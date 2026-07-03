@@ -35,7 +35,7 @@ defineProps<{
 
     <template v-else>
       <h2>Question selected</h2>
-      <p class="muted">Waiting for the host to reveal it. Suspense, but with CSS.</p>
+      <p class="muted">Waiting for the host to reveal it.</p>
     </template>
   </section>
 </template>
