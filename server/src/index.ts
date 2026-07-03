@@ -26,8 +26,11 @@ app.use(
 );
 app.use(express.json());
 
-app.get('/health', (_request, response) => {
-  response.json({ ok: true });
+app.get("/health", (_request, response) => {
+  response.json({
+    ok: true,
+    version: "answer-screen-fix-v1"
+  });
 });
 
 const httpServer = createServer(app);
