@@ -175,6 +175,26 @@ function closeQuestion() {
 </script>
 
 <template>
+
+  <div
+      v-if="gameState"
+      style="
+    position: fixed;
+    left: 12px;
+    bottom: 12px;
+    z-index: 99999;
+    background: red;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+  "
+  >
+    phase: {{ gameState.phase }} |
+    active: {{ gameState.activeQuestion ? 'yes' : 'no' }}
+  </div>
+
   <main class="app-shell">
     <section v-if="connectionError" class="error-box">
       {{ connectionError }}
