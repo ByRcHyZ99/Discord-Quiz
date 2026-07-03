@@ -175,12 +175,6 @@ function closeQuestion() {
 </script>
 
 <template>
-
-  <pre style="color: white">
-phase: {{ gameState?.phase }}
-activeQuestion: {{ gameState?.activeQuestion ? 'yes' : 'no' }}
-</pre>
-  
   <main class="app-shell">
     <section v-if="connectionError" class="error-box">
       {{ connectionError }}
@@ -240,7 +234,7 @@ activeQuestion: {{ gameState?.activeQuestion ? 'yes' : 'no' }}
 
         <section class="main-panel">
           <QuestionView
-              v-if="(gameState.phase === 'question' || gameState.phase === 'answer') && gameState.activeQuestion"
+              v-if="gameState.phase === 'question' || gameState.phase === 'answer'"
               :state="gameState"
           />
 

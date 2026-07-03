@@ -38,6 +38,22 @@ const io = new Server(httpServer, {
   }
 });
 
+function markActiveQuestionUsed(room: Room) {
+  const activeQuestion = room.activeQuestion?.question;
+  if (!activeQuestion) return;
+
+  activeQuestion.used = true;
+
+  for (const category of room.categories) {
+    const matchingQuestion = category.questions.find(
+        (question) => question.id === activeQuestion.id
+    );
+
+    if (matchingQuestion) {
+      matchingQuestion.used = true;
+    }
+  }
+}
 
 
 io.on('connection', (socket) => {
@@ -250,7 +266,8 @@ io.on('connection', (socket) => {
         }
 
         player.score += room.activeQuestion.question.points;
-        room.activeQuestion.question.used = true;
+
+        markActiveQuestionUsed(room);
 
         room.phase = 'answer';
         room.buzzer.locked = true;
@@ -287,6 +304,10 @@ io.on('connection', (socket) => {
       ) => {
         const room = requireHostRoom(payload.roomCode, socket.id, callback);
         if (!room) return;
+
+        if (room.activeQuestion) {
+          markActiveQuestionUsed(room);
+        }
 
         resetQuestion(room);
         room.message = 'Back to the board.';

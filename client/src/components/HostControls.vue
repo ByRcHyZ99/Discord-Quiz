@@ -19,9 +19,9 @@ const emit = defineEmits<{
   <section class="panel host-controls">
     <h2>Host controls</h2>
 
-    <div v-if="state.phase === 'answer' && state.activeQuestion" class="control-stack">
+    <div v-if="state.phase === 'answer'" class="control-stack">
       <p class="muted">
-        The correct answer is now visible to everyone.
+        The correct answer is visible.
       </p>
 
       <button class="big-action" @click="emit('close-question')">

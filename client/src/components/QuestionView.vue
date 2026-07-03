@@ -9,7 +9,9 @@ defineProps<{
 <template>
   <section class="question-view card">
     <div class="question-meta">
-      <span class="badge">{{ state.activeQuestion?.question.points }} pts</span>
+      <span v-if="state.activeQuestion" class="badge">
+        {{ state.activeQuestion.question.points }} pts
+      </span>
 
       <span
           v-if="state.phase === 'question'"
@@ -20,20 +22,29 @@ defineProps<{
       </span>
 
       <span v-if="state.phase === 'answer'" class="badge badge--success">
-        Answer revealed
+        Answer
       </span>
     </div>
 
-    <template v-if="state.phase === 'answer' && state.activeQuestion">
-      <p class="eyebrow">Correct answer</p>
+    <template v-if="state.phase === 'answer'">
+      <template v-if="state.activeQuestion">
+        <p class="eyebrow">Correct answer</p>
 
-      <h2 class="answer-text">
-        {{ state.activeQuestion.question.answer }}
-      </h2>
+        <h2 class="answer-text">
+          {{ state.activeQuestion.question.answer }}
+        </h2>
 
-      <p class="muted">
-        {{ state.message }}
-      </p>
+        <p class="muted">
+          {{ state.message }}
+        </p>
+      </template>
+
+      <template v-else>
+        <h2>Answer screen</h2>
+        <p class="muted">
+          No active question found. The server reset the question too early.
+        </p>
+      </template>
     </template>
 
     <template v-else-if="state.activeQuestion?.revealed">
@@ -54,9 +65,14 @@ defineProps<{
       </div>
     </template>
 
-    <template v-else>
+    <template v-else-if="state.activeQuestion">
       <h2>Question selected</h2>
       <p class="muted">Waiting for the host to reveal it.</p>
+    </template>
+
+    <template v-else>
+      <h2>No question selected</h2>
+      <p class="muted">The game state is missing an active question.</p>
     </template>
   </section>
 </template>
