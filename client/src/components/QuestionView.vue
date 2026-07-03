@@ -40,9 +40,9 @@ defineProps<{
       </template>
 
       <template v-else>
-        <h2>Answer screen</h2>
+        <h2>Answer screen reached</h2>
         <p class="muted">
-          No active question found. The server reset the question too early.
+          But activeQuestion is missing. The server reset the question too early.
         </p>
       </template>
     </template>

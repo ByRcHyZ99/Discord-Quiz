@@ -256,16 +256,26 @@ function closeQuestion() {
 
         <section class="main-panel">
           <QuestionView
-              v-if="gameState.phase === 'question' || gameState.phase === 'answer'"
+              v-if="gameState.phase === 'answer'"
+              :state="gameState"
+          />
+
+          <QuestionView
+              v-else-if="gameState.phase === 'question'"
               :state="gameState"
           />
 
           <GameBoard
-              v-else
+              v-else-if="gameState.phase === 'board'"
               :categories="gameState.categories"
               :can-select="isHost"
               @select-question="selectQuestion"
           />
+
+          <div v-else class="card">
+            <h2>Unknown game state</h2>
+            <p>Phase: {{ gameState.phase }}</p>
+          </div>
         </section>
       </section>
     </template>
