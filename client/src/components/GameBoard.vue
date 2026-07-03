@@ -32,7 +32,7 @@ const emit = defineEmits<{
     </div>
 
     <p v-if="!canSelect" class="muted board-note">
-      Only the host can select questions. Civilization survives another day.
+      Only the host can select questions.
     </p>
   </section>
 </template>

@@ -234,15 +234,15 @@ function closeQuestion() {
 
         <section class="main-panel">
           <QuestionView
-            v-if="gameState.phase === 'question' && gameState.activeQuestion"
-            :state="gameState"
+              v-if="(gameState.phase === 'question' || gameState.phase === 'answer') && gameState.activeQuestion"
+              :state="gameState"
           />
 
           <GameBoard
-            v-else
-            :categories="gameState.categories"
-            :can-select="isHost"
-            @select-question="selectQuestion"
+              v-else
+              :categories="gameState.categories"
+              :can-select="isHost"
+              @select-question="selectQuestion"
           />
         </section>
       </section>

@@ -19,11 +19,21 @@ const emit = defineEmits<{
   <section class="panel host-controls">
     <h2>Host controls</h2>
 
-    <div v-if="state.phase === 'question' && state.activeQuestion" class="control-stack">
+    <div v-if="state.phase === 'answer' && state.activeQuestion" class="control-stack">
+      <p class="muted">
+        The correct answer is now visible to everyone.
+      </p>
+
+      <button class="big-action" @click="emit('close-question')">
+        Back to Board
+      </button>
+    </div>
+
+    <div v-else-if="state.phase === 'question' && state.activeQuestion" class="control-stack">
       <button
-        v-if="!state.activeQuestion.revealed"
-        class="big-action"
-        @click="emit('reveal-question')"
+          v-if="!state.activeQuestion.revealed"
+          class="big-action"
+          @click="emit('reveal-question')"
       >
         Reveal Question
       </button>
@@ -33,17 +43,17 @@ const emit = defineEmits<{
         <button @click="emit('lock-buzzer')">Lock Buzzer</button>
 
         <button
-          class="success"
-          :disabled="!state.buzzer.firstBuzz"
-          @click="emit('mark-correct')"
+            class="success"
+            :disabled="!state.buzzer.firstBuzz"
+            @click="emit('mark-correct')"
         >
           Mark First Buzz Correct
         </button>
 
         <button
-          class="danger"
-          :disabled="!state.buzzer.firstBuzz"
-          @click="emit('mark-wrong')"
+            class="danger"
+            :disabled="!state.buzzer.firstBuzz"
+            @click="emit('mark-wrong')"
         >
           Mark First Buzz Wrong / Timeout
         </button>
@@ -55,7 +65,7 @@ const emit = defineEmits<{
     </div>
 
     <p v-else class="muted">
-      Select a question from the board. Yes, the host has to do work. Tragic.
+      Select a question from the board.
     </p>
   </section>
 </template>

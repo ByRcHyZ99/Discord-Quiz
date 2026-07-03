@@ -16,7 +16,7 @@ const emit = defineEmits<{
     <div class="section-heading">
       <p class="eyebrow">Lobby</p>
       <h2>Waiting for players</h2>
-      <p>Everyone joins here before the host starts the game.</p>
+      <p>Waiting for everyone to join ...</p>
     </div>
 
     <ul class="player-list">

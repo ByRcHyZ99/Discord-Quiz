@@ -1,4 +1,4 @@
-export type GamePhase = 'lobby' | 'board' | 'question' | 'finished';
+export type GamePhase = 'lobby' | 'board' | 'question' | 'answer' | 'finished';
 
 export type Player = {
   id: string;

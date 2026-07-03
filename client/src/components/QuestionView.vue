@@ -10,12 +10,33 @@ defineProps<{
   <section class="question-view card">
     <div class="question-meta">
       <span class="badge">{{ state.activeQuestion?.question.points }} pts</span>
-      <span class="badge" :class="state.buzzer.locked ? 'badge--danger' : 'badge--success'">
+
+      <span
+          v-if="state.phase === 'question'"
+          class="badge"
+          :class="state.buzzer.locked ? 'badge--danger' : 'badge--success'"
+      >
         Buzzer {{ state.buzzer.locked ? 'locked' : 'open' }}
+      </span>
+
+      <span v-if="state.phase === 'answer'" class="badge badge--success">
+        Answer revealed
       </span>
     </div>
 
-    <template v-if="state.activeQuestion?.revealed">
+    <template v-if="state.phase === 'answer' && state.activeQuestion">
+      <p class="eyebrow">Correct answer</p>
+
+      <h2 class="answer-text">
+        {{ state.activeQuestion.question.answer }}
+      </h2>
+
+      <p class="muted">
+        {{ state.message }}
+      </p>
+    </template>
+
+    <template v-else-if="state.activeQuestion?.revealed">
       <h2>{{ state.activeQuestion.question.text }}</h2>
 
       <div v-if="state.buzzer.firstBuzz" class="first-buzz">

@@ -243,8 +243,10 @@ io.on('connection', (socket) => {
 
     player.score += room.activeQuestion.question.points;
     room.activeQuestion.question.used = true;
+
+    room.phase = 'answer';
+    room.buzzer.locked = true;
     room.message = `${player.name} got ${room.activeQuestion.question.points} points.`;
-    resetQuestion(room);
 
     respond(callback, room);
     emitRoom(room);
