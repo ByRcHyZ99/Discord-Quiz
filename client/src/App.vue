@@ -177,22 +177,24 @@ function closeQuestion() {
 <template>
 
   <div
-      v-if="gameState"
       style="
     position: fixed;
+    top: 12px;
     left: 12px;
-    bottom: 12px;
-    z-index: 99999;
-    background: red;
-    color: white;
-    padding: 10px 14px;
+    z-index: 999999;
+    background: lime;
+    color: black;
+    padding: 12px 18px;
     border-radius: 8px;
-    font-size: 14px;
-    font-weight: bold;
+    font-size: 16px;
+    font-weight: 900;
   "
   >
-    phase: {{ gameState.phase }} |
-    active: {{ gameState.activeQuestion ? 'yes' : 'no' }}
+    CLIENT VERSION: ANSWER FIX 3
+    <br />
+    phase: {{ gameState?.phase ?? 'no state' }}
+    <br />
+    active: {{ gameState?.activeQuestion ? 'yes' : 'no' }}
   </div>
 
   <main class="app-shell">
