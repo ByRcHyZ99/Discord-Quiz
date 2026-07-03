@@ -175,6 +175,12 @@ function closeQuestion() {
 </script>
 
 <template>
+
+  <pre style="color: white">
+phase: {{ gameState?.phase }}
+activeQuestion: {{ gameState?.activeQuestion ? 'yes' : 'no' }}
+</pre>
+  
   <main class="app-shell">
     <section v-if="connectionError" class="error-box">
       {{ connectionError }}

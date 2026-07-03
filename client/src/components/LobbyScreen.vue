@@ -32,6 +32,6 @@ const emit = defineEmits<{
       Start Game
     </button>
 
-    <p v-else class="muted">Waiting for host to start. Truly thrilling, but necessary.</p>
+    <p v-else class="muted">Waiting for host to start.</p>
   </section>
 </template>

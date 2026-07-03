@@ -226,31 +226,40 @@ io.on('connection', (socket) => {
     emitRoom(room);
   });
 
-  socket.on('answer:correct', (payload: { roomCode: string }, callback: (response: ServerResponse) => void) => {
-    const room = requireHostRoom(payload.roomCode, socket.id, callback);
-    if (!room) return;
+  socket.on(
+      'answer:correct',
+      (
+          payload: { roomCode: string },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const room = requireHostRoom(payload.roomCode, socket.id, callback);
+        if (!room) return;
 
-    if (!room.activeQuestion || !room.buzzer.firstBuzz) {
-      callback({ ok: false, error: 'No first buzz to mark correct.' });
-      return;
-    }
+        if (!room.activeQuestion || !room.buzzer.firstBuzz) {
+          callback({ ok: false, error: 'No first buzz to mark correct.' });
+          return;
+        }
 
-    const player = room.players.find((item) => item.id === room.buzzer.firstBuzz?.playerId);
-    if (!player) {
-      callback({ ok: false, error: 'Buzzing player not found.' });
-      return;
-    }
+        const player = room.players.find(
+            (item) => item.id === room.buzzer.firstBuzz?.playerId
+        );
 
-    player.score += room.activeQuestion.question.points;
-    room.activeQuestion.question.used = true;
+        if (!player) {
+          callback({ ok: false, error: 'Buzzing player not found.' });
+          return;
+        }
 
-    room.phase = 'answer';
-    room.buzzer.locked = true;
-    room.message = `${player.name} got ${room.activeQuestion.question.points} points.`;
+        player.score += room.activeQuestion.question.points;
+        room.activeQuestion.question.used = true;
 
-    respond(callback, room);
-    emitRoom(room);
-  });
+        room.phase = 'answer';
+        room.buzzer.locked = true;
+        room.message = `${player.name} got ${room.activeQuestion.question.points} points.`;
+
+        respond(callback, room);
+        emitRoom(room);
+      }
+  );
 
   socket.on('answer:wrong', (payload: { roomCode: string }, callback: (response: ServerResponse) => void) => {
     const room = requireHostRoom(payload.roomCode, socket.id, callback);
@@ -270,20 +279,22 @@ io.on('connection', (socket) => {
     emitRoom(room);
   });
 
-  socket.on('question:close', (payload: { roomCode: string }, callback: (response: ServerResponse) => void) => {
-    const room = requireHostRoom(payload.roomCode, socket.id, callback);
-    if (!room) return;
+  socket.on(
+      'question:close',
+      (
+          payload: { roomCode: string },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const room = requireHostRoom(payload.roomCode, socket.id, callback);
+        if (!room) return;
 
-    if (room.activeQuestion) {
-      room.activeQuestion.question.used = true;
-    }
+        resetQuestion(room);
+        room.message = 'Back to the board.';
 
-    room.message = 'Question closed.';
-    resetQuestion(room);
-
-    respond(callback, room);
-    emitRoom(room);
-  });
+        respond(callback, room);
+        emitRoom(room);
+      }
+  );
 
   socket.on('disconnect', () => {
     const room = markPlayerDisconnected(socket.id);
