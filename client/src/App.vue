@@ -175,28 +175,6 @@ function closeQuestion() {
 </script>
 
 <template>
-
-  <div
-      style="
-    position: fixed;
-    top: 12px;
-    left: 12px;
-    z-index: 999999;
-    background: lime;
-    color: black;
-    padding: 12px 18px;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 900;
-  "
-  >
-    CLIENT VERSION: ANSWER FIX 3
-    <br />
-    phase: {{ gameState?.phase ?? 'no state' }}
-    <br />
-    active: {{ gameState?.activeQuestion ? 'yes' : 'no' }}
-  </div>
-
   <main class="app-shell">
     <section v-if="connectionError" class="error-box">
       {{ connectionError }}
