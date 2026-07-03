@@ -9,7 +9,8 @@ import {
   getRoom,
   isHost,
   joinRoom,
-  markPlayerDisconnected
+  markPlayerDisconnected,
+  restorePlayerSession
 } from './rooms.js';
 import type { Room, ServerResponse } from './types.js';
 
@@ -65,6 +66,29 @@ io.on('connection', (socket) => {
       respond(callback, result.room, result.player.id);
       emitRoom(result.room);
     }
+  );
+
+  socket.on(
+      'room:restore',
+      (
+          payload: { roomCode: string; playerId: string },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const roomCode = cleanRoomCode(payload.roomCode);
+        const playerId = payload.playerId;
+
+        const result = restorePlayerSession(roomCode, playerId, socket.id);
+
+        if (!result) {
+          callback({ ok: false, error: 'Previous session could not be restored.' });
+          return;
+        }
+
+        socket.join(result.room.roomCode);
+
+        respond(callback, result.room, result.player.id);
+        emitRoom(result.room);
+      }
   );
 
   socket.on('room:start', (payload: { roomCode: string }, callback: (response: ServerResponse) => void) => {

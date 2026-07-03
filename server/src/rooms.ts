@@ -37,6 +37,24 @@ export function joinRoom(roomCode: string, socketId: string, playerName: string)
   return { room, player };
 }
 
+export function restorePlayerSession(
+    roomCode: string,
+    playerId: string,
+    socketId: string
+): { room: Room; player: Player } | null {
+  const room = getRoom(roomCode);
+  if (!room) return null;
+
+  const player = room.players.find((item) => item.id === playerId);
+  if (!player) return null;
+
+  player.socketId = socketId;
+  player.isConnected = true;
+  room.message = `${player.name} reconnected.`;
+
+  return { room, player };
+}
+
 export function getRoom(roomCode: string): Room | null {
   return rooms.get(roomCode.toUpperCase()) ?? null;
 }

@@ -14,6 +14,13 @@ const gameState = ref<GameState | null>(null);
 const currentPlayerId = ref<string | null>(null);
 const connectionError = ref('');
 
+const SESSION_STORAGE_KEY = 'discord-quiz-session';
+
+type SavedSession = {
+  roomCode: string;
+  playerId: string;
+};
+
 const currentPlayer = computed(() => {
   if (!gameState.value || !currentPlayerId.value) return null;
   return gameState.value.players.find((player) => player.id === currentPlayerId.value) ?? null;
@@ -21,11 +28,62 @@ const currentPlayer = computed(() => {
 
 const isHost = computed(() => currentPlayer.value?.isHost === true);
 
+function saveSession(roomCode: string, playerId: string) {
+  localStorage.setItem(
+      SESSION_STORAGE_KEY,
+      JSON.stringify({
+        roomCode,
+        playerId
+      })
+  );
+}
+
+function loadSession(): SavedSession | null {
+  const rawSession = localStorage.getItem(SESSION_STORAGE_KEY);
+  if (!rawSession) return null;
+
+  try {
+    return JSON.parse(rawSession) as SavedSession;
+  } catch {
+    localStorage.removeItem(SESSION_STORAGE_KEY);
+    return null;
+  }
+}
+
+function clearSession() {
+  localStorage.removeItem(SESSION_STORAGE_KEY);
+}
+
+function restoreSession() {
+  const savedSession = loadSession();
+  if (!savedSession) return;
+
+  socket.emit(
+      'room:restore',
+      {
+        roomCode: savedSession.roomCode,
+        playerId: savedSession.playerId
+      },
+      (response: ServerResponse) => {
+        if (!response.ok) {
+          clearSession();
+          gameState.value = null;
+          currentPlayerId.value = null;
+          connectionError.value = '';
+          return;
+        }
+
+        handleResponse(response);
+      }
+  );
+}
+
 onMounted(() => {
   socket.connect();
 
   socket.on('connect', () => {
     connectionError.value = '';
+    restoreSession();
   });
 
   socket.on('connect_error', () => {
@@ -51,6 +109,10 @@ function handleResponse(response: ServerResponse) {
 
   if (response.state) {
     gameState.value = response.state;
+  }
+
+  if (response.roomCode && response.playerId) {
+    saveSession(response.roomCode, response.playerId);
   }
 }
 
