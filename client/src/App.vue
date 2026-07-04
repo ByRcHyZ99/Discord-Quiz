@@ -30,7 +30,7 @@ const currentPlayer = computed(() => {
 const isHost = computed(() => currentPlayer.value?.isHost === true);
 
 function saveSession(roomCode: string, playerId: string) {
-  localStorage.setItem(
+  sessionStorage.setItem(
       SESSION_STORAGE_KEY,
       JSON.stringify({
         roomCode,
@@ -123,19 +123,19 @@ function resetImageZoom() {
 }
 
 function loadSession(): SavedSession | null {
-  const rawSession = localStorage.getItem(SESSION_STORAGE_KEY);
+  const rawSession = sessionStorage.getItem(SESSION_STORAGE_KEY);
   if (!rawSession) return null;
 
   try {
     return JSON.parse(rawSession) as SavedSession;
   } catch {
-    localStorage.removeItem(SESSION_STORAGE_KEY);
+    sessionStorage.removeItem(SESSION_STORAGE_KEY);
     return null;
   }
 }
 
 function clearSession() {
-  localStorage.removeItem(SESSION_STORAGE_KEY);
+  sessionStorage.removeItem(SESSION_STORAGE_KEY);
 }
 
 function restoreSession() {
