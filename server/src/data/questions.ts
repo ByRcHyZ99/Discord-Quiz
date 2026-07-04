@@ -48,15 +48,19 @@ export const createQuestionSet = (): Category[] => [
     ]
   },
   {
-    id: 'movies',
-    title: 'Movies',
+    id: 'lol',
+    title: 'League of Legends',
     questions: [
       {
-        id: 'movies-100',
-        categoryId: 'movies',
+        id: 'lol-100', //Frage mit Bild zum zoomen
+        categoryId: 'league',
         points: 100,
-        text: 'Movies 100 question. Replace this text.',
-        answer: 'Movies 100 answer. Replace this answer.',
+        text: 'Which champion is this?',
+        answer: 'Ahri',
+        imageUrl: '/images/lol/ahri.jpg',
+        imageMode: 'zoom',
+        zoomLevels: [3, 2.5, 2, 1.5, 1],
+        zoomStartIndex: 0,
         used: false
       },
       {
@@ -94,15 +98,17 @@ export const createQuestionSet = (): Category[] => [
     ]
   },
   {
-    id: 'music',
-    title: 'Music',
+    id: 'cs2',
+    title: 'Counter Strike 2',
     questions: [
       {
-        id: 'music-100',
-        categoryId: 'music',
+        id: 'cs2-100', //normale Frage mit Bild
+        categoryId: 'cs2',
         points: 100,
         text: 'Music 100 question. Replace this text.',
         answer: 'Music 100 answer. Replace this answer.',
+        imageUrl: '/images/movies/shrek.jpg',
+        imageMode: 'normal',
         used: false
       },
       {

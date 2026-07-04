@@ -92,6 +92,36 @@ function setAudioVolume(volume: number) {
   );
 }
 
+function revealImageMore() {
+  if (!gameState.value) return;
+
+  socket.emit(
+      'image:reveal-more',
+      { roomCode: gameState.value.roomCode },
+      handleResponse
+  );
+}
+
+function revealImageLess() {
+  if (!gameState.value) return;
+
+  socket.emit(
+      'image:reveal-less',
+      { roomCode: gameState.value.roomCode },
+      handleResponse
+  );
+}
+
+function resetImageZoom() {
+  if (!gameState.value) return;
+
+  socket.emit(
+      'image:reset',
+      { roomCode: gameState.value.roomCode },
+      handleResponse
+  );
+}
+
 function loadSession(): SavedSession | null {
   const rawSession = localStorage.getItem(SESSION_STORAGE_KEY);
   if (!rawSession) return null;
@@ -314,6 +344,9 @@ function closeQuestion() {
               @audio-stop="stopAudio"
               @audio-restart="restartAudio"
               @audio-volume="setAudioVolume"
+              @image-reveal-more="revealImageMore"
+              @image-reveal-less="revealImageLess"
+              @image-reset="resetImageZoom"
           />
         </aside>
 

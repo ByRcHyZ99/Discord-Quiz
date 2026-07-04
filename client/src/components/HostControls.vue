@@ -17,6 +17,9 @@ const emit = defineEmits<{
   'audio-stop': [];
   'audio-restart': [];
   'audio-volume': [volume: number];
+  'image-reveal-more': [];
+  'image-reveal-less': [];
+  'image-reset': [];
 }>();
 
 function handleVolumeInput(event: Event) {
@@ -40,6 +43,31 @@ function handleVolumeInput(event: Event) {
     </div>
 
     <div v-else-if="state.phase === 'question' && state.activeQuestion" class="control-stack">
+      <div
+          v-if="state.activeQuestion.question.imageMode === 'zoom'"
+          class="image-controls"
+      >
+        <p class="eyebrow">Image controls</p>
+
+        <button @click="emit('image-reveal-more')">
+          Reveal More
+        </button>
+
+        <button @click="emit('image-reveal-less')">
+          Reveal Less
+        </button>
+
+        <button @click="emit('image-reset')">
+          Reset Image
+        </button>
+
+        <p class="muted">
+          Zoom step:
+          {{ state.activeQuestion.zoomStep + 1 }}
+          /
+          {{ state.activeQuestion.question.zoomLevels?.length ?? 1 }}
+        </p>
+      </div>
       <div
           v-if="state.activeQuestion.question.soundUrl"
           class="audio-controls"

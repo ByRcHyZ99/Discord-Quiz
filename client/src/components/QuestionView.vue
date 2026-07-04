@@ -1,9 +1,28 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import type { GameState } from '../types/game';
 
-defineProps<{
+const props = defineProps<{
   state: GameState;
 }>();
+
+const currentZoomScale = computed(() => {
+  const activeQuestion = props.state.activeQuestion;
+  if (!activeQuestion) return 1;
+
+  const levels = activeQuestion.question.zoomLevels;
+  if (!levels || levels.length === 0) return 1;
+
+  return levels[activeQuestion.zoomStep] ?? 1;
+});
+
+const hasImage = computed(() => {
+  return Boolean(props.state.activeQuestion?.question.imageUrl);
+});
+
+const isZoomImage = computed(() => {
+  return props.state.activeQuestion?.question.imageMode === 'zoom';
+});
 </script>
 
 <template>
@@ -34,6 +53,17 @@ defineProps<{
           {{ state.activeQuestion.question.answer }}
         </h2>
 
+        <div
+            v-if="hasImage"
+            class="question-image-frame question-image-frame--answer"
+        >
+          <img
+              :src="state.activeQuestion.question.imageUrl"
+              alt="Question image"
+              class="question-image"
+          />
+        </div>
+
         <p class="muted">
           {{ state.message }}
         </p>
@@ -42,13 +72,38 @@ defineProps<{
       <template v-else>
         <h2>Answer screen reached</h2>
         <p class="muted">
-          But activeQuestion is missing. The server reset the question too early.
+          But activeQuestion is missing.
         </p>
       </template>
     </template>
 
     <template v-else-if="state.activeQuestion?.revealed">
-      <h2>{{ state.activeQuestion.question.text }}</h2>
+      <h2>
+        {{ state.activeQuestion.question.text }}
+      </h2>
+
+      <div
+          v-if="hasImage && isZoomImage"
+          class="question-image-frame question-image-frame--zoom"
+      >
+        <img
+            :src="state.activeQuestion.question.imageUrl"
+            alt="Question image"
+            class="question-image question-image--zoom"
+            :style="{ transform: `scale(${currentZoomScale})` }"
+        />
+      </div>
+
+      <div
+          v-else-if="hasImage"
+          class="question-image-frame"
+      >
+        <img
+            :src="state.activeQuestion.question.imageUrl"
+            alt="Question image"
+            class="question-image"
+        />
+      </div>
 
       <div v-if="state.buzzer.firstBuzz" class="first-buzz">
         <p class="eyebrow">First buzz</p>
@@ -71,7 +126,7 @@ defineProps<{
     </template>
 
     <template v-else>
-      <h2>No question selected</h2>
+      <h2>No active question</h2>
       <p class="muted">The game state is missing an active question.</p>
     </template>
   </section>

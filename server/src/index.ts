@@ -107,6 +107,82 @@ io.on('connection', (socket) => {
   });
 
   socket.on(
+      'image:reveal-more',
+      (
+          payload: { roomCode: string },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const room = requireHostRoom(payload.roomCode, socket.id, callback);
+        if (!room) return;
+
+        const activeQuestion = room.activeQuestion;
+
+        if (!activeQuestion || activeQuestion.question.imageMode !== 'zoom') {
+          callback({ ok: false, error: 'This question has no zoom image.' });
+          return;
+        }
+
+        const maxStep = (activeQuestion.question.zoomLevels?.length ?? 1) - 1;
+        activeQuestion.zoomStep = Math.min(activeQuestion.zoomStep + 1, maxStep);
+
+        room.message = 'Image revealed more.';
+
+        respond(callback, room);
+        emitRoom(room);
+      }
+  );
+
+  socket.on(
+      'image:reveal-less',
+      (
+          payload: { roomCode: string },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const room = requireHostRoom(payload.roomCode, socket.id, callback);
+        if (!room) return;
+
+        const activeQuestion = room.activeQuestion;
+
+        if (!activeQuestion || activeQuestion.question.imageMode !== 'zoom') {
+          callback({ ok: false, error: 'This question has no zoom image.' });
+          return;
+        }
+
+        activeQuestion.zoomStep = Math.max(activeQuestion.zoomStep - 1, 0);
+
+        room.message = 'Image zoomed in again.';
+
+        respond(callback, room);
+        emitRoom(room);
+      }
+  );
+
+  socket.on(
+      'image:reset',
+      (
+          payload: { roomCode: string },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const room = requireHostRoom(payload.roomCode, socket.id, callback);
+        if (!room) return;
+
+        const activeQuestion = room.activeQuestion;
+
+        if (!activeQuestion || activeQuestion.question.imageMode !== 'zoom') {
+          callback({ ok: false, error: 'This question has no zoom image.' });
+          return;
+        }
+
+        activeQuestion.zoomStep = activeQuestion.question.zoomStartIndex ?? 0;
+
+        room.message = 'Image zoom reset.';
+
+        respond(callback, room);
+        emitRoom(room);
+      }
+  );
+
+  socket.on(
       'audio:play',
       (
           payload: { roomCode: string },
@@ -280,7 +356,8 @@ io.on('connection', (socket) => {
       room.phase = 'question';
       room.activeQuestion = {
         question,
-        revealed: false
+        revealed: false,
+        zoomStep: question.zoomStartIndex ?? 0
       };
       room.buzzer.locked = true;
       room.buzzer.firstBuzz = null;

@@ -15,7 +15,13 @@ export type Question = {
   text: string;
   answer: string;
   used: boolean;
+
   soundUrl?: string;
+
+  imageUrl?: string;
+  imageMode?: 'normal' | 'zoom';
+  zoomLevels?: number[];
+  zoomStartIndex?: number;
 };
 
 export type AudioStatus = 'stopped' | 'playing' | 'paused';
@@ -42,6 +48,7 @@ export type Buzz = {
 export type ActiveQuestion = {
   question: Question;
   revealed: boolean;
+  zoomStep: number;
 };
 
 export type BuzzerState = {
