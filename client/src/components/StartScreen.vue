@@ -28,7 +28,7 @@ function joinRoom() {
   <section class="start-screen card">
     <div class="start-screen__intro">
       <p class="eyebrow">Gaming Quiz</p>
-      <h1>Test your Knowledge</h1>
+      <h1>Mind Mash</h1>
       <p>
         Create a room as host or join with a room code. Then share the host screen in Discord.
       </p>
