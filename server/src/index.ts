@@ -269,6 +269,65 @@ io.on('connection', (socket) => {
   );
 
   socket.on(
+      'room:leave',
+      (
+          payload: { roomCode: string; playerId: string },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const roomCode = cleanRoomCode(payload.roomCode);
+        const room = getRoom(roomCode);
+
+        if (!room) {
+          callback({ ok: true });
+          return;
+        }
+
+        const playerIndex = room.players.findIndex(
+            (player) =>
+                player.id === payload.playerId ||
+                player.socketId === socket.id
+        );
+
+        if (playerIndex === -1) {
+          callback({ ok: true });
+          return;
+        }
+
+        const leavingPlayer = room.players[playerIndex];
+
+        room.players.splice(playerIndex, 1);
+
+        socket.leave(room.roomCode);
+
+        if (room.players.length === 0) {
+          callback({ ok: true });
+          return;
+        }
+
+        if (leavingPlayer.isHost) {
+          const newHost = room.players[0];
+
+          room.hostId = newHost.id;
+          newHost.isHost = true;
+
+          for (const player of room.players) {
+            if (player.id !== newHost.id) {
+              player.isHost = false;
+            }
+          }
+
+          room.message = `${leavingPlayer.name} left the game. ${newHost.name} is now host.`;
+        } else {
+          room.message = `${leavingPlayer.name} left the game.`;
+        }
+
+        callback({ ok: true });
+
+        emitRoom(room);
+      }
+  );
+
+  socket.on(
       'estimate:reveal-answer',
       (
           payload: { roomCode: string },

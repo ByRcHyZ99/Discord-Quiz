@@ -301,17 +301,47 @@ function startGame() {
 }
 
 function leaveGame() {
-  clearSession();
+  const roomCode = gameState.value?.roomCode;
+  const playerId = currentPlayerId.value;
 
-  gameState.value = null;
-  currentPlayerId.value = null;
-  connectionError.value = '';
+  let finished = false;
 
-  socket.disconnect();
+  function finishLeave() {
+    if (finished) return;
+    finished = true;
+
+    clearSession();
+
+    gameState.value = null;
+    currentPlayerId.value = null;
+    connectionError.value = '';
+
+    socket.disconnect();
+
+    setTimeout(() => {
+      socket.connect();
+    }, 100);
+  }
+
+  if (!roomCode || !playerId || !socket.connected) {
+    finishLeave();
+    return;
+  }
+
+  socket.emit(
+      'room:leave',
+      {
+        roomCode,
+        playerId
+      },
+      () => {
+        finishLeave();
+      }
+  );
 
   setTimeout(() => {
-    socket.connect();
-  }, 100);
+    finishLeave();
+  }, 800);
 }
 
 function selectQuestion(questionId: string) {
