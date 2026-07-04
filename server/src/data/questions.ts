@@ -48,8 +48,8 @@ export const createQuestionSet = (): Category[] => [
     ]
   },
   {
-    id: 'gaming',
-    title: 'Gaming',
+    id: 'gaming1',
+    title: 'Gaming1',
     questions: [
       {
         id: 'gaming-100',
@@ -68,7 +68,7 @@ export const createQuestionSet = (): Category[] => [
         used: false
       },
       {
-        id: 'gaming-300',
+        id: 'gaming-3001',
         categoryId: 'gaming',
         points: 300,
         text: 'Placeholder question for Gaming 300. Replace this text.',
