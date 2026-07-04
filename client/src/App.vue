@@ -9,6 +9,7 @@ import QuestionView from './components/QuestionView.vue';
 import Scoreboard from './components/Scoreboard.vue';
 import PlayerControls from './components/PlayerControls.vue';
 import HostControls from './components/HostControls.vue';
+import AudioSync from './components/AudioSync.vue';
 
 const gameState = ref<GameState | null>(null);
 const currentPlayerId = ref<string | null>(null);
@@ -35,6 +36,59 @@ function saveSession(roomCode: string, playerId: string) {
         roomCode,
         playerId
       })
+  );
+}
+
+function playAudio() {
+  if (!gameState.value) return;
+
+  socket.emit(
+      'audio:play',
+      { roomCode: gameState.value.roomCode },
+      handleResponse
+  );
+}
+
+function pauseAudio() {
+  if (!gameState.value) return;
+
+  socket.emit(
+      'audio:pause',
+      { roomCode: gameState.value.roomCode },
+      handleResponse
+  );
+}
+
+function stopAudio() {
+  if (!gameState.value) return;
+
+  socket.emit(
+      'audio:stop',
+      { roomCode: gameState.value.roomCode },
+      handleResponse
+  );
+}
+
+function restartAudio() {
+  if (!gameState.value) return;
+
+  socket.emit(
+      'audio:restart',
+      { roomCode: gameState.value.roomCode },
+      handleResponse
+  );
+}
+
+function setAudioVolume(volume: number) {
+  if (!gameState.value) return;
+
+  socket.emit(
+      'audio:volume',
+      {
+        roomCode: gameState.value.roomCode,
+        volume
+      },
+      handleResponse
   );
 }
 
@@ -176,6 +230,10 @@ function closeQuestion() {
 
 <template>
   <main class="app-shell">
+    <AudioSync
+        v-if="gameState"
+        :audio="gameState.audio"
+    />
     <section v-if="connectionError" class="error-box">
       {{ connectionError }}
     </section>
@@ -221,14 +279,19 @@ function closeQuestion() {
           />
 
           <HostControls
-            v-else
-            :state="gameState"
-            @reveal-question="revealQuestion"
-            @lock-buzzer="lockBuzzer"
-            @unlock-buzzer="unlockBuzzer"
-            @mark-correct="markCorrect"
-            @mark-wrong="markWrong"
-            @close-question="closeQuestion"
+              v-if="isHost && gameState"
+              :state="gameState"
+              @reveal-question="revealQuestion"
+              @unlock-buzzer="unlockBuzzer"
+              @lock-buzzer="lockBuzzer"
+              @mark-correct="markCorrect"
+              @mark-wrong="markWrong"
+              @close-question="closeQuestion"
+              @audio-play="playAudio"
+              @audio-pause="pauseAudio"
+              @audio-stop="stopAudio"
+              @audio-restart="restartAudio"
+              @audio-volume="setAudioVolume"
           />
         </aside>
 

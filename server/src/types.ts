@@ -16,6 +16,16 @@ export type Question = {
   text: string;
   answer: string;
   used: boolean;
+  soundUrl?: string;
+};
+
+export type AudioStatus = 'stopped' | 'playing' | 'paused';
+
+export type AudioState = {
+  soundUrl: string | null;
+  status: AudioStatus;
+  version: number;
+  volume: number;
 };
 
 export type Category = {
@@ -44,17 +54,20 @@ export type BuzzerState = {
 export type Room = {
   roomCode: string;
   phase: GamePhase;
+  hostId: string;
   players: Player[];
   categories: Category[];
   activeQuestion: ActiveQuestion | null;
   buzzer: BuzzerState;
   message: string;
+  audio: AudioState;
 };
 
 export type PublicPlayer = Omit<Player, 'socketId'>;
 
 export type PublicRoom = Omit<Room, 'players'> & {
   players: PublicPlayer[];
+  audio: AudioState;
 };
 
 export type ServerResponse = {

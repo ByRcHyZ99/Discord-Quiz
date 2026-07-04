@@ -58,6 +58,43 @@ function markActiveQuestionUsed(room: Room) {
   }
 }
 
+function clampVolume(volume: number) {
+  return Math.max(0, Math.min(1, volume));
+}
+
+function setRoomAudio(
+    room: Room,
+    status: 'stopped' | 'playing' | 'paused',
+    soundUrl?: string | null
+) {
+  const currentAudio = room.audio ?? {
+    soundUrl: null,
+    status: 'stopped',
+    version: 0,
+    volume: 0.35
+  };
+
+  room.audio = {
+    soundUrl: soundUrl !== undefined ? soundUrl : currentAudio.soundUrl,
+    status,
+    version: currentAudio.version + 1,
+    volume: currentAudio.volume
+  };
+}
+
+function setRoomAudioVolume(room: Room, volume: number) {
+  const currentAudio = room.audio ?? {
+    soundUrl: null,
+    status: 'stopped',
+    version: 0,
+    volume: 0.35
+  };
+
+  room.audio = {
+    ...currentAudio,
+    volume: clampVolume(volume)
+  };
+}
 
 io.on('connection', (socket) => {
   socket.on('room:create', (payload: { hostName: string }, callback: (response: ServerResponse) => void) => {
@@ -68,6 +105,105 @@ io.on('connection', (socket) => {
     respond(callback, room, player.id);
     emitRoom(room);
   });
+
+  socket.on(
+      'audio:play',
+      (
+          payload: { roomCode: string },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const room = requireHostRoom(payload.roomCode, socket.id, callback);
+        if (!room) return;
+
+        const soundUrl = room.activeQuestion?.question.soundUrl;
+
+        if (!soundUrl) {
+          callback({ ok: false, error: 'This question has no sound.' });
+          return;
+        }
+
+        setRoomAudio(room, 'playing', soundUrl);
+        room.message = 'Sound playing.';
+
+        respond(callback, room);
+        emitRoom(room);
+      }
+  );
+
+  socket.on(
+      'audio:volume',
+      (
+          payload: { roomCode: string; volume: number },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const room = requireHostRoom(payload.roomCode, socket.id, callback);
+        if (!room) return;
+
+        setRoomAudioVolume(room, payload.volume);
+        room.message = `Sound volume set to ${Math.round(room.audio.volume * 100)}%.`;
+
+        respond(callback, room);
+        emitRoom(room);
+      }
+  );
+
+  socket.on(
+      'audio:pause',
+      (
+          payload: { roomCode: string },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const room = requireHostRoom(payload.roomCode, socket.id, callback);
+        if (!room) return;
+
+        setRoomAudio(room, 'paused');
+        room.message = 'Sound paused.';
+
+        respond(callback, room);
+        emitRoom(room);
+      }
+  );
+
+  socket.on(
+      'audio:stop',
+      (
+          payload: { roomCode: string },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const room = requireHostRoom(payload.roomCode, socket.id, callback);
+        if (!room) return;
+
+        setRoomAudio(room, 'stopped');
+        room.message = 'Sound stopped.';
+
+        respond(callback, room);
+        emitRoom(room);
+      }
+  );
+
+  socket.on(
+      'audio:restart',
+      (
+          payload: { roomCode: string },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const room = requireHostRoom(payload.roomCode, socket.id, callback);
+        if (!room) return;
+
+        const soundUrl = room.activeQuestion?.question.soundUrl;
+
+        if (!soundUrl) {
+          callback({ ok: false, error: 'This question has no sound.' });
+          return;
+        }
+
+        setRoomAudio(room, 'playing', soundUrl);
+        room.message = 'Sound restarted.';
+
+        respond(callback, room);
+        emitRoom(room);
+      }
+  );
 
   socket.on(
     'room:join',
@@ -151,6 +287,8 @@ io.on('connection', (socket) => {
       room.buzzer.buzzOrder = [];
       room.message = 'Question selected.';
 
+      setRoomAudio(room, 'stopped', question.soundUrl ?? null);
+
       respond(callback, room);
       emitRoom(room);
     }
@@ -215,6 +353,9 @@ io.on('connection', (socket) => {
       room.buzzer.firstBuzz = buzz;
       room.buzzer.locked = true;
       room.message = `${player.name} buzzed first.`;
+      if (room.audio.soundUrl) {
+        setRoomAudio(room, 'stopped');
+      }
     }
 
     respond(callback, room);

@@ -14,6 +14,12 @@ export function createRoom(socketId: string, hostName: string): { room: Room; pl
     players: [player],
     categories: createQuestionSet(),
     activeQuestion: null,
+    audio: {
+      soundUrl: null,
+      status: 'stopped',
+      version: 0,
+      volume: 0.35
+    },
     buzzer: {
       locked: true,
       firstBuzz: null,

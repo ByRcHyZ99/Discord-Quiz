@@ -15,6 +15,16 @@ export type Question = {
   text: string;
   answer: string;
   used: boolean;
+  soundUrl?: string;
+};
+
+export type AudioStatus = 'stopped' | 'playing' | 'paused';
+
+export type AudioState = {
+  soundUrl: string | null;
+  status: AudioStatus;
+  version: number;
+  volume: number;
 };
 
 export type Category = {
@@ -48,6 +58,7 @@ export type GameState = {
   activeQuestion: ActiveQuestion | null;
   buzzer: BuzzerState;
   message: string;
+  audio: AudioState;
 };
 
 export type ServerResponse = {
