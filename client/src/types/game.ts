@@ -30,6 +30,7 @@ export type Question = {
   imageMode?: 'normal' | 'zoom';
   zoomLevels?: number[];
   zoomStartIndex?: number;
+}
 
 export type AudioStatus = 'stopped' | 'playing' | 'paused';
 
