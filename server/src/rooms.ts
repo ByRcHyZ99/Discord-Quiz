@@ -11,7 +11,8 @@ export function createRoom(socketId: string, hostName: string): { room: Room; pl
   const room: Room = {
     roomCode,
     phase: 'lobby',
-    players: [player],
+    hostId: host.id,
+    players: [host],
     categories: createQuestionSet(),
     activeQuestion: null,
     audio: {
@@ -25,7 +26,7 @@ export function createRoom(socketId: string, hostName: string): { room: Room; pl
       firstBuzz: null,
       buzzOrder: []
     },
-    message: 'Lobby created.'
+    message: 'Room created.'
   };
 
   rooms.set(roomCode, room);
