@@ -183,6 +183,20 @@ function startGame() {
   socket.emit('room:start', { roomCode: gameState.value.roomCode }, handleResponse);
 }
 
+function leaveGame() {
+  clearSession();
+
+  gameState.value = null;
+  currentPlayerId.value = null;
+  connectionError.value = '';
+
+  socket.disconnect();
+
+  setTimeout(() => {
+    socket.connect();
+  }, 100);
+}
+
 function selectQuestion(questionId: string) {
   if (!gameState.value || !isHost.value) return;
   socket.emit('question:select', { roomCode: gameState.value.roomCode, questionId }, handleResponse);
@@ -230,6 +244,14 @@ function closeQuestion() {
 
 <template>
   <main class="app-shell">
+    <button
+        v-if="gameState"
+        class="leave-game-button"
+        type="button"
+        @click="leaveGame"
+    >
+      Leave Game
+    </button>
     <AudioSync
         v-if="gameState"
         :audio="gameState.audio"
