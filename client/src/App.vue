@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { socket } from './services/socket';
 import type { GameState, ServerResponse } from './types/game';
 import StartScreen from './components/StartScreen.vue';
@@ -14,6 +14,8 @@ import AudioSync from './components/AudioSync.vue';
 const gameState = ref<GameState | null>(null);
 const currentPlayerId = ref<string | null>(null);
 const connectionError = ref('');
+const estimateValue = ref('');
+const estimateSubmitted = ref(false);
 
 const SESSION_STORAGE_KEY = 'discord-quiz-session';
 
@@ -21,6 +23,23 @@ type SavedSession = {
   roomCode: string;
   playerId: string;
 };
+
+const showEstimateInput = computed(() => {
+  return (
+      gameState.value?.phase === 'question' &&
+      gameState.value.activeQuestion?.revealed === true &&
+      gameState.value.activeQuestion.question.questionType === 'estimate' &&
+      !isHost.value
+  );
+});
+
+watch(
+    () => gameState.value?.activeQuestion?.question.id,
+    () => {
+      estimateValue.value = '';
+      estimateSubmitted.value = false;
+    }
+);
 
 const currentPlayer = computed(() => {
   if (!gameState.value || !currentPlayerId.value) return null;
@@ -65,6 +84,74 @@ function stopAudio() {
   socket.emit(
       'audio:stop',
       { roomCode: gameState.value.roomCode },
+      handleResponse
+  );
+}
+
+function submitEstimateFromOverlay() {
+  if (!gameState.value) return;
+
+  const value = estimateValue.value.trim();
+  if (!value) return;
+
+  socket.emit(
+      'estimate:submit',
+      {
+        roomCode: gameState.value.roomCode,
+        value
+      },
+      handleResponse
+  );
+
+  estimateSubmitted.value = true;
+}
+
+function submitEstimateAnswer(value: string) {
+  if (!gameState.value) return;
+
+  socket.emit(
+      'estimate:submit',
+      {
+        roomCode: gameState.value.roomCode,
+        value
+      },
+      handleResponse
+  );
+}
+
+function closeEstimates() {
+  if (!gameState.value) return;
+
+  socket.emit(
+      'estimate:close',
+      {
+        roomCode: gameState.value.roomCode
+      },
+      handleResponse
+  );
+}
+
+function revealEstimateAnswer() {
+  if (!gameState.value) return;
+
+  socket.emit(
+      'estimate:reveal-answer',
+      {
+        roomCode: gameState.value.roomCode
+      },
+      handleResponse
+  );
+}
+
+function awardEstimatePoints(playerId: string) {
+  if (!gameState.value) return;
+
+  socket.emit(
+      'estimate:award',
+      {
+        roomCode: gameState.value.roomCode,
+        playerId
+      },
       handleResponse
   );
 }
@@ -273,6 +360,43 @@ function closeQuestion() {
 </script>
 
 <template>
+  <div
+      v-if="showEstimateInput"
+      class="estimate-overlay"
+  >
+    <section class="estimate-modal">
+      <p class="eyebrow">Your estimate</p>
+
+      <h2>
+        {{ gameState?.activeQuestion?.question.text }}
+      </h2>
+
+      <p class="muted">
+        Write your answer here. Other players cannot see it yet.
+      </p>
+
+      <input
+          v-model="estimateValue"
+          class="estimate-input"
+          type="text"
+          maxlength="120"
+          placeholder="Your estimate / answer..."
+          @keydown.enter.prevent="submitEstimateFromOverlay"
+      />
+
+      <button
+          class="big-action"
+          :disabled="!estimateValue.trim()"
+          @click="submitEstimateFromOverlay"
+      >
+        {{ estimateSubmitted ? 'Update Answer' : 'Submit Answer' }}
+      </button>
+
+      <p v-if="estimateSubmitted" class="muted">
+        Submitted. You can update it until the host closes estimates.
+      </p>
+    </section>
+  </div>
   <main class="app-shell">
     <button
         v-if="gameState"
@@ -323,11 +447,9 @@ function closeQuestion() {
           <Scoreboard :players="gameState.players" />
 
           <PlayerControls
-            v-if="!isHost"
-            :buzzer="gameState.buzzer"
-            :active-question="gameState.activeQuestion"
-            :current-player-id="currentPlayerId"
-            @buzz="buzz"
+              v-if="!isHost"
+              :state="gameState"
+              @buzz="buzz"
           />
 
           <HostControls
@@ -347,18 +469,21 @@ function closeQuestion() {
               @image-reveal-more="revealImageMore"
               @image-reveal-less="revealImageLess"
               @image-reset="resetImageZoom"
+              @estimate-close="closeEstimates"
+              @estimate-reveal-answer="revealEstimateAnswer"
+              @estimate-award="awardEstimatePoints"
           />
         </aside>
 
         <section class="main-panel">
           <QuestionView
-              v-if="gameState.phase === 'answer'"
+              v-if="
+    gameState.phase === 'question' ||
+    gameState.phase === 'submissions' ||
+    gameState.phase === 'answer'
+  "
               :state="gameState"
-          />
-
-          <QuestionView
-              v-else-if="gameState.phase === 'question'"
-              :state="gameState"
+              :is-host="isHost"
           />
 
           <GameBoard

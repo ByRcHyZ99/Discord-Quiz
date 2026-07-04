@@ -67,8 +67,21 @@ export function getRoom(roomCode: string): Room | null {
 }
 
 export function getPublicRoom(room: Room): PublicRoom {
+  const shouldShowEstimateAnswers =
+      room.phase === 'submissions' || room.phase === 'answer';
+
+  const activeQuestion = room.activeQuestion
+      ? {
+        ...room.activeQuestion,
+        estimateAnswers: shouldShowEstimateAnswers
+            ? room.activeQuestion.estimateAnswers
+            : []
+      }
+      : null;
+
   return {
     ...room,
+    activeQuestion,
     players: room.players.map(({ socketId: _socketId, ...player }) => player)
   };
 }

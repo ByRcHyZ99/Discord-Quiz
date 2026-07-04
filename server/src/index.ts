@@ -107,6 +107,194 @@ io.on('connection', (socket) => {
   });
 
   socket.on(
+      'estimate:submit',
+      (
+          payload: { roomCode: string; value: string },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const roomCode = cleanRoomCode(payload.roomCode);
+        const room = getRoom(roomCode);
+
+        if (!room) {
+          callback({ ok: false, error: 'Room not found.' });
+          return;
+        }
+
+        const player = room.players.find((item) => item.socketId === socket.id);
+
+        if (!player) {
+          callback({ ok: false, error: 'Player not found in this room.' });
+          return;
+        }
+
+        if (
+            room.phase !== 'question' ||
+            !room.activeQuestion ||
+            room.activeQuestion.question.questionType !== 'estimate' ||
+            !room.activeQuestion.revealed
+        ) {
+          callback({ ok: false, error: 'No open estimate question.' });
+          return;
+        }
+
+        const value = String(payload.value ?? '').trim().slice(0, 120);
+
+        if (!value) {
+          callback({ ok: false, error: 'Please enter an answer.' });
+          return;
+        }
+
+        const existingAnswer = room.activeQuestion.estimateAnswers.find(
+            (answer) => answer.playerId === player.id
+        );
+
+        if (existingAnswer) {
+          existingAnswer.value = value;
+          existingAnswer.submittedAt = Date.now();
+        } else {
+          room.activeQuestion.estimateAnswers.push({
+            playerId: player.id,
+            playerName: player.name,
+            value,
+            submittedAt: Date.now()
+          });
+        }
+
+        room.message = `${player.name} submitted an answer.`;
+
+        respond(callback, room, player.id);
+        emitRoom(room);
+      }
+  );
+
+  socket.on(
+      'estimate:award',
+      (
+          payload: { roomCode: string; playerId: string },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const room = requireHostRoom(payload.roomCode, socket.id, callback);
+        if (!room) return;
+
+        const activeQuestion = room.activeQuestion;
+
+        if (
+            !activeQuestion ||
+            activeQuestion.question.questionType !== 'estimate'
+        ) {
+          callback({ ok: false, error: 'No estimate question is active.' });
+          return;
+        }
+
+        if (room.phase !== 'submissions' && room.phase !== 'answer') {
+          callback({
+            ok: false,
+            error: 'You can only award estimate points after closing submissions.'
+          });
+          return;
+        }
+
+        const winner = room.players.find((player) => player.id === payload.playerId);
+
+        if (!winner) {
+          callback({ ok: false, error: 'Player not found.' });
+          return;
+        }
+
+        const hasSubmitted = activeQuestion.estimateAnswers.some(
+            (answer) => answer.playerId === winner.id
+        );
+
+        if (!hasSubmitted) {
+          callback({
+            ok: false,
+            error: 'This player did not submit an estimate.'
+          });
+          return;
+        }
+
+        const points = activeQuestion.question.points;
+
+        if (
+            activeQuestion.estimateAwardedPlayerId &&
+            activeQuestion.estimateAwardedPlayerId !== winner.id
+        ) {
+          const previousWinner = room.players.find(
+              (player) => player.id === activeQuestion.estimateAwardedPlayerId
+          );
+
+          if (previousWinner) {
+            previousWinner.score -= points;
+          }
+        }
+
+        if (activeQuestion.estimateAwardedPlayerId !== winner.id) {
+          winner.score += points;
+        }
+
+        activeQuestion.estimateAwardedPlayerId = winner.id;
+        activeQuestion.estimateAwardedPlayerName = winner.name;
+
+        room.message = `${winner.name} received ${points} points for the estimate.`;
+
+        respond(callback, room);
+        emitRoom(room);
+      }
+  );
+
+  socket.on(
+      'estimate:close',
+      (
+          payload: { roomCode: string },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const room = requireHostRoom(payload.roomCode, socket.id, callback);
+        if (!room) return;
+
+        if (
+            !room.activeQuestion ||
+            room.activeQuestion.question.questionType !== 'estimate'
+        ) {
+          callback({ ok: false, error: 'No estimate question is active.' });
+          return;
+        }
+
+        room.phase = 'submissions';
+        room.buzzer.locked = true;
+        room.message = 'All player answers are now visible.';
+
+        respond(callback, room);
+        emitRoom(room);
+      }
+  );
+
+  socket.on(
+      'estimate:reveal-answer',
+      (
+          payload: { roomCode: string },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const room = requireHostRoom(payload.roomCode, socket.id, callback);
+        if (!room) return;
+
+        if (
+            !room.activeQuestion ||
+            room.activeQuestion.question.questionType !== 'estimate'
+        ) {
+          callback({ ok: false, error: 'No estimate question is active.' });
+          return;
+        }
+
+        room.phase = 'answer';
+        room.buzzer.locked = true;
+        room.message = 'Correct answer revealed.';
+
+        respond(callback, room);
+        emitRoom(room);
+      }
+  );
+
+  socket.on(
       'image:reveal-more',
       (
           payload: { roomCode: string },
@@ -357,7 +545,10 @@ io.on('connection', (socket) => {
       room.activeQuestion = {
         question,
         revealed: false,
-        zoomStep: question.zoomStartIndex ?? 0
+        zoomStep: question.zoomStartIndex ?? 0,
+        estimateAnswers: [],
+        estimateAwardedPlayerId: null,
+        estimateAwardedPlayerName: null
       };
       room.buzzer.locked = true;
       room.buzzer.firstBuzz = null;

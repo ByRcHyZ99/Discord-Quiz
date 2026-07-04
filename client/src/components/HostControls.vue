@@ -20,6 +20,9 @@ const emit = defineEmits<{
   'image-reveal-more': [];
   'image-reveal-less': [];
   'image-reset': [];
+  'estimate-close': [];
+  'estimate-reveal-answer': [];
+  'estimate-award': [playerId: string];
 }>();
 
 function handleVolumeInput(event: Event) {
@@ -32,9 +35,110 @@ function handleVolumeInput(event: Event) {
   <section class="panel host-controls">
     <h2>Host controls</h2>
 
-    <div v-if="state.phase === 'answer'" class="control-stack">
+    <div v-if="state.phase === 'submissions'" class="control-stack">
+      <p class="muted">
+        Player answers are now visible.
+      </p>
+
+      <div
+          v-if="state.activeQuestion?.estimateAnswers.length"
+          class="estimate-award-list"
+      >
+        <p class="eyebrow">Award points</p>
+
+        <button
+            v-for="answer in state.activeQuestion.estimateAnswers"
+            :key="answer.playerId"
+            class="estimate-award-button"
+            :class="{
+        'estimate-award-button--selected':
+          state.activeQuestion.estimateAwardedPlayerId === answer.playerId
+      }"
+            @click="emit('estimate-award', answer.playerId)"
+        >
+      <span>
+        {{ answer.playerName }}
+      </span>
+
+          <strong>
+            {{ answer.value }}
+          </strong>
+
+          <em>
+            {{
+            state.activeQuestion.estimateAwardedPlayerId === answer.playerId
+            ? 'Points awarded'
+            : `Give ${state.activeQuestion.question.points} pts`
+            }}
+          </em>
+        </button>
+      </div>
+
+      <p
+          v-if="state.activeQuestion?.estimateAwardedPlayerName"
+          class="muted"
+      >
+        Points awarded to:
+        <strong>{{ state.activeQuestion.estimateAwardedPlayerName }}</strong>
+      </p>
+
+      <button class="big-action" @click="emit('estimate-reveal-answer')">
+        Reveal Correct Answer
+      </button>
+
+      <button class="secondary" @click="emit('close-question')">
+        Back to Board
+      </button>
+    </div>
+
+    <div v-else-if="state.phase === 'answer'" class="control-stack">
       <p class="muted">
         The correct answer is visible.
+      </p>
+
+      <div
+          v-if="
+      state.activeQuestion?.question.questionType === 'estimate' &&
+      state.activeQuestion.estimateAnswers.length
+    "
+          class="estimate-award-list"
+      >
+        <p class="eyebrow">Award points</p>
+
+        <button
+            v-for="answer in state.activeQuestion.estimateAnswers"
+            :key="answer.playerId"
+            class="estimate-award-button"
+            :class="{
+        'estimate-award-button--selected':
+          state.activeQuestion.estimateAwardedPlayerId === answer.playerId
+      }"
+            @click="emit('estimate-award', answer.playerId)"
+        >
+      <span>
+        {{ answer.playerName }}
+      </span>
+
+          <strong>
+            {{ answer.value }}
+          </strong>
+
+          <em>
+            {{
+            state.activeQuestion.estimateAwardedPlayerId === answer.playerId
+            ? 'Points awarded'
+            : `Give ${state.activeQuestion.question.points} pts`
+            }}
+          </em>
+        </button>
+      </div>
+
+      <p
+          v-if="state.activeQuestion?.estimateAwardedPlayerName"
+          class="muted"
+      >
+        Points awarded to:
+        <strong>{{ state.activeQuestion.estimateAwardedPlayerName }}</strong>
       </p>
 
       <button class="big-action" @click="emit('close-question')">
@@ -43,31 +147,6 @@ function handleVolumeInput(event: Event) {
     </div>
 
     <div v-else-if="state.phase === 'question' && state.activeQuestion" class="control-stack">
-      <div
-          v-if="state.activeQuestion.question.imageMode === 'zoom'"
-          class="image-controls"
-      >
-        <p class="eyebrow">Image controls</p>
-
-        <button @click="emit('image-reveal-more')">
-          Reveal More
-        </button>
-
-        <button @click="emit('image-reveal-less')">
-          Reveal Less
-        </button>
-
-        <button @click="emit('image-reset')">
-          Reset Image
-        </button>
-
-        <p class="muted">
-          Zoom step:
-          {{ state.activeQuestion.zoomStep + 1 }}
-          /
-          {{ state.activeQuestion.question.zoomLevels?.length ?? 1 }}
-        </p>
-      </div>
       <div
           v-if="state.activeQuestion.question.soundUrl"
           class="audio-controls"
@@ -106,6 +185,32 @@ function handleVolumeInput(event: Event) {
         </button>
       </div>
 
+      <div
+          v-if="state.activeQuestion.question.imageMode === 'zoom'"
+          class="image-controls"
+      >
+        <p class="eyebrow">Image controls</p>
+
+        <button @click="emit('image-reveal-more')">
+          Reveal More
+        </button>
+
+        <button @click="emit('image-reveal-less')">
+          Reveal Less
+        </button>
+
+        <button @click="emit('image-reset')">
+          Reset Image
+        </button>
+
+        <p class="muted">
+          Zoom step:
+          {{ state.activeQuestion.zoomStep + 1 }}
+          /
+          {{ state.activeQuestion.question.zoomLevels?.length ?? 1 }}
+        </p>
+      </div>
+
       <button
           v-if="!state.activeQuestion.revealed"
           class="big-action"
@@ -115,33 +220,45 @@ function handleVolumeInput(event: Event) {
       </button>
 
       <template v-else>
-        <button @click="emit('unlock-buzzer')">
-          Unlock Buzzer
-        </button>
+        <template v-if="state.activeQuestion.question.questionType === 'estimate'">
+          <button class="big-action" @click="emit('estimate-close')">
+            Close Estimates / Show Player Answers
+          </button>
 
-        <button @click="emit('lock-buzzer')">
-          Lock Buzzer
-        </button>
+          <button class="secondary" @click="emit('close-question')">
+            Cancel / Back to Board
+          </button>
+        </template>
 
-        <button
-            class="success"
-            :disabled="!state.buzzer.firstBuzz"
-            @click="emit('mark-correct')"
-        >
-          Mark First Buzz Correct
-        </button>
+        <template v-else>
+          <button @click="emit('unlock-buzzer')">
+            Unlock Buzzer
+          </button>
 
-        <button
-            class="danger"
-            :disabled="!state.buzzer.firstBuzz"
-            @click="emit('mark-wrong')"
-        >
-          Mark First Buzz Wrong / Timeout
-        </button>
+          <button @click="emit('lock-buzzer')">
+            Lock Buzzer
+          </button>
 
-        <button class="secondary" @click="emit('close-question')">
-          Close Question / Back to Board
-        </button>
+          <button
+              class="success"
+              :disabled="!state.buzzer.firstBuzz"
+              @click="emit('mark-correct')"
+          >
+            Mark First Buzz Correct
+          </button>
+
+          <button
+              class="danger"
+              :disabled="!state.buzzer.firstBuzz"
+              @click="emit('mark-wrong')"
+          >
+            Mark First Buzz Wrong / Timeout
+          </button>
+
+          <button class="secondary" @click="emit('close-question')">
+            Close Question / Back to Board
+          </button>
+        </template>
       </template>
     </div>
 

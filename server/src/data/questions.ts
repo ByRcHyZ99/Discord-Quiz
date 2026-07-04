@@ -2,47 +2,52 @@ import type { Category } from '../types.js';
 
 export const createQuestionSet = (): Category[] => [
   {
-    id: 'gaming',
-    title: 'Gaming',
+    id: 'schaetzen',
+    title: 'Schätzen',
     questions: [
       {
-        id: 'gaming-100',
-        categoryId: 'gaming',
+        id: 'schaetzen-100',
+        categoryId: 'schaetzen',
         points: 100,
-        text: 'Gaming 100 question. Replace this text.',
-        answer: 'Gaming 100 answer. Replace this answer.',
+        text: 'Wie viele Spiele hat Burgi auf seinem Main Account',
+        answer: '209',
+        questionType: 'estimate',
         used: false
       },
       {
-        id: 'gaming-200',
-        categoryId: 'gaming',
+        id: 'schaetzen-200',
+        categoryId: 'schaetzen',
         points: 200,
         text: 'Gaming 200 question. Replace this text.',
         answer: 'Gaming 200 answer. Replace this answer.',
+        questionType: 'estimate',
         used: false
       },
       {
-        id: 'gaming-300',
-        categoryId: 'gaming',
+        id: 'schaetzen-300',
+        categoryId: 'schaetzen',
         points: 300,
-        text: 'Gaming 300 question. Replace this text.',
-        answer: 'Gaming 300 answer. Replace this answer.',
+        text: 'Wie viele Pokemon gibt es in der Gen 1',
+        answer: '151',
+        questionType: 'estimate',
         used: false
       },
       {
-        id: 'gaming-400',
-        categoryId: 'gaming',
+        id: 'schaetzen-400',
+        categoryId: 'schaetzen',
         points: 400,
         text: 'Gaming 400 question. Replace this text.',
         answer: 'Gaming 400 answer. Replace this answer.',
+        questionType: 'estimate',
         used: false
       },
       {
-        id: 'gaming-500',
-        categoryId: 'gaming',
+        id: 'schaetzen-500',
+        categoryId: 'schaetzen',
         points: 500,
         text: 'Gaming 500 question. Replace this text.',
         answer: 'Gaming 500 answer. Replace this answer.',
+        questionType: 'estimate',
         used: false
       }
     ]
@@ -102,21 +107,21 @@ export const createQuestionSet = (): Category[] => [
     title: 'Counter Strike 2',
     questions: [
       {
-        id: 'cs2-100', //normale Frage mit Bild
+        id: 'cs2-100',
         categoryId: 'cs2',
         points: 100,
-        text: 'Music 100 question. Replace this text.',
-        answer: 'Music 100 answer. Replace this answer.',
-        imageUrl: '/images/movies/shrek.jpg',
-        imageMode: 'normal',
+        text: 'Welche Map hat den Callout "Banana"',
+        answer: 'Inferno',
         used: false
       },
       {
-        id: 'music-200',
-        categoryId: 'music',
+        id: 'cs2-200', //normale Frage mit Bild
+        categoryId: 'cs2',
         points: 200,
-        text: 'Music 200 question. Replace this text.',
-        answer: 'Music 200 answer. Replace this answer.',
+        text: 'Wie viel kostet Kevlar ohne Helm + CZ75-Auto',
+        answer: '500 + 650 = 1150',
+        imageUrl: '/images/cs2/kevlar.png',
+        imageMode: 'normal',
         used: false
       },
       {

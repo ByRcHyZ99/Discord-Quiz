@@ -4,6 +4,7 @@ import type { GameState } from '../types/game';
 
 const props = defineProps<{
   state: GameState;
+  isHost: boolean;
 }>();
 
 const currentZoomScale = computed(() => {
@@ -40,18 +41,74 @@ const isZoomImage = computed(() => {
         Buzzer {{ state.buzzer.locked ? 'locked' : 'open' }}
       </span>
 
+      <span v-if="state.phase === 'submissions'" class="badge badge--success">
+        Submissions
+      </span>
+
       <span v-if="state.phase === 'answer'" class="badge badge--success">
         Answer
       </span>
     </div>
 
-    <template v-if="state.phase === 'answer'">
+    <template v-if="state.phase === 'submissions'">
+      <template v-if="state.activeQuestion">
+        <p class="eyebrow">Player answers</p>
+
+        <h2>
+          {{ state.activeQuestion.question.text }}
+        </h2>
+
+        <div
+            v-if="state.activeQuestion.estimateAnswers.length"
+            class="estimate-answer-list"
+        >
+          <div
+              v-for="answer in state.activeQuestion.estimateAnswers"
+              :key="answer.playerId"
+              class="estimate-answer-card"
+          >
+            <strong>{{ answer.playerName }}</strong>
+            <span>{{ answer.value }}</span>
+          </div>
+        </div>
+
+        <p v-else class="muted">
+          Nobody submitted an answer.
+        </p>
+      </template>
+
+      <template v-else>
+        <h2>No active question</h2>
+        <p class="muted">
+          The game state is missing an active question.
+        </p>
+      </template>
+    </template>
+
+    <template v-else-if="state.phase === 'answer'">
       <template v-if="state.activeQuestion">
         <p class="eyebrow">Correct answer</p>
 
         <h2 class="answer-text">
           {{ state.activeQuestion.question.answer }}
         </h2>
+
+        <div
+            v-if="
+            state.activeQuestion.question.questionType === 'estimate' &&
+            state.activeQuestion.estimateAnswers.length
+          "
+            class="estimate-answer-list"
+        >
+          <div
+              v-for="answer in state.activeQuestion.estimateAnswers"
+              :key="answer.playerId"
+              class="estimate-answer-card"
+          >
+            <strong>{{ answer.playerName }}</strong>
+            <span>{{ answer.value }}</span>
+          </div>
+        </div>
 
         <div
             v-if="hasImage"
@@ -112,8 +169,12 @@ const isZoomImage = computed(() => {
 
       <div v-if="state.buzzer.buzzOrder.length" class="buzz-order">
         <p class="eyebrow">Buzz order</p>
+
         <ol>
-          <li v-for="buzz in state.buzzer.buzzOrder" :key="buzz.playerId">
+          <li
+              v-for="buzz in state.buzzer.buzzOrder"
+              :key="buzz.playerId"
+          >
             {{ buzz.playerName }}
           </li>
         </ol>

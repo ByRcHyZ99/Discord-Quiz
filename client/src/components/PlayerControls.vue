@@ -1,26 +1,29 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { ActiveQuestion, BuzzerState } from '../types/game';
+import type { GameState } from '../types/game';
 
 const props = defineProps<{
-  buzzer: BuzzerState;
-  activeQuestion: ActiveQuestion | null;
-  currentPlayerId: string | null;
+  state: GameState;
 }>();
 
 const emit = defineEmits<{
   buzz: [];
 }>();
 
-const alreadyBuzzed = computed(() => {
-  return props.buzzer.buzzOrder.some((buzz) => buzz.playerId === props.currentPlayerId);
+const isEstimateQuestion = computed(() => {
+  return (
+      props.state.phase === 'question' &&
+      props.state.activeQuestion?.revealed &&
+      props.state.activeQuestion.question.questionType === 'estimate'
+  );
 });
 
 const canBuzz = computed(() => {
-  return Boolean(
-    props.activeQuestion?.revealed &&
-    !props.buzzer.locked &&
-    !alreadyBuzzed.value
+  return (
+      props.state.phase === 'question' &&
+      props.state.activeQuestion?.revealed &&
+      props.state.activeQuestion.question.questionType !== 'estimate' &&
+      !props.state.buzzer.locked
   );
 });
 </script>
@@ -29,16 +32,36 @@ const canBuzz = computed(() => {
   <section class="panel player-controls">
     <h2>Player controls</h2>
 
-    <button
-      class="buzzer-button"
-      :disabled="!canBuzz"
-      @click="emit('buzz')"
-    >
-      Buzz!
-    </button>
+    <template v-if="isEstimateQuestion">
+      <p class="muted">
+        Enter your estimate in the box in the middle of the screen.
+      </p>
+    </template>
 
-    <p v-if="alreadyBuzzed" class="muted">You already buzzed.</p>
-    <p v-else-if="buzzer.locked" class="muted">Buzzer is locked.</p>
-    <p v-else-if="!activeQuestion?.revealed" class="muted">Waiting for a revealed question.</p>
+    <template v-else-if="state.phase === 'submissions'">
+      <p class="muted">
+        Submissions are closed. Player answers are visible now.
+      </p>
+    </template>
+
+    <template v-else-if="state.phase === 'answer'">
+      <p class="muted">
+        The correct answer is visible.
+      </p>
+    </template>
+
+    <template v-else>
+      <button
+          class="big-action"
+          :disabled="!canBuzz"
+          @click="emit('buzz')"
+      >
+        Buzz
+      </button>
+
+      <p v-if="state.buzzer.locked" class="muted">
+        Buzzer is locked.
+      </p>
+    </template>
   </section>
 </template>

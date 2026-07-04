@@ -1,4 +1,10 @@
-export type GamePhase = 'start' | 'lobby' | 'board' | 'question' | 'answer' | 'finished';
+export type GamePhase =
+    | 'lobby'
+    | 'board'
+    | 'question'
+    | 'submissions'
+    | 'answer'
+    | 'finished';
 
 export type Player = {
   id: string;
@@ -16,13 +22,14 @@ export type Question = {
   answer: string;
   used: boolean;
 
+  questionType?: 'normal' | 'estimate';
+
   soundUrl?: string;
 
   imageUrl?: string;
   imageMode?: 'normal' | 'zoom';
   zoomLevels?: number[];
   zoomStartIndex?: number;
-};
 
 export type AudioStatus = 'stopped' | 'playing' | 'paused';
 
@@ -31,6 +38,13 @@ export type AudioState = {
   status: AudioStatus;
   version: number;
   volume: number;
+};
+
+export type EstimateAnswer = {
+  playerId: string;
+  playerName: string;
+  value: string;
+  submittedAt: number;
 };
 
 export type Category = {
@@ -49,6 +63,9 @@ export type ActiveQuestion = {
   question: Question;
   revealed: boolean;
   zoomStep: number;
+  estimateAnswers: EstimateAnswer[];
+  estimateAwardedPlayerId?: string | null;
+  estimateAwardedPlayerName?: string | null;
 };
 
 export type BuzzerState = {
