@@ -31,6 +31,7 @@ export function createRoom(socketId: string, hostName: string): { room: Room; pl
       firstBuzz: null,
       buzzOrder: []
     },
+    soundCheckBuzzes: [],
     message: 'Room created.'
   };
 

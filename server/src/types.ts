@@ -1,5 +1,6 @@
 export type GamePhase =
     | 'lobby'
+    | 'soundcheck'
     | 'board'
     | 'question'
     | 'submissions'
@@ -106,6 +107,12 @@ export type BuzzerState = {
   buzzOrder: Buzz[];
 };
 
+export type SoundCheckBuzz = {
+  playerId: string;
+  playerName: string;
+  timestamp: number;
+};
+
 export type Room = {
   roomCode: string;
   phase: GamePhase;
@@ -117,6 +124,7 @@ export type Room = {
   message: string;
   audio: AudioState;
   sfx: SfxState;
+  soundCheckBuzzes: SoundCheckBuzz[];
 };
 
 export type PublicPlayer = Omit<Player, 'socketId'>;

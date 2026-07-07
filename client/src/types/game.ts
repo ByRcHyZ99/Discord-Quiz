@@ -1,5 +1,6 @@
 export type GamePhase =
     | 'lobby'
+    | 'soundcheck'
     | 'board'
     | 'question'
     | 'submissions'
@@ -22,6 +23,12 @@ export type AbilitySlot = {
   abilityName?: string;
   isFake?: boolean;
   fakeFromChampion?: string;
+};
+
+export type SoundCheckBuzz = {
+  playerId: string;
+  playerName: string;
+  timestamp: number;
 };
 
 export type Question = {
@@ -115,6 +122,7 @@ export type GameState = {
   message: string;
   audio: AudioState;
   sfx: SfxState;
+  soundCheckBuzzes: SoundCheckBuzz[];
 };
 
 export type ServerResponse = {

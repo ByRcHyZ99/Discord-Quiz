@@ -121,6 +121,125 @@ io.on('connection', (socket) => {
   });
 
   socket.on(
+      'soundcheck:buzz',
+      (
+          payload: { roomCode: string; playerId: string },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const roomCode = cleanRoomCode(payload.roomCode);
+        const room = getRoom(roomCode);
+
+        if (!room) {
+          callback({ ok: false, error: 'Room not found.' });
+          return;
+        }
+
+        if (room.phase !== 'soundcheck') {
+          callback({ ok: false, error: 'Soundcheck is not active.' });
+          return;
+        }
+
+        const player = room.players.find(
+            (item) => item.id === payload.playerId && item.socketId === socket.id
+        );
+
+        if (!player) {
+          callback({ ok: false, error: 'Player not found in this room.' });
+          return;
+        }
+
+        const existingBuzz = room.soundCheckBuzzes.find(
+            (buzz) => buzz.playerId === player.id
+        );
+
+        if (!existingBuzz) {
+          room.soundCheckBuzzes.push({
+            playerId: player.id,
+            playerName: player.name,
+            timestamp: Date.now()
+          });
+        }
+
+        playRoomSfx(room, '/sounds/sfx/buzzer.mp3');
+
+        room.message = `${player.name} tested the buzzer.`;
+
+        respond(callback, room, player.id);
+        emitRoom(room);
+      }
+  );
+
+  socket.on(
+      'soundcheck:play-sound',
+      (
+          payload: { roomCode: string },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const room = requireHostRoom(payload.roomCode, socket.id, callback);
+        if (!room) return;
+
+        if (room.phase !== 'soundcheck') {
+          callback({ ok: false, error: 'Soundcheck is not active.' });
+          return;
+        }
+
+        playRoomSfx(room, '/sounds/sfx/buzzer.mp3');
+
+        room.message = 'Test sound played.';
+
+        respond(callback, room);
+        emitRoom(room);
+      }
+  );
+
+  socket.on(
+      'soundcheck:reset',
+      (
+          payload: { roomCode: string },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const room = requireHostRoom(payload.roomCode, socket.id, callback);
+        if (!room) return;
+
+        if (room.phase !== 'soundcheck') {
+          callback({ ok: false, error: 'Soundcheck is not active.' });
+          return;
+        }
+
+        room.soundCheckBuzzes = [];
+        room.message = 'Soundcheck reset.';
+
+        respond(callback, room);
+        emitRoom(room);
+      }
+  );
+
+  socket.on(
+      'soundcheck:continue',
+      (
+          payload: { roomCode: string },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const room = requireHostRoom(payload.roomCode, socket.id, callback);
+        if (!room) return;
+
+        if (room.phase !== 'soundcheck') {
+          callback({ ok: false, error: 'Soundcheck is not active.' });
+          return;
+        }
+
+        room.phase = 'board';
+        room.buzzer.locked = true;
+        room.buzzer.firstBuzz = null;
+        room.buzzer.buzzOrder = [];
+        room.message = 'Game board opened.';
+
+        respond(callback, room);
+        emitRoom(room);
+      }
+  );
+
+  socket.on(
       'progressive:reveal-next',
       (
           payload: { roomCode: string },
@@ -714,8 +833,9 @@ io.on('connection', (socket) => {
     const room = requireHostRoom(payload.roomCode, socket.id, callback);
     if (!room) return;
 
-    room.phase = 'board';
-    room.message = 'Game started.';
+    room.phase = 'soundcheck';
+    room.soundCheckBuzzes = [];
+    room.message = 'Soundcheck started.';
     room.buzzer.locked = true;
     room.buzzer.firstBuzz = null;
     room.buzzer.buzzOrder = [];

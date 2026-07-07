@@ -4,13 +4,14 @@ import type { SfxState } from '../types/game';
 
 const props = defineProps<{
   sfx: SfxState;
+  localVolume?: number;
 }>();
 
 const audioElement = ref<HTMLAudioElement | null>(null);
 const lastVersion = ref(0);
 
 function clampVolume(volume: number | undefined) {
-  if (volume === undefined) return 0.55;
+  if (volume === undefined) return 1;
   return Math.max(0, Math.min(1, volume));
 }
 
@@ -20,13 +21,16 @@ watch(
       const element = audioElement.value;
       if (!element) return;
 
-      element.volume = clampVolume(sfxState.volume);
-
       if (!sfxState.soundUrl) return;
 
       if (sfxState.version === lastVersion.value) return;
 
       lastVersion.value = sfxState.version;
+
+      const serverVolume = clampVolume(sfxState.volume);
+      const localVolume = clampVolume(props.localVolume);
+
+      element.volume = Math.max(0, Math.min(1, serverVolume * localVolume));
 
       element.pause();
       element.currentTime = 0;

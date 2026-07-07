@@ -11,6 +11,7 @@ import PlayerControls from './components/PlayerControls.vue';
 import HostControls from './components/HostControls.vue';
 import AudioSync from './components/AudioSync.vue';
 import SfxSync from './components/SfxSync.vue';
+import SoundCheckScreen from './components/SoundCheckScreen.vue';
 
 const gameState = ref<GameState | null>(null);
 const currentPlayerId = ref<string | null>(null);
@@ -19,6 +20,77 @@ const estimateValue = ref('');
 const estimateSubmitted = ref(false);
 
 const SESSION_STORAGE_KEY = 'discord-quiz-session';
+
+const SFX_VOLUME_KEY = 'discord-quiz-sfx-volume';
+
+function loadLocalSfxVolume() {
+  const rawVolume = localStorage.getItem(SFX_VOLUME_KEY);
+  if (!rawVolume) return 1;
+
+  const parsedVolume = Number(rawVolume);
+  if (Number.isNaN(parsedVolume)) return 1;
+
+  return Math.max(0, Math.min(1, parsedVolume));
+}
+
+const sfxLocalVolume = ref(loadLocalSfxVolume());
+
+watch(sfxLocalVolume, (volume) => {
+  localStorage.setItem(SFX_VOLUME_KEY, String(volume));
+});
+
+function setLocalSfxVolume(volume: number) {
+  sfxLocalVolume.value = Math.max(0, Math.min(1, volume));
+}
+
+function testSoundCheckBuzz() {
+  if (!gameState.value || !currentPlayerId.value) return;
+
+  socket.emit(
+      'soundcheck:buzz',
+      {
+        roomCode: gameState.value.roomCode,
+        playerId: currentPlayerId.value
+      },
+      handleResponse
+  );
+}
+
+function playSoundCheckTestSound() {
+  if (!gameState.value || !isHost.value) return;
+
+  socket.emit(
+      'soundcheck:play-sound',
+      {
+        roomCode: gameState.value.roomCode
+      },
+      handleResponse
+  );
+}
+
+function resetSoundCheck() {
+  if (!gameState.value || !isHost.value) return;
+
+  socket.emit(
+      'soundcheck:reset',
+      {
+        roomCode: gameState.value.roomCode
+      },
+      handleResponse
+  );
+}
+
+function continueToGameBoard() {
+  if (!gameState.value || !isHost.value) return;
+
+  socket.emit(
+      'soundcheck:continue',
+      {
+        roomCode: gameState.value.roomCode
+      },
+      handleResponse
+  );
+}
 
 type SavedSession = {
   roomCode: string;
@@ -507,6 +579,7 @@ function closeQuestion() {
     <SfxSync
         v-if="gameState"
         :sfx="gameState.sfx"
+        :local-volume="sfxLocalVolume"
     />
 
     <section v-if="connectionError" class="error-box">
@@ -535,10 +608,23 @@ function closeQuestion() {
       </header>
 
       <LobbyScreen
-        v-if="gameState.phase === 'lobby'"
-        :players="gameState.players"
-        :is-host="isHost"
-        @start-game="startGame"
+          v-if="gameState.phase === 'lobby'"
+          :players="gameState.players"
+          :is-host="isHost"
+          @start-game="startGame"
+      />
+
+      <SoundCheckScreen
+          v-else-if="gameState.phase === 'soundcheck'"
+          :state="gameState"
+          :is-host="isHost"
+          :current-player-id="currentPlayerId"
+          :sfx-volume="sfxLocalVolume"
+          @test-buzz="testSoundCheckBuzz"
+          @play-test-sound="playSoundCheckTestSound"
+          @reset="resetSoundCheck"
+          @continue="continueToGameBoard"
+          @update-sfx-volume="setLocalSfxVolume"
       />
 
       <section v-else class="game-layout">
@@ -583,10 +669,10 @@ function closeQuestion() {
         <section class="main-panel">
           <QuestionView
               v-if="
-    gameState.phase === 'question' ||
-    gameState.phase === 'submissions' ||
-    gameState.phase === 'answer'
-  "
+        gameState.phase === 'question' ||
+        gameState.phase === 'submissions' ||
+        gameState.phase === 'answer'
+      "
               :state="gameState"
               :is-host="isHost"
           />
