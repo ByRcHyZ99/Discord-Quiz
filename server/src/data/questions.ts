@@ -171,7 +171,7 @@ export const createQuestionSet = (): Category[] => [
             imageUrl: '/images/lol/abilities/corki/passive.png',
             abilityName: 'Präzision',
             isFake: true,
-            fakeFromChampion: 'Brand'
+            fakeFromChampion: 'Tristana'
           },
           {
             key: 'Q',
@@ -195,7 +195,7 @@ export const createQuestionSet = (): Category[] => [
           }
         ],
 
-        fakeAbilityKey: 'Passive',
+        fakeAbilityKey: 'P',
         fakeAbilityFrom: 'Tristana',
         fakeAbilityName: 'Präzision',
 
