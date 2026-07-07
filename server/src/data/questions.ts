@@ -136,7 +136,7 @@ export const createQuestionSet = (): Category[] => [
         categoryId: 'ohrwurm',
         points: 200,
         text: 'Welcher Champion ist das?',
-        answer: 'K`sante - W,
+        answer: 'K`sante - W',
         soundUrl: '/sounds/ksante.mp3',
         used: false
       },
@@ -188,7 +188,7 @@ export const createQuestionSet = (): Category[] => [
           {
             key: 'P',
             imageUrl: '/images/lol/abilities/corki/tristana_passive.png',
-            abilityName: 'Hextech Munition,
+            abilityName: 'Hextech Munition',
             isFake: true,
             fakeFromChampion: 'Tristana'
           },
@@ -250,7 +250,7 @@ export const createQuestionSet = (): Category[] => [
           {
             key: 'E',
             imageUrl: '/images/lol/abilities/camille/nilah_e.png',
-            abilityName: 'Greifhaken'
+            abilityName: 'Greifhaken',
             isFake: true,
             fakeFromChampion: 'Nilah'
           },
@@ -287,7 +287,7 @@ export const createQuestionSet = (): Category[] => [
           {
             key: 'Q',
             imageUrl: '/images/lol/abilities/kassadin/malzahar_q.png',
-            abilityName: 'Kugel der Leere'
+            abilityName: 'Kugel der Leere',
             isFake: true,
             fakeFromChampion: 'Malzahar'
           },
@@ -334,7 +334,7 @@ export const createQuestionSet = (): Category[] => [
           {
             key: 'Q',
             imageUrl: '/images/lol/abilities/blitzcrank/heimerdinger_q.png',
-            abilityName: 'Raketenangriff'
+            abilityName: 'Raketenangriff',
             isFake: true,
             fakeFromChampion: 'Heimerdinger'
           },
@@ -386,7 +386,7 @@ export const createQuestionSet = (): Category[] => [
           {
             key: 'W',
             imageUrl: '/images/lol/abilities/volibear/udyr_w.png',
-            abilityName: 'Zerfleischen'
+            abilityName: 'Zerfleischen',
             isFake: true,
             fakeFromChampion: 'Udyr'
           },

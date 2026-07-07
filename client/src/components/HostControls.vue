@@ -132,7 +132,7 @@ function handleVolumeInput(event: Event) {
             class="estimate-award-button"
             :class="{
         'estimate-award-button--selected':
-          state.activeQuestion.estimateAwardedPlayerId === answer.playerId
+          (state.activeQuestion.estimateAwardedPlayerIds ?? []).includes(answer.playerId)
       }"
             @click="emit('estimate-award', answer.playerId)"
         >
@@ -146,7 +146,7 @@ function handleVolumeInput(event: Event) {
 
           <em>
             {{
-            state.activeQuestion.estimateAwardedPlayerId === answer.playerId
+            (state.activeQuestion.estimateAwardedPlayerIds ?? []).includes(answer.playerId)
             ? 'Points awarded'
             : `Give ${state.activeQuestion.question.points} pts`
             }}

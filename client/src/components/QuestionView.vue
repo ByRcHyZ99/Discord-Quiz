@@ -9,6 +9,8 @@ const props = defineProps<{
   isHost: boolean;
 }>();
 
+const state = computed(() => props.state);
+
 const currentZoomScale = computed(() => {
   const activeQuestion = props.state.activeQuestion;
   if (!activeQuestion) return 1;
@@ -52,6 +54,7 @@ const isZoomImage = computed(() => {
       </span>
     </div>
 
+    <!-- ESTIMATE SUBMISSIONS SCREEN -->
     <template v-if="state.phase === 'submissions'">
       <template v-if="state.activeQuestion">
         <p class="eyebrow">Player answers</p>
@@ -87,15 +90,17 @@ const isZoomImage = computed(() => {
       </template>
     </template>
 
+    <!-- ANSWER SCREEN -->
     <template v-else-if="state.phase === 'answer'">
       <template v-if="state.activeQuestion">
-        <p class="eyebrow">Correct answer</p>
+        <template v-if="state.activeQuestion.question.questionType === 'ability-fake'">
+          <p class="eyebrow">Correct answer</p>
 
-        <AbilityFakeQuestionView
-            v-if="state.activeQuestion.question.questionType === 'ability-fake'"
-            :active-question="state.activeQuestion"
-            :first-buzz-name="state.buzzer.firstBuzz?.playerName ?? null"
-        />
+          <AbilityFakeQuestionView
+              :active-question="state.activeQuestion"
+              :first-buzz-name="state.buzzer.firstBuzz?.playerName ?? null"
+          />
+        </template>
 
         <template v-else-if="state.activeQuestion.question.questionType === 'progressive'">
           <ProgressiveQuestionView
@@ -113,15 +118,17 @@ const isZoomImage = computed(() => {
         </template>
 
         <template v-else>
+          <p class="eyebrow">Correct answer</p>
+
           <h2 class="answer-text">
             {{ state.activeQuestion.question.answer }}
           </h2>
 
           <div
               v-if="
-          state.activeQuestion.question.questionType === 'estimate' &&
-          state.activeQuestion.estimateAnswers.length
-        "
+              state.activeQuestion.question.questionType === 'estimate' &&
+              state.activeQuestion.estimateAnswers.length
+            "
               class="estimate-answer-list"
           >
             <div
@@ -159,6 +166,7 @@ const isZoomImage = computed(() => {
       </template>
     </template>
 
+    <!-- QUESTION SCREEN -->
     <template v-else-if="state.activeQuestion?.revealed">
       <AbilityFakeQuestionView
           v-if="state.activeQuestion.question.questionType === 'ability-fake'"
@@ -172,60 +180,60 @@ const isZoomImage = computed(() => {
       />
 
       <template v-else>
+        <h2>
+          {{ state.activeQuestion.question.text }}
+        </h2>
 
-      <template v-else>
-      <h2>
-        {{ state.activeQuestion.question.text }}
-      </h2>
+        <div
+            v-if="hasImage && isZoomImage"
+            class="question-image-frame question-image-frame--zoom"
+        >
+          <img
+              :src="state.activeQuestion.question.imageUrl"
+              alt="Question image"
+              class="question-image question-image--zoom"
+              :style="{ transform: `scale(${currentZoomScale})` }"
+          />
+        </div>
 
-      <div
-          v-if="hasImage && isZoomImage"
-          class="question-image-frame question-image-frame--zoom"
-      >
-        <img
-            :src="state.activeQuestion.question.imageUrl"
-            alt="Question image"
-            class="question-image question-image--zoom"
-            :style="{ transform: `scale(${currentZoomScale})` }"
-        />
-      </div>
+        <div
+            v-else-if="hasImage"
+            class="question-image-frame"
+        >
+          <img
+              :src="state.activeQuestion.question.imageUrl"
+              alt="Question image"
+              class="question-image"
+          />
+        </div>
 
-      <div
-          v-else-if="hasImage"
-          class="question-image-frame"
-      >
-        <img
-            :src="state.activeQuestion.question.imageUrl"
-            alt="Question image"
-            class="question-image"
-        />
-      </div>
+        <div v-if="state.buzzer.firstBuzz" class="first-buzz">
+          <p class="eyebrow">First buzz</p>
+          <strong>{{ state.buzzer.firstBuzz.playerName }}</strong>
+        </div>
 
-      <div v-if="state.buzzer.firstBuzz" class="first-buzz">
-        <p class="eyebrow">First buzz</p>
-        <strong>{{ state.buzzer.firstBuzz.playerName }}</strong>
-      </div>
+        <div v-if="state.buzzer.buzzOrder.length" class="buzz-order">
+          <p class="eyebrow">Buzz order</p>
 
-      <div v-if="state.buzzer.buzzOrder.length" class="buzz-order">
-        <p class="eyebrow">Buzz order</p>
-
-        <ol>
-          <li
-              v-for="buzz in state.buzzer.buzzOrder"
-              :key="buzz.playerId"
-          >
-            {{ buzz.playerName }}
-          </li>
-        </ol>
-      </div>
-    </template>
+          <ol>
+            <li
+                v-for="buzz in state.buzzer.buzzOrder"
+                :key="buzz.playerId"
+            >
+              {{ buzz.playerName }}
+            </li>
+          </ol>
+        </div>
+      </template>
     </template>
 
+    <!-- SELECTED BUT NOT REVEALED -->
     <template v-else-if="state.activeQuestion">
       <h2>Question selected</h2>
       <p class="muted">Waiting for the host to reveal it.</p>
     </template>
 
+    <!-- FALLBACK -->
     <template v-else>
       <h2>No active question</h2>
       <p class="muted">The game state is missing an active question.</p>
