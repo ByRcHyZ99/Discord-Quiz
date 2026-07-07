@@ -169,7 +169,7 @@ export const createQuestionSet = (): Category[] => [
           {
             key: 'P',
             imageUrl: '/images/lol/abilities/corki/passive.png',
-            abilityName: 'Präzision'
+            abilityName: 'Präzision',
             isFake: true,
             fakeFromChampion: 'Brand'
           },
