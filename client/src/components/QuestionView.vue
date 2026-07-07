@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import type { GameState } from '../types/game';
+import AbilityFakeQuestionView from './AbilityFakeQuestionView.vue';
 
 const props = defineProps<{
   state: GameState;
@@ -89,41 +90,49 @@ const isZoomImage = computed(() => {
       <template v-if="state.activeQuestion">
         <p class="eyebrow">Correct answer</p>
 
-        <h2 class="answer-text">
-          {{ state.activeQuestion.question.answer }}
-        </h2>
+        <AbilityFakeQuestionView
+            v-if="state.activeQuestion.question.questionType === 'ability-fake'"
+            :active-question="state.activeQuestion"
+            :first-buzz-name="state.buzzer.firstBuzz?.playerName ?? null"
+        />
 
-        <div
-            v-if="
-            state.activeQuestion.question.questionType === 'estimate' &&
-            state.activeQuestion.estimateAnswers.length
-          "
-            class="estimate-answer-list"
-        >
+        <template v-else>
+          <h2 class="answer-text">
+            {{ state.activeQuestion.question.answer }}
+          </h2>
+
           <div
-              v-for="answer in state.activeQuestion.estimateAnswers"
-              :key="answer.playerId"
-              class="estimate-answer-card"
+              v-if="
+          state.activeQuestion.question.questionType === 'estimate' &&
+          state.activeQuestion.estimateAnswers.length
+        "
+              class="estimate-answer-list"
           >
-            <strong>{{ answer.playerName }}</strong>
-            <span>{{ answer.value }}</span>
+            <div
+                v-for="answer in state.activeQuestion.estimateAnswers"
+                :key="answer.playerId"
+                class="estimate-answer-card"
+            >
+              <strong>{{ answer.playerName }}</strong>
+              <span>{{ answer.value }}</span>
+            </div>
           </div>
-        </div>
 
-        <div
-            v-if="hasImage"
-            class="question-image-frame question-image-frame--answer"
-        >
-          <img
-              :src="state.activeQuestion.question.imageUrl"
-              alt="Question image"
-              class="question-image"
-          />
-        </div>
+          <div
+              v-if="hasImage"
+              class="question-image-frame question-image-frame--answer"
+          >
+            <img
+                :src="state.activeQuestion.question.imageUrl"
+                alt="Question image"
+                class="question-image"
+            />
+          </div>
 
-        <p class="muted">
-          {{ state.message }}
-        </p>
+          <p class="muted">
+            {{ state.message }}
+          </p>
+        </template>
       </template>
 
       <template v-else>
@@ -135,6 +144,13 @@ const isZoomImage = computed(() => {
     </template>
 
     <template v-else-if="state.activeQuestion?.revealed">
+      <AbilityFakeQuestionView
+          v-if="state.activeQuestion.question.questionType === 'ability-fake'"
+          :active-question="state.activeQuestion"
+          :first-buzz-name="state.buzzer.firstBuzz?.playerName ?? null"
+      />
+
+      <template v-else>
       <h2>
         {{ state.activeQuestion.question.text }}
       </h2>
@@ -179,6 +195,7 @@ const isZoomImage = computed(() => {
           </li>
         </ol>
       </div>
+    </template>
     </template>
 
     <template v-else-if="state.activeQuestion">

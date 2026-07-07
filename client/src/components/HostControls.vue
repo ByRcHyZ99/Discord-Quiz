@@ -23,6 +23,8 @@ const emit = defineEmits<{
   'estimate-close': [];
   'estimate-reveal-answer': [];
   'estimate-award': [playerId: string];
+  'ability-show-question': [];
+  'ability-show-solution': [];
 }>();
 
 function handleVolumeInput(event: Event) {
@@ -92,6 +94,20 @@ function handleVolumeInput(event: Event) {
     </div>
 
     <div v-else-if="state.phase === 'answer'" class="control-stack">
+      <div
+          v-if="state.activeQuestion?.question.questionType === 'ability-fake'"
+          class="ability-controls"
+      >
+        <p class="eyebrow">Ability View</p>
+
+        <button @click="emit('ability-show-question')">
+          Show Question View
+        </button>
+
+        <button @click="emit('ability-show-solution')">
+          Show Solution View
+        </button>
+      </div>
       <p class="muted">
         The correct answer is visible.
       </p>
@@ -209,6 +225,21 @@ function handleVolumeInput(event: Event) {
           /
           {{ state.activeQuestion.question.zoomLevels?.length ?? 1 }}
         </p>
+      </div>
+
+      <div
+          v-if="state.activeQuestion.question.questionType === 'ability-fake'"
+          class="ability-controls"
+      >
+        <p class="eyebrow">Ability View</p>
+
+        <button @click="emit('ability-show-question')">
+          Show Question View
+        </button>
+
+        <button @click="emit('ability-show-solution')">
+          Show Solution View
+        </button>
       </div>
 
       <button

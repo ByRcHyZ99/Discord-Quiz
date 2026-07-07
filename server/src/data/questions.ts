@@ -2,63 +2,63 @@ import type { Category } from '../types.js';
 
 export const createQuestionSet = (): Category[] => [
   {
-    id: 'schaetzen',
-    title: 'Schätzen',
+    id: 'smite_oder_schaetzen',
+    title: 'Smite oder Schätzen',
     questions: [
       {
-        id: 'schaetzen-100',
-        categoryId: 'schaetzen',
+        id: 'smite_oder_schaetzen-100',
+        categoryId: 'smite_oder_schaetzen',
         points: 100,
-        text: 'Wie viele Spiele hat Burgi auf seinem Main Account',
-        answer: '209',
+        text: 'Wie viele Voidgrubs können maximal vor dem Rift Herald in einem Spiel spawnen?',
+        answer: '6 Voidgrubs',
         questionType: 'estimate',
         used: false
       },
       {
-        id: 'schaetzen-200',
-        categoryId: 'schaetzen',
+        id: 'smite_oder_schaetzen-200',
+        categoryId: 'smite_oder_schaetzen',
         points: 200,
-        text: 'Gaming 200 question. Replace this text.',
-        answer: 'Gaming 200 answer. Replace this answer.',
+        text: 'Wie viele Champs haben eine Fähigkeit die unendlich stacken kann?',
+        answer: '15 Champions',
         questionType: 'estimate',
         used: false
       },
       {
-        id: 'schaetzen-300',
-        categoryId: 'schaetzen',
+        id: 'smite_oder_schaetzen-300',
+        categoryId: 'smite_oder_schaetzen',
         points: 300,
-        text: 'Wie viele Pokemon gibt es in der Gen 1',
-        answer: '151',
+        text: 'Wie viel Gold ist eine normale Minion-Wave ohne Cannon wert?',
+        answer: '105 Gold',
         questionType: 'estimate',
         used: false
       },
       {
-        id: 'schaetzen-400',
-        categoryId: 'schaetzen',
+        id: 'smite_oder_schaetzen-400',
+        categoryId: 'smite_oder_schaetzen',
         points: 400,
-        text: 'Gaming 400 question. Replace this text.',
-        answer: 'Gaming 400 answer. Replace this answer.',
+        text: 'Wie viel Gold bekommt man, wenn man bis Minute 10:00 auf einer Lane perfekt last-hittet, ohne Kills, Plates oder passives Gold mitzuzählen?',
+        answer: '2295 Gold',
         questionType: 'estimate',
         used: false
       },
       {
-        id: 'schaetzen-500',
-        categoryId: 'schaetzen',
+        id: 'smite_oder_schaetzen-500',
+        categoryId: 'smite_oder_schaetzen',
         points: 500,
-        text: 'Gaming 500 question. Replace this text.',
-        answer: 'Gaming 500 answer. Replace this answer.',
+        text: 'Wie viele aktuelle Champs haben ein Apostroph im offiziellen Namen?',
+        answer: '8 Champions',
         questionType: 'estimate',
         used: false
       }
     ]
   },
   {
-    id: 'lol',
-    title: 'League of Legends',
+    id: 'splash',
+    title: 'Splash',
     questions: [
       {
-        id: 'lol-100', //Frage mit Bild zum zoomen
-        categoryId: 'league',
+        id: 'splash-100', //Frage mit Bild zum zoomen
+        categoryId: 'splash',
         points: 100,
         text: 'Which champion is this?',
         answer: 'Ahri',
@@ -69,32 +69,32 @@ export const createQuestionSet = (): Category[] => [
         used: false
       },
       {
-        id: 'movies-200',
-        categoryId: 'movies',
+        id: 'splash-200',
+        categoryId: 'splash',
         points: 200,
         text: 'Movies 200 question. Replace this text.',
         answer: 'Movies 200 answer. Replace this answer.',
         used: false
       },
       {
-        id: 'movies-300',
-        categoryId: 'movies',
+        id: 'splash-300',
+        categoryId: 'splash',
         points: 300,
         text: 'Movies 300 question. Replace this text.',
         answer: 'Movies 300 answer. Replace this answer.',
         used: false
       },
       {
-        id: 'movies-400',
-        categoryId: 'movies',
+        id: 'splash-400',
+        categoryId: 'splash',
         points: 400,
         text: 'Movies 400 question. Replace this text.',
         answer: 'Movies 400 answer. Replace this answer.',
         used: false
       },
       {
-        id: 'movies-500',
-        categoryId: 'movies',
+        id: 'splash-500',
+        categoryId: 'splash',
         points: 500,
         text: 'Movies 500 question. Replace this text.',
         answer: 'Movies 500 answer. Replace this answer.',
@@ -103,20 +103,20 @@ export const createQuestionSet = (): Category[] => [
     ]
   },
   {
-    id: 'cs2',
-    title: 'Counter Strike 2',
+    id: 'ohrwurm',
+    title: 'Ohrwurm',
     questions: [
       {
-        id: 'cs2-100',
-        categoryId: 'cs2',
+        id: 'ohrwurm-100',
+        categoryId: 'ohrwurm',
         points: 100,
         text: 'Welche Map hat den Callout "Banana"',
         answer: 'Inferno',
         used: false
       },
       {
-        id: 'cs2-200', //normale Frage mit Bild
-        categoryId: 'cs2',
+        id: 'ohrwurm-200', //normale Frage mit Bild
+        categoryId: 'ohrwurm',
         points: 200,
         text: 'Wie viel kostet Kevlar ohne Helm + CZ75-Auto',
         answer: '500 + 650 = 1150',
@@ -125,24 +125,24 @@ export const createQuestionSet = (): Category[] => [
         used: false
       },
       {
-        id: 'music-300',
-        categoryId: 'music',
+        id: 'ohrwurm-300',
+        categoryId: 'ohrwurm',
         points: 300,
         text: 'Music 300 question. Replace this text.',
         answer: 'Music 300 answer. Replace this answer.',
         used: false
       },
       {
-        id: 'music-400',
-        categoryId: 'music',
+        id: 'ohrwurm-400',
+        categoryId: 'ohrwurm',
         points: 400,
         text: 'Music 400 question. Replace this text.',
         answer: 'Music 400 answer. Replace this answer.',
         used: false
       },
       {
-        id: 'music-500',
-        categoryId: 'music',
+        id: 'ohrwurm-500',
+        categoryId: 'ohrwurm',
         points: 500,
         text: 'Music 500 question. Replace this text.',
         answer: 'Music 500 answer. Replace this answer.',
@@ -151,58 +151,253 @@ export const createQuestionSet = (): Category[] => [
     ]
   },
   {
-    id: 'internet',
-    title: 'Internet',
+    id: 'viegod',
+    title: "Viego'd",
     questions: [
       {
-        id: 'internet-100',
-        categoryId: 'internet',
+        id: 'viegod-100',
+        categoryId: 'viegod',
         points: 100,
-        text: 'Internet 100 question. Replace this text.',
-        answer: 'Internet 100 answer. Replace this answer.',
+        text: 'Welche Ability gehört nicht Corki?',
+        answer: 'Passive ist von Tristana',
+        questionType: 'ability-fake',
+
+        champName: 'Corki',
+        splashUrl: '/images/lol/splashes/Corki.jpg',
+
+        abilitySlots: [
+          {
+            key: 'P',
+            imageUrl: '/images/lol/abilities/corki/passive.png',
+            abilityName: 'Präzision'
+            isFake: true,
+            fakeFromChampion: 'Brand'
+          },
+          {
+            key: 'Q',
+            imageUrl: '/images/lol/abilities/corki/q.png',
+            abilityName: 'Phosphorus Bombe'
+          },
+          {
+            key: 'W',
+            imageUrl: '/images/lol/abilities/corki/w.png',
+            abilityName: 'Valkyrie',
+          },
+          {
+            key: 'E',
+            imageUrl: '/images/lol/abilities/corki/e.png',
+            abilityName: 'Gatling Gun'
+          },
+          {
+            key: 'R',
+            imageUrl: '/images/lol/abilities/corki/r.png',
+            abilityName: 'Missile Barrage'
+          }
+        ],
+
+        fakeAbilityKey: 'Passive',
+        fakeAbilityFrom: 'Tristana',
+        fakeAbilityName: 'Präzision',
+
         used: false
       },
       {
-        id: 'internet-200',
-        categoryId: 'internet',
+        id: 'viegod-200',
+        categoryId: 'viegod',
         points: 200,
-        text: 'Internet 200 question. Replace this text.',
-        answer: 'Internet 200 answer. Replace this answer.',
+        text: 'Which ability does not belong to Viego?',
+        answer: 'Q is from Aatrox.',
+        questionType: 'ability-fake',
+
+        champName: 'Viego',
+        splashUrl: '/images/lol/splashes/viego.jpg',
+
+        abilitySlots: [
+          {
+            key: 'P',
+            imageUrl: '/images/lol/abilities/viego/passive.png',
+            abilityName: 'Sovereign’s Domination'
+          },
+          {
+            key: 'Q',
+            imageUrl: '/images/lol/abilities/aatrox/q.png',
+            abilityName: 'The Darkin Blade',
+            isFake: true,
+            fakeFromChampion: 'Aatrox'
+          },
+          {
+            key: 'W',
+            imageUrl: '/images/lol/abilities/viego/w.png',
+            abilityName: 'Spectral Maw'
+          },
+          {
+            key: 'E',
+            imageUrl: '/images/lol/abilities/viego/e.png',
+            abilityName: 'Harrowed Path'
+          },
+          {
+            key: 'R',
+            imageUrl: '/images/lol/abilities/viego/r.png',
+            abilityName: 'Heartbreaker'
+          }
+        ],
+
+        fakeAbilityKey: 'Q',
+        fakeAbilityFrom: 'Aatrox',
+        fakeAbilityName: 'The Darkin Blade',
+
         used: false
       },
       {
-        id: 'internet-300',
-        categoryId: 'internet',
+        id: 'viegod-300',
+        categoryId: 'viegod',
         points: 300,
-        text: 'Internet 300 question. Replace this text.',
-        answer: 'Internet 300 answer. Replace this answer.',
+        text: 'Which ability does not belong to Viego?',
+        answer: 'E is from Heimerdinger.',
+        questionType: 'ability-fake',
+
+        champName: 'Viego',
+        splashUrl: '/images/lol/splashes/viego.jpg',
+
+        abilitySlots: [
+          {
+            key: 'P',
+            imageUrl: '/images/lol/abilities/viego/passive.png',
+            abilityName: 'Sovereign’s Domination'
+          },
+          {
+            key: 'Q',
+            imageUrl: '/images/lol/abilities/viego/q.png',
+            abilityName: 'Blade of the Ruined King'
+          },
+          {
+            key: 'W',
+            imageUrl: '/images/lol/abilities/viego/w.png',
+            abilityName: 'Spectral Maw'
+          },
+          {
+            key: 'E',
+            imageUrl: '/images/lol/abilities/heimerdinger/e.png',
+            abilityName: 'CH-2 Electron Storm Grenade',
+            isFake: true,
+            fakeFromChampion: 'Heimerdinger'
+          },
+          {
+            key: 'R',
+            imageUrl: '/images/lol/abilities/viego/r.png',
+            abilityName: 'Heartbreaker'
+          }
+        ],
+
+        fakeAbilityKey: 'E',
+        fakeAbilityFrom: 'Heimerdinger',
+        fakeAbilityName: 'CH-2 Electron Storm Grenade',
+
         used: false
       },
       {
-        id: 'internet-400',
-        categoryId: 'internet',
+        id: 'viegod-400',
+        categoryId: 'viegod',
         points: 400,
-        text: 'Internet 400 question. Replace this text.',
-        answer: 'Internet 400 answer. Replace this answer.',
+        text: 'Which ability does not belong to Viego?',
+        answer: 'R is from Garen.',
+        questionType: 'ability-fake',
+
+        champName: 'Viego',
+        splashUrl: '/images/lol/splashes/viego.jpg',
+
+        abilitySlots: [
+          {
+            key: 'P',
+            imageUrl: '/images/lol/abilities/viego/passive.png',
+            abilityName: 'Sovereign’s Domination'
+          },
+          {
+            key: 'Q',
+            imageUrl: '/images/lol/abilities/viego/q.png',
+            abilityName: 'Blade of the Ruined King'
+          },
+          {
+            key: 'W',
+            imageUrl: '/images/lol/abilities/viego/w.png',
+            abilityName: 'Spectral Maw'
+          },
+          {
+            key: 'E',
+            imageUrl: '/images/lol/abilities/viego/e.png',
+            abilityName: 'Harrowed Path'
+          },
+          {
+            key: 'R',
+            imageUrl: '/images/lol/abilities/garen/r.png',
+            abilityName: 'Demacian Justice',
+            isFake: true,
+            fakeFromChampion: 'Garen'
+          }
+        ],
+
+        fakeAbilityKey: 'R',
+        fakeAbilityFrom: 'Garen',
+        fakeAbilityName: 'Demacian Justice',
+
         used: false
       },
       {
-        id: 'internet-500',
-        categoryId: 'internet',
+        id: 'viegod-500',
+        categoryId: 'viegod',
         points: 500,
-        text: 'Internet 500 question. Replace this text.',
-        answer: 'Internet 500 answer. Replace this answer.',
+        text: 'Which ability does not belong to Viego?',
+        answer: 'P is from Renata Glasc.',
+        questionType: 'ability-fake',
+
+        champName: 'Viego',
+        splashUrl: '/images/lol/splashes/viego.jpg',
+
+        abilitySlots: [
+          {
+            key: 'P',
+            imageUrl: '/images/lol/abilities/renata/passive.png',
+            abilityName: 'Leverage',
+            isFake: true,
+            fakeFromChampion: 'Renata Glasc'
+          },
+          {
+            key: 'Q',
+            imageUrl: '/images/lol/abilities/viego/q.png',
+            abilityName: 'Blade of the Ruined King'
+          },
+          {
+            key: 'W',
+            imageUrl: '/images/lol/abilities/viego/w.png',
+            abilityName: 'Spectral Maw'
+          },
+          {
+            key: 'E',
+            imageUrl: '/images/lol/abilities/viego/e.png',
+            abilityName: 'Harrowed Path'
+          },
+          {
+            key: 'R',
+            imageUrl: '/images/lol/abilities/viego/r.png',
+            abilityName: 'Heartbreaker'
+          }
+        ],
+
+        fakeAbilityKey: 'P',
+        fakeAbilityFrom: 'Renata Glasc',
+        fakeAbilityName: 'Leverage',
+
         used: false
       }
     ]
   },
   {
-    id: 'sounds',
-    title: 'Sounds',
+    id: 'riot',
+    title: 'Riot?',
     questions: [
       {
-        id: 'sounds-100',
-        categoryId: 'sounds',
+        id: 'riot-100',
+        categoryId: 'riot',
         points: 100,
         text: 'Which game is this sound from?',
         answer: 'Nani',
@@ -210,8 +405,8 @@ export const createQuestionSet = (): Category[] => [
         used: false
       },
       {
-        id: 'sounds-200',
-        categoryId: 'sounds',
+        id: 'riot-200',
+        categoryId: 'riot',
         points: 200,
         text: 'Which movie is this sound from?',
         answer: 'Star Wars',
@@ -219,8 +414,8 @@ export const createQuestionSet = (): Category[] => [
         used: false
       },
       {
-        id: 'sounds-300',
-        categoryId: 'sounds',
+        id: 'riot-300',
+        categoryId: 'riot',
         points: 300,
         text: 'Which meme sound is this?',
         answer: 'Vine boom',
@@ -228,8 +423,8 @@ export const createQuestionSet = (): Category[] => [
         used: false
       },
       {
-        id: 'sounds-400',
-        categoryId: 'sounds',
+        id: 'riot-400',
+        categoryId: 'riot',
         points: 400,
         text: 'Which game character makes this sound?',
         answer: 'Mario',
@@ -237,8 +432,8 @@ export const createQuestionSet = (): Category[] => [
         used: false
       },
       {
-        id: 'sounds-500',
-        categoryId: 'sounds',
+        id: 'riot-500',
+        categoryId: 'riot',
         points: 500,
         text: 'Name the song.',
         answer: 'Your answer here',

@@ -771,3 +771,206 @@ p {
   color: rgba(255, 255, 255, 0.72);
   font-size: 0.85rem;
 }
+
+.ability-fake-card {
+  position: relative;
+  width: min(980px, 100%);
+  margin: 0 auto;
+}
+
+.ability-fake-content {
+  display: grid;
+  gap: 1.5rem;
+
+  transition:
+          filter 0.2s ease,
+          opacity 0.2s ease;
+}
+
+.ability-fake-content--blurred {
+  filter: blur(12px);
+  opacity: 0.35;
+  pointer-events: none;
+  user-select: none;
+}
+
+.ability-fake-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: start;
+}
+
+.ability-fake-header h2 {
+  margin: 0;
+  font-size: clamp(1.7rem, 3vw, 3rem);
+  line-height: 1.08;
+}
+
+.ability-fake-points {
+  padding: 0.5rem 0.8rem;
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+
+  white-space: nowrap;
+}
+
+.ability-splash-frame {
+  width: 100%;
+  height: min(260px, 32vh);
+
+  overflow: hidden;
+  border-radius: 1.25rem;
+
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.ability-splash-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ability-slots {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(90px, 1fr));
+  gap: 1rem;
+}
+
+.ability-slot {
+  display: grid;
+  justify-items: center;
+  gap: 0.6rem;
+
+  padding: 0.9rem;
+
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.ability-slot--fake {
+  background: rgba(244, 63, 94, 0.18);
+  border-color: rgba(244, 63, 94, 0.9);
+  box-shadow: 0 0 0 4px rgba(244, 63, 94, 0.12);
+}
+
+.ability-icon-frame {
+  width: 76px;
+  height: 76px;
+
+  overflow: hidden;
+  border-radius: 0.85rem;
+
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.ability-icon-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ability-slot strong {
+  font-size: 1.5rem;
+  font-weight: 1000;
+  color: white;
+}
+
+.ability-name {
+  min-height: 1.2rem;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.ability-fake-origin {
+  padding: 0.25rem 0.5rem;
+
+  border-radius: 999px;
+  background: rgba(244, 63, 94, 0.25);
+  color: white;
+
+  font-size: 0.75rem;
+  font-weight: 900;
+}
+
+.ability-solution-box {
+  padding: 1.25rem;
+
+  border-radius: 1.25rem;
+  background: rgba(34, 197, 94, 0.13);
+  border: 1px solid rgba(34, 197, 94, 0.42);
+}
+
+.ability-solution-box h3 {
+  margin: 0.25rem 0;
+  font-size: clamp(1.4rem, 2.4vw, 2.2rem);
+}
+
+.ability-solution-box p {
+  margin: 0;
+}
+
+.ability-blur-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 0.5rem;
+
+  text-align: center;
+
+  border-radius: 1.5rem;
+  background: rgba(15, 23, 42, 0.58);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.ability-blur-overlay strong {
+  font-size: clamp(2rem, 5vw, 4rem);
+  color: white;
+}
+
+.ability-blur-overlay span {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.ability-controls {
+  display: grid;
+  gap: 0.75rem;
+
+  padding: 1rem;
+  border-radius: 1rem;
+
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.ability-controls .eyebrow {
+  margin: 0;
+}
+
+.ability-controls button {
+  width: 100%;
+}
+
+@media (max-width: 800px) {
+  .ability-slots {
+    grid-template-columns: repeat(2, minmax(90px, 1fr));
+  }
+
+  .ability-slot:last-child {
+    grid-column: span 2;
+  }
+
+  .ability-fake-header {
+    display: grid;
+  }
+}

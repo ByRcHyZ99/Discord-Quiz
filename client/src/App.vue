@@ -295,6 +295,32 @@ function joinRoom(payload: { roomCode: string; playerName: string }) {
   socket.emit('room:join', payload, handleResponse);
 }
 
+function showAbilityQuestionView() {
+  if (!gameState.value) return;
+
+  socket.emit(
+      'ability:set-view',
+      {
+        roomCode: gameState.value.roomCode,
+        view: 'question'
+      },
+      handleResponse
+  );
+}
+
+function showAbilitySolutionView() {
+  if (!gameState.value) return;
+
+  socket.emit(
+      'ability:set-view',
+      {
+        roomCode: gameState.value.roomCode,
+        view: 'solution'
+      },
+      handleResponse
+  );
+}
+
 function startGame() {
   if (!gameState.value) return;
   socket.emit('room:start', { roomCode: gameState.value.roomCode }, handleResponse);
@@ -502,6 +528,8 @@ function closeQuestion() {
               @estimate-close="closeEstimates"
               @estimate-reveal-answer="revealEstimateAnswer"
               @estimate-award="awardEstimatePoints"
+              @ability-show-question="showAbilityQuestionView"
+              @ability-show-solution="showAbilitySolutionView"
           />
         </aside>
 

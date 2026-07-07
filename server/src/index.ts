@@ -107,6 +107,39 @@ io.on('connection', (socket) => {
   });
 
   socket.on(
+      'ability:set-view',
+      (
+          payload: { roomCode: string; view: 'question' | 'solution' },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const room = requireHostRoom(payload.roomCode, socket.id, callback);
+        if (!room) return;
+
+        if (
+            !room.activeQuestion ||
+            room.activeQuestion.question.questionType !== 'ability-fake'
+        ) {
+          callback({ ok: false, error: 'No ability fake question is active.' });
+          return;
+        }
+
+        room.activeQuestion.abilityView = payload.view;
+
+        if (payload.view === 'solution') {
+          room.activeQuestion.abilityBlurred = false;
+        }
+
+        room.message =
+            payload.view === 'solution'
+                ? 'Solution view shown.'
+                : 'Question view shown.';
+
+        respond(callback, room);
+        emitRoom(room);
+      }
+  );
+
+  socket.on(
       'estimate:submit',
       (
           payload: { roomCode: string; value: string },
@@ -607,7 +640,9 @@ io.on('connection', (socket) => {
         zoomStep: question.zoomStartIndex ?? 0,
         estimateAnswers: [],
         estimateAwardedPlayerId: null,
-        estimateAwardedPlayerName: null
+        estimateAwardedPlayerName: null,
+        abilityBlurred: false,
+        abilityView: 'question'
       };
       room.buzzer.locked = true;
       room.buzzer.firstBuzz = null;
@@ -680,6 +715,11 @@ io.on('connection', (socket) => {
       room.buzzer.firstBuzz = buzz;
       room.buzzer.locked = true;
       room.message = `${player.name} buzzed first.`;
+
+      if (room.activeQuestion?.question.questionType === 'ability-fake') {
+        room.activeQuestion.abilityBlurred = true;
+      }
+
       if (room.audio.soundUrl) {
         setRoomAudio(room, 'stopped');
       }
@@ -705,6 +745,9 @@ io.on('connection', (socket) => {
     if (!room) return;
 
     room.buzzer.locked = false;
+    if (room.activeQuestion?.question.questionType === 'ability-fake') {
+      room.activeQuestion.abilityBlurred = false;
+    }
     room.buzzer.firstBuzz = null;
     room.buzzer.buzzOrder = [];
     room.message = 'Buzzer unlocked for everyone.';
@@ -742,6 +785,12 @@ io.on('connection', (socket) => {
 
         room.phase = 'answer';
         room.buzzer.locked = true;
+
+        if (room.activeQuestion?.question.questionType === 'ability-fake') {
+          room.activeQuestion.abilityBlurred = false;
+          room.activeQuestion.abilityView = 'solution';
+        }
+        
         room.message = `${player.name} got ${room.activeQuestion.question.points} points.`;
 
         respond(callback, room);

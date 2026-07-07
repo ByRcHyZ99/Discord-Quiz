@@ -14,6 +14,16 @@ export type Player = {
   isConnected: boolean;
 };
 
+export type AbilityKey = 'P' | 'Q' | 'W' | 'E' | 'R';
+
+export type AbilitySlot = {
+  key: AbilityKey;
+  imageUrl: string;
+  abilityName?: string;
+  isFake?: boolean;
+  fakeFromChampion?: string;
+};
+
 export type Question = {
   id: string;
   categoryId: string;
@@ -22,7 +32,7 @@ export type Question = {
   answer: string;
   used: boolean;
 
-  questionType?: 'normal' | 'estimate';
+  questionType?: 'normal' | 'estimate' | 'ability-fake';
 
   soundUrl?: string;
 
@@ -30,7 +40,14 @@ export type Question = {
   imageMode?: 'normal' | 'zoom';
   zoomLevels?: number[];
   zoomStartIndex?: number;
-}
+
+  champName?: string;
+  splashUrl?: string;
+  abilitySlots?: AbilitySlot[];
+  fakeAbilityKey?: AbilityKey;
+  fakeAbilityFrom?: string;
+  fakeAbilityName?: string;
+};
 
 export type AudioStatus = 'stopped' | 'playing' | 'paused';
 
@@ -67,6 +84,9 @@ export type ActiveQuestion = {
   estimateAnswers: EstimateAnswer[];
   estimateAwardedPlayerId?: string | null;
   estimateAwardedPlayerName?: string | null;
+
+  abilityBlurred?: boolean;
+  abilityView?: 'question' | 'solution';
 };
 
 export type BuzzerState = {
