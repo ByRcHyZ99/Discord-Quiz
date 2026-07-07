@@ -189,6 +189,42 @@ function revealImageMore() {
   );
 }
 
+function revealNextProgressiveClue() {
+  if (!gameState.value) return;
+
+  socket.emit(
+      'progressive:reveal-next',
+      {
+        roomCode: gameState.value.roomCode
+      },
+      handleResponse
+  );
+}
+
+function hideLastProgressiveClue() {
+  if (!gameState.value) return;
+
+  socket.emit(
+      'progressive:hide-last',
+      {
+        roomCode: gameState.value.roomCode
+      },
+      handleResponse
+  );
+}
+
+function resetProgressiveClues() {
+  if (!gameState.value) return;
+
+  socket.emit(
+      'progressive:reset',
+      {
+        roomCode: gameState.value.roomCode
+      },
+      handleResponse
+  );
+}
+
 function revealImageLess() {
   if (!gameState.value) return;
 
@@ -505,6 +541,7 @@ function closeQuestion() {
           <PlayerControls
               v-if="!isHost"
               :state="gameState"
+              :current-player-id="currentPlayerId"
               @buzz="buzz"
           />
 
@@ -530,6 +567,9 @@ function closeQuestion() {
               @estimate-award="awardEstimatePoints"
               @ability-show-question="showAbilityQuestionView"
               @ability-show-solution="showAbilitySolutionView"
+              @progressive-reveal-next="revealNextProgressiveClue"
+              @progressive-hide-last="hideLastProgressiveClue"
+              @progressive-reset="resetProgressiveClues"
           />
         </aside>
 

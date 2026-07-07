@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import type { GameState } from '../types/game';
 import AbilityFakeQuestionView from './AbilityFakeQuestionView.vue';
+import ProgressiveQuestionView from './ProgressiveQuestionView.vue';
 
 const props = defineProps<{
   state: GameState;
@@ -96,6 +97,21 @@ const isZoomImage = computed(() => {
             :first-buzz-name="state.buzzer.firstBuzz?.playerName ?? null"
         />
 
+        <template v-else-if="state.activeQuestion.question.questionType === 'progressive'">
+          <ProgressiveQuestionView
+              :active-question="state.activeQuestion"
+              show-all
+          />
+
+          <div class="progressive-answer-box">
+            <p class="eyebrow">Correct answer</p>
+
+            <h2 class="answer-text">
+              {{ state.activeQuestion.question.answer }}
+            </h2>
+          </div>
+        </template>
+
         <template v-else>
           <h2 class="answer-text">
             {{ state.activeQuestion.question.answer }}
@@ -149,6 +165,13 @@ const isZoomImage = computed(() => {
           :active-question="state.activeQuestion"
           :first-buzz-name="state.buzzer.firstBuzz?.playerName ?? null"
       />
+
+      <ProgressiveQuestionView
+          v-else-if="state.activeQuestion.question.questionType === 'progressive'"
+          :active-question="state.activeQuestion"
+      />
+
+      <template v-else>
 
       <template v-else>
       <h2>

@@ -25,6 +25,9 @@ const emit = defineEmits<{
   'estimate-award': [playerId: string];
   'ability-show-question': [];
   'ability-show-solution': [];
+  'progressive-reveal-next': [];
+  'progressive-hide-last': [];
+  'progressive-reset': [];
 }>();
 
 function handleVolumeInput(event: Event) {
@@ -53,9 +56,9 @@ function handleVolumeInput(event: Event) {
             :key="answer.playerId"
             class="estimate-award-button"
             :class="{
-        'estimate-award-button--selected':
-          state.activeQuestion.estimateAwardedPlayerId === answer.playerId
-      }"
+  'estimate-award-button--selected':
+    (state.activeQuestion.estimateAwardedPlayerIds ?? []).includes(answer.playerId)
+}"
             @click="emit('estimate-award', answer.playerId)"
         >
       <span>
@@ -68,8 +71,8 @@ function handleVolumeInput(event: Event) {
 
           <em>
             {{
-            state.activeQuestion.estimateAwardedPlayerId === answer.playerId
-            ? 'Points awarded'
+            (state.activeQuestion.estimateAwardedPlayerIds ?? []).includes(answer.playerId)
+            ? 'Remove points'
             : `Give ${state.activeQuestion.question.points} pts`
             }}
           </em>
@@ -77,11 +80,13 @@ function handleVolumeInput(event: Event) {
       </div>
 
       <p
-          v-if="state.activeQuestion?.estimateAwardedPlayerName"
+          v-if="(state.activeQuestion?.estimateAwardedPlayerNames ?? []).length"
           class="muted"
       >
         Points awarded to:
-        <strong>{{ state.activeQuestion.estimateAwardedPlayerName }}</strong>
+        <strong>
+          {{ (state.activeQuestion?.estimateAwardedPlayerNames ?? []).join(', ') }}
+        </strong>
       </p>
 
       <button class="big-action" @click="emit('estimate-reveal-answer')">
@@ -150,11 +155,13 @@ function handleVolumeInput(event: Event) {
       </div>
 
       <p
-          v-if="state.activeQuestion?.estimateAwardedPlayerName"
+          v-if="(state.activeQuestion?.estimateAwardedPlayerNames ?? []).length"
           class="muted"
       >
         Points awarded to:
-        <strong>{{ state.activeQuestion.estimateAwardedPlayerName }}</strong>
+        <strong>
+          {{ (state.activeQuestion?.estimateAwardedPlayerNames ?? []).join(', ') }}
+        </strong>
       </p>
 
       <button class="big-action" @click="emit('close-question')">
@@ -163,6 +170,47 @@ function handleVolumeInput(event: Event) {
     </div>
 
     <div v-else-if="state.phase === 'question' && state.activeQuestion" class="control-stack">
+      <div
+          v-if="
+    state.activeQuestion.revealed &&
+    state.activeQuestion.question.questionType === 'progressive'
+  "
+          class="progressive-controls"
+      >
+        <p class="eyebrow">Progressive descriptions</p>
+
+        <p class="muted">
+          Revealed:
+          {{ state.activeQuestion.progressiveRevealCount ?? 0 }}
+          /
+          {{ state.activeQuestion.question.progressiveClues?.length ?? 0 }}
+        </p>
+
+        <button
+            class="big-action"
+            :disabled="
+      (state.activeQuestion.progressiveRevealCount ?? 0) >=
+      (state.activeQuestion.question.progressiveClues?.length ?? 0)
+    "
+            @click="emit('progressive-reveal-next')"
+        >
+          Reveal Next Description
+        </button>
+
+        <button
+            :disabled="(state.activeQuestion.progressiveRevealCount ?? 0) <= 0"
+            @click="emit('progressive-hide-last')"
+        >
+          Hide Last Description
+        </button>
+
+        <button
+            :disabled="(state.activeQuestion.progressiveRevealCount ?? 0) <= 0"
+            @click="emit('progressive-reset')"
+        >
+          Reset Descriptions
+        </button>
+      </div>
       <div
           v-if="state.activeQuestion.question.soundUrl"
           class="audio-controls"
@@ -283,7 +331,10 @@ function handleVolumeInput(event: Event) {
               :disabled="!state.buzzer.firstBuzz"
               @click="emit('mark-wrong')"
           >
-            Mark First Buzz Wrong / Timeout
+            Mark Wrong
+            <template v-if="state.activeQuestion">
+              (-{{ Math.round(state.activeQuestion.question.points / 2) }} pts, 5s timeout)
+            </template>
           </button>
 
           <button class="secondary" @click="emit('close-question')">

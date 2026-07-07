@@ -107,6 +107,103 @@ io.on('connection', (socket) => {
   });
 
   socket.on(
+      'progressive:reveal-next',
+      (
+          payload: { roomCode: string },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const room = requireHostRoom(payload.roomCode, socket.id, callback);
+        if (!room) return;
+
+        const activeQuestion = room.activeQuestion;
+
+        if (
+            !activeQuestion ||
+            activeQuestion.question.questionType !== 'progressive'
+        ) {
+          callback({ ok: false, error: 'No progressive question is active.' });
+          return;
+        }
+
+        if (!activeQuestion.revealed) {
+          callback({ ok: false, error: 'Reveal the question first.' });
+          return;
+        }
+
+        const clues = activeQuestion.question.progressiveClues ?? [];
+        const currentCount = activeQuestion.progressiveRevealCount ?? 0;
+
+        activeQuestion.progressiveRevealCount = Math.min(
+            currentCount + 1,
+            clues.length
+        );
+
+        room.message = 'Next description revealed.';
+
+        respond(callback, room);
+        emitRoom(room);
+      }
+  );
+
+  socket.on(
+      'progressive:hide-last',
+      (
+          payload: { roomCode: string },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const room = requireHostRoom(payload.roomCode, socket.id, callback);
+        if (!room) return;
+
+        const activeQuestion = room.activeQuestion;
+
+        if (
+            !activeQuestion ||
+            activeQuestion.question.questionType !== 'progressive'
+        ) {
+          callback({ ok: false, error: 'No progressive question is active.' });
+          return;
+        }
+
+        const currentCount = activeQuestion.progressiveRevealCount ?? 0;
+
+        activeQuestion.progressiveRevealCount = Math.max(currentCount - 1, 0);
+
+        room.message = 'Last description hidden.';
+
+        respond(callback, room);
+        emitRoom(room);
+      }
+  );
+
+  socket.on(
+      'progressive:reset',
+      (
+          payload: { roomCode: string },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const room = requireHostRoom(payload.roomCode, socket.id, callback);
+        if (!room) return;
+
+        const activeQuestion = room.activeQuestion;
+
+        if (
+            !activeQuestion ||
+            activeQuestion.question.questionType !== 'progressive'
+        ) {
+          callback({ ok: false, error: 'No progressive question is active.' });
+          return;
+        }
+
+        activeQuestion.progressiveRevealCount = 0;
+
+        room.message = 'Descriptions reset.';
+
+        respond(callback, room);
+        emitRoom(room);
+      }
+  );
+
+  socket.on(
       'ability:set-view',
       (
           payload: { roomCode: string; view: 'question' | 'solution' },
@@ -248,27 +345,24 @@ io.on('connection', (socket) => {
 
         const points = activeQuestion.question.points;
 
-        if (
-            activeQuestion.estimateAwardedPlayerId &&
-            activeQuestion.estimateAwardedPlayerId !== winner.id
-        ) {
-          const previousWinner = room.players.find(
-              (player) => player.id === activeQuestion.estimateAwardedPlayerId
-          );
+        const awardedIds = new Set(activeQuestion.estimateAwardedPlayerIds ?? []);
 
-          if (previousWinner) {
-            previousWinner.score -= points;
-          }
-        }
-
-        if (activeQuestion.estimateAwardedPlayerId !== winner.id) {
+        if (awardedIds.has(winner.id)) {
+          awardedIds.delete(winner.id);
+          winner.score -= points;
+          room.message = `${winner.name} lost ${points} estimate points.`;
+        } else {
+          awardedIds.add(winner.id);
           winner.score += points;
+          room.message = `${winner.name} received ${points} estimate points.`;
         }
 
-        activeQuestion.estimateAwardedPlayerId = winner.id;
-        activeQuestion.estimateAwardedPlayerName = winner.name;
+        activeQuestion.estimateAwardedPlayerIds = Array.from(awardedIds);
 
-        room.message = `${winner.name} received ${points} points for the estimate.`;
+        activeQuestion.estimateAwardedPlayerNames =
+            activeQuestion.estimateAwardedPlayerIds
+                .map((playerId) => room.players.find((player) => player.id === playerId)?.name)
+                .filter((name): name is string => Boolean(name));
 
         respond(callback, room);
         emitRoom(room);
@@ -639,10 +733,12 @@ io.on('connection', (socket) => {
         revealed: false,
         zoomStep: question.zoomStartIndex ?? 0,
         estimateAnswers: [],
-        estimateAwardedPlayerId: null,
-        estimateAwardedPlayerName: null,
+        estimateAwardedPlayerIds: [],
+        estimateAwardedPlayerNames: [],
         abilityBlurred: false,
-        abilityView: 'question'
+        abilityView: 'question',
+        buzzTimeouts: {},
+        progressiveRevealCount: 0
       };
       room.buzzer.locked = true;
       room.buzzer.firstBuzz = null;
@@ -685,6 +781,22 @@ io.on('connection', (socket) => {
     const player = room.players.find((item) => item.id === payload.playerId && item.socketId === socket.id);
     if (!player) {
       callback({ ok: false, error: 'Player not found in this room.' });
+      return;
+    }
+
+    const timeoutUntil =
+        room.activeQuestion?.buzzTimeouts?.[player.id] ?? 0;
+
+    const now = Date.now();
+
+    if (timeoutUntil > now) {
+      const secondsLeft = Math.ceil((timeoutUntil - now) / 1000);
+
+      callback({
+        ok: false,
+        error: `You are timed out for ${secondsLeft} more seconds.`
+      });
+
       return;
     }
 
@@ -798,23 +910,55 @@ io.on('connection', (socket) => {
       }
   );
 
-  socket.on('answer:wrong', (payload: { roomCode: string }, callback: (response: ServerResponse) => void) => {
-    const room = requireHostRoom(payload.roomCode, socket.id, callback);
-    if (!room) return;
+  socket.on(
+      'answer:wrong',
+      (
+          payload: { roomCode: string },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const room = requireHostRoom(payload.roomCode, socket.id, callback);
+        if (!room) return;
 
-    if (!room.activeQuestion) {
-      callback({ ok: false, error: 'No active question.' });
-      return;
-    }
+        const activeQuestion = room.activeQuestion;
+        const firstBuzz = room.buzzer.firstBuzz;
 
-    room.buzzer.locked = false;
-    room.buzzer.firstBuzz = null;
-    room.buzzer.buzzOrder = [];
-    room.message = 'Wrong answer or timeout. Buzzer is open again.';
+        if (!activeQuestion || !firstBuzz) {
+          callback({ ok: false, error: 'No buzzed player to mark wrong.' });
+          return;
+        }
 
-    respond(callback, room);
-    emitRoom(room);
-  });
+        const player = room.players.find(
+            (item) => item.id === firstBuzz.playerId
+        );
+
+        if (!player) {
+          callback({ ok: false, error: 'Buzzed player not found.' });
+          return;
+        }
+
+        const penalty = Math.round(activeQuestion.question.points / 2);
+
+        player.score -= penalty;
+
+        activeQuestion.buzzTimeouts = {
+          ...(activeQuestion.buzzTimeouts ?? {}),
+          [player.id]: Date.now() + 5000
+        };
+
+        room.buzzer.firstBuzz = null;
+        room.buzzer.buzzOrder = [];
+        room.buzzer.locked = false;
+
+        if (activeQuestion.question.questionType === 'ability-fake') {
+          activeQuestion.abilityBlurred = false;
+        }
+
+        room.message = `${player.name} answered wrong, lost ${penalty} points, and cannot buzz for 5 seconds.`;
+
+        respond(callback, room);
+        emitRoom(room);
+      }
+  );
 
   socket.on(
       'question:close',

@@ -1,14 +1,31 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 import type { GameState } from '../types/game';
 
 const props = defineProps<{
   state: GameState;
+  currentPlayerId: string | null;
 }>();
 
 const emit = defineEmits<{
   buzz: [];
 }>();
+
+const now = ref(Date.now());
+
+let intervalId: number | undefined;
+
+onMounted(() => {
+  intervalId = window.setInterval(() => {
+    now.value = Date.now();
+  }, 250);
+});
+
+onUnmounted(() => {
+  if (intervalId !== undefined) {
+    window.clearInterval(intervalId);
+  }
+});
 
 const isEstimateQuestion = computed(() => {
   return (
@@ -18,12 +35,30 @@ const isEstimateQuestion = computed(() => {
   );
 });
 
+const timeoutUntil = computed(() => {
+  if (!props.currentPlayerId) return 0;
+
+  return (
+      props.state.activeQuestion?.buzzTimeouts?.[props.currentPlayerId] ?? 0
+  );
+});
+
+const timeoutSecondsLeft = computed(() => {
+  const remaining = timeoutUntil.value - now.value;
+  return Math.max(0, Math.ceil(remaining / 1000));
+});
+
+const isTimedOut = computed(() => {
+  return timeoutSecondsLeft.value > 0;
+});
+
 const canBuzz = computed(() => {
   return (
       props.state.phase === 'question' &&
       props.state.activeQuestion?.revealed &&
       props.state.activeQuestion.question.questionType !== 'estimate' &&
-      !props.state.buzzer.locked
+      !props.state.buzzer.locked &&
+      !isTimedOut.value
   );
 });
 </script>
@@ -51,6 +86,11 @@ const canBuzz = computed(() => {
     </template>
 
     <template v-else>
+      <p v-if="isTimedOut" class="timeout-warning">
+        Wrong answer timeout:
+        <strong>{{ timeoutSecondsLeft }}s</strong>
+      </p>
+
       <button
           class="big-action"
           :disabled="!canBuzz"
@@ -61,6 +101,10 @@ const canBuzz = computed(() => {
 
       <p v-if="state.buzzer.locked" class="muted">
         Buzzer is locked.
+      </p>
+
+      <p v-else-if="isTimedOut" class="muted">
+        You cannot buzz until the timeout is over.
       </p>
     </template>
   </section>

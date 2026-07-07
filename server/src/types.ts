@@ -33,7 +33,7 @@ export type Question = {
   answer: string;
   used: boolean;
 
-  questionType?: 'normal' | 'estimate' | 'ability-fake';
+  questionType?: 'normal' | 'estimate' | 'ability-fake' | 'progressive';
 
   soundUrl?: string;
 
@@ -48,6 +48,7 @@ export type Question = {
   fakeAbilityKey?: AbilityKey;
   fakeAbilityFrom?: string;
   fakeAbilityName?: string;
+  progressiveClues?: string[];
 };
 
 export type AudioStatus = 'stopped' | 'playing' | 'paused';
@@ -83,11 +84,14 @@ export type ActiveQuestion = {
   revealed: boolean;
   zoomStep: number;
   estimateAnswers: EstimateAnswer[];
-  estimateAwardedPlayerId?: string | null;
-  estimateAwardedPlayerName?: string | null;
+
+  estimateAwardedPlayerIds?: string[];
+  estimateAwardedPlayerNames?: string[];
 
   abilityBlurred?: boolean;
   abilityView?: 'question' | 'solution';
+  buzzTimeouts: Record<string, number>;
+  progressiveRevealCount?: number;
 };
 
 export type BuzzerState = {
