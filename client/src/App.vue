@@ -10,6 +10,7 @@ import Scoreboard from './components/Scoreboard.vue';
 import PlayerControls from './components/PlayerControls.vue';
 import HostControls from './components/HostControls.vue';
 import AudioSync from './components/AudioSync.vue';
+import SfxSync from './components/SfxSync.vue';
 
 const gameState = ref<GameState | null>(null);
 const currentPlayerId = ref<string | null>(null);
@@ -502,6 +503,12 @@ function closeQuestion() {
         v-if="gameState"
         :audio="gameState.audio"
     />
+
+    <SfxSync
+        v-if="gameState"
+        :sfx="gameState.sfx"
+    />
+
     <section v-if="connectionError" class="error-box">
       {{ connectionError }}
     </section>

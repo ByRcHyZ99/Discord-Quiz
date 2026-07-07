@@ -2,6 +2,7 @@ import cors from 'cors';
 import express from 'express';
 import { createServer } from 'node:http';
 import { Server } from 'socket.io';
+import type { Room } from './types.js';
 import {
   createRoom,
   findQuestion,
@@ -40,6 +41,20 @@ const io = new Server(httpServer, {
     methods: ["GET", "POST"]
   }
 });
+
+function playRoomSfx(room: Room, soundUrl: string) {
+  const currentSfx = room.sfx ?? {
+    soundUrl: null,
+    version: 0,
+    volume: 0.55
+  };
+
+  room.sfx = {
+    soundUrl,
+    version: currentSfx.version + 1,
+    volume: currentSfx.volume
+  };
+}
 
 function markActiveQuestionUsed(room: Room) {
   const activeQuestion = room.activeQuestion?.question;
@@ -828,6 +843,8 @@ io.on('connection', (socket) => {
       room.buzzer.locked = true;
       room.message = `${player.name} buzzed first.`;
 
+      playRoomSfx(room, '/sounds/sfx/buzzer.mp3');
+
       if (room.activeQuestion?.question.questionType === 'ability-fake') {
         room.activeQuestion.abilityBlurred = true;
       }
@@ -905,6 +922,8 @@ io.on('connection', (socket) => {
         
         room.message = `${player.name} got ${room.activeQuestion.question.points} points.`;
 
+        playRoomSfx(room, '/sounds/sfx/correct.mp3');
+
         respond(callback, room);
         emitRoom(room);
       }
@@ -954,6 +973,8 @@ io.on('connection', (socket) => {
         }
 
         room.message = `${player.name} answered wrong, lost ${penalty} points, and cannot buzz for 5 seconds.`;
+
+        playRoomSfx(room, '/sounds/sfx/wrong.mp3');
 
         respond(callback, room);
         emitRoom(room);

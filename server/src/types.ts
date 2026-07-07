@@ -73,6 +73,12 @@ export type Category = {
   questions: Question[];
 };
 
+export type SfxState = {
+  soundUrl: string | null;
+  version: number;
+  volume: number;
+};
+
 export type Buzz = {
   playerId: string;
   playerName: string;
@@ -110,6 +116,7 @@ export type Room = {
   buzzer: BuzzerState;
   message: string;
   audio: AudioState;
+  sfx: SfxState;
 };
 
 export type PublicPlayer = Omit<Player, 'socketId'>;
@@ -117,6 +124,7 @@ export type PublicPlayer = Omit<Player, 'socketId'>;
 export type PublicRoom = Omit<Room, 'players'> & {
   players: PublicPlayer[];
   audio: AudioState;
+  sfx: SfxState;
 };
 
 export type ServerResponse = {

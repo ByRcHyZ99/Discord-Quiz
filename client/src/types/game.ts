@@ -59,6 +59,12 @@ export type AudioState = {
   volume: number;
 };
 
+export type SfxState = {
+  soundUrl: string | null;
+  version: number;
+  volume: number;
+};
+
 export type EstimateAnswer = {
   playerId: string;
   playerName: string;
@@ -108,6 +114,7 @@ export type GameState = {
   buzzer: BuzzerState;
   message: string;
   audio: AudioState;
+  sfx: SfxState;
 };
 
 export type ServerResponse = {

@@ -21,6 +21,11 @@ export function createRoom(socketId: string, hostName: string): { room: Room; pl
       version: 0,
       volume: 0.35
     },
+    sfx: {
+      soundUrl: null,
+      version: 0,
+      volume: 0.55
+    },
     buzzer: {
       locked: true,
       firstBuzz: null,
