@@ -2,7 +2,6 @@ import cors from 'cors';
 import express from 'express';
 import { createServer } from 'node:http';
 import { Server } from 'socket.io';
-import type { Room } from './types.js';
 import {
   createRoom,
   findQuestion,
