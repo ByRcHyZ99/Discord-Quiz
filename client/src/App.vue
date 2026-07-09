@@ -175,21 +175,38 @@ function stopAudio() {
 }
 
 function submitEstimateFromOverlay() {
-  if (!gameState.value) return;
+  if (!gameState.value) {
+    connectionError.value = 'No active game state.';
+    return;
+  }
+
+  if (!currentPlayerId.value) {
+    connectionError.value = 'Player ID missing. Please rejoin the room.';
+    return;
+  }
 
   const value = estimateValue.value.trim();
-  if (!value) return;
+
+  if (!value) {
+    connectionError.value = 'Estimate cannot be empty.';
+    return;
+  }
 
   socket.emit(
       'estimate:submit',
       {
         roomCode: gameState.value.roomCode,
+        playerId: currentPlayerId.value,
         value
       },
-      handleResponse
-  );
+      (response: ServerResponse) => {
+        if (response.ok) {
+          estimateSubmitted.value = true;
+        }
 
-  estimateSubmitted.value = true;
+        handleResponse(response);
+      }
+  );
 }
 
 function submitEstimateAnswer(value: string) {
@@ -442,10 +459,12 @@ function handleResponse(response: ServerResponse) {
 
   if (response.state) {
     gameState.value = response.state;
-  }
 
-  if (response.roomCode && response.playerId) {
-    saveSession(response.roomCode, response.playerId);
+    const playerIdToSave = response.playerId ?? currentPlayerId.value;
+
+    if (playerIdToSave) {
+      saveSession(response.state.roomCode, playerIdToSave);
+    }
   }
 }
 

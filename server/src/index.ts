@@ -572,9 +572,13 @@ io.on('connection', (socket) => {
   socket.on(
       'estimate:submit',
       (
-          payload: { roomCode: string; playerId: string; value: string },
+          payload: { roomCode: string; playerId?: string; value: string },
           callback: (response: ServerResponse) => void
       ) => {
+        if (!payload || typeof payload.roomCode !== 'string') {
+          callback({ ok: false, error: 'Missing room code.' });
+          return;
+        }
         const roomCode = cleanRoomCode(payload.roomCode);
         const room = getRoom(roomCode);
 
@@ -603,23 +607,50 @@ io.on('connection', (socket) => {
           return;
         }
 
-        const player = room.players.find(
-            (item) =>
-                item.id === payload.playerId &&
-                item.socketId === socket.id
-        );
-
-        if (!player) {
-          callback({ ok: false, error: 'Player not found in this room.' });
-          return;
-        }
-
         const value = payload.value.trim();
 
         if (!value) {
           callback({ ok: false, error: 'Answer cannot be empty.' });
           return;
         }
+
+        const payloadPlayerId =
+            typeof payload.playerId === 'string'
+                ? payload.playerId
+                : '';
+
+        let player = room.players.find(
+            (item) => item.socketId === socket.id
+        );
+
+        if (!player && payloadPlayerId) {
+          player = room.players.find(
+              (item) => item.id === payloadPlayerId
+          );
+        }
+
+        if (!player) {
+          console.warn('Estimate submit failed: player not found', {
+            roomCode: room.roomCode,
+            payloadPlayerId,
+            socketId: socket.id,
+            players: room.players.map((item) => ({
+              id: item.id,
+              name: item.name,
+              socketId: item.socketId,
+              isConnected: item.isConnected
+            }))
+          });
+
+          callback({ ok: false, error: 'Player not found in this room.' });
+          return;
+        }
+
+        player.socketId = socket.id;
+        player.isConnected = true;
+        socket.join(room.roomCode);
+
+        activeQuestion.estimateAnswers = activeQuestion.estimateAnswers ?? [];
 
         const existingAnswer = activeQuestion.estimateAnswers.find(
             (answer: { playerId: string }) => answer.playerId === player.id
@@ -1395,7 +1426,11 @@ function emitRoom(room: Room) {
   io.to(room.roomCode).emit('game:state', getPublicRoom(room));
 }
 
-function cleanRoomCode(roomCode: string) {
+function cleanRoomCode(roomCode: unknown): string {
+  if (typeof roomCode !== 'string') {
+    return '';
+  }
+
   return roomCode.trim().toUpperCase();
 }
 

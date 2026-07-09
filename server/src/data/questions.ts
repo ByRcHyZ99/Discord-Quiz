@@ -491,45 +491,45 @@ export function createQuestionSetBoard2(): Category[] {
       title: 'Pi * Baron',
       questions: [
         {
-          id: 'Pi_*_Baron-100',
+          id: 'Pi_*_Baron-600',
           categoryId: 'Pi_*_Baron',
-          points: 100,
+          points: 600,
           text: 'Wie viele Voidgrubs können maximal vor dem Rift Herald in einem Spiel spawnen?',
           answer: '6 Voidgrubs',
           questionType: 'estimate',
           used: false
         },
         {
-          id: 'Pi_*_Baron-200',
+          id: 'Pi_*_Baron-700',
           categoryId: 'Pi_*_Baron',
-          points: 200,
+          points: 700,
           text: 'Wie viele Champs haben eine Fähigkeit die unendlich stacken kann?',
           answer: '15 Champions',
           questionType: 'estimate',
           used: false
         },
         {
-          id: 'Pi_*_Baron-300',
+          id: 'Pi_*_Baron-800',
           categoryId: 'Pi_*_Baron',
-          points: 300,
+          points: 800,
           text: 'Wie viel Gold ist eine normale Minion-Wave ohne Cannon wert?',
           answer: '105 Gold',
           questionType: 'estimate',
           used: false
         },
         {
-          id: 'Pi_*_Baron',
+          id: 'Pi_*_Baron-900',
           categoryId: 'Pi_*_Baron',
-          points: 400,
+          points: 900,
           text: 'Wie viel Gold bekommt man, wenn man bis Minute 10:00 auf einer Lane perfekt last-hittet, ohne Kills, Plates oder passives Gold mitzuzählen?',
           answer: '2295 Gold',
           questionType: 'estimate',
           used: false
         },
         {
-          id: 'Pi_*_Baron-500',
+          id: 'Pi_*_Baron-1000',
           categoryId: 'Pi_*_Baron',
-          points: 500,
+          points: 1000,
           text: 'Wie viele aktuelle Champs haben ein Apostroph im offiziellen Namen?',
           answer: '8 Champions',
           questionType: 'estimate',
