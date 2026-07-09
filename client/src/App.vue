@@ -570,6 +570,33 @@ function buzz() {
   );
 }
 
+function useShieldJoker() {
+  if (!gameState.value || !currentPlayerId.value) return;
+
+  socket.emit(
+      'joker:use-shield',
+      {
+        roomCode: gameState.value.roomCode,
+        playerId: currentPlayerId.value
+      },
+      handleResponse
+  );
+}
+
+function useBlockJoker(targetPlayerId: string) {
+  if (!gameState.value || !currentPlayerId.value) return;
+
+  socket.emit(
+      'joker:use-block',
+      {
+        roomCode: gameState.value.roomCode,
+        playerId: currentPlayerId.value,
+        targetPlayerId
+      },
+      handleResponse
+  );
+}
+
 function setPointAward(payload: { playerId: string; awarded: boolean }) {
   if (!gameState.value) return;
 
@@ -722,6 +749,8 @@ function closeQuestion() {
               :state="gameState"
               :current-player-id="currentPlayerId"
               @buzz="buzz"
+              @use-shield-joker="useShieldJoker"
+              @use-block-joker="useBlockJoker"
           />
 
           <HostControls
@@ -771,6 +800,7 @@ function closeQuestion() {
               v-else-if="gameState.phase === 'board'"
               :categories="gameState.categories"
               :can-select="isHost"
+              :double-points-active="gameState.activeBoardDoublePointsActive"
               @select-question="selectQuestion"
           />
 

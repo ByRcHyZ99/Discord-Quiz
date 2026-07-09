@@ -14,6 +14,8 @@ export type Player = {
   score: number;
   isHost: boolean;
   isConnected: boolean;
+  jokerShieldAvailable: boolean;
+  jokerBlockAvailable: boolean;
 };
 
 export type AbilityKey = 'P' | 'Q' | 'W' | 'E' | 'R';
@@ -82,6 +84,13 @@ export type EstimateAnswer = {
   submittedAt: number;
 };
 
+export type BuzzerBlockEntry = {
+  sourcePlayerId: string;
+  sourcePlayerName: string;
+  targetPlayerId: string;
+  targetPlayerName: string;
+};
+
 export type ActiveQuestion = {
   question: Question;
   revealed: boolean;
@@ -103,6 +112,16 @@ export type ActiveQuestion = {
 
   pointPenalizedPlayerIds?: string[];
   pointPenalizedPlayerNames?: string[];
+
+  effectivePoints: number;
+  pointsMultiplier: number;
+
+  penaltyShieldPlayerIds?: string[];
+  penaltyShieldPlayerNames?: string[];
+
+  buzzerBlockedPlayerIds?: string[];
+  buzzerBlockedPlayerNames?: string[];
+  buzzerBlockEntries?: BuzzerBlockEntry[];
 };
 
 export type Category = {
@@ -151,6 +170,7 @@ export type Room = {
   categoryBoards: QuizBoard[];
   boards: BoardSummary[];
   activeBoardIndex: number;
+  activeBoardDoublePointsActive: boolean;
 };
 
 export type PublicPlayer = Omit<Player, 'socketId'>;

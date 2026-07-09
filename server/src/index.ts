@@ -12,7 +12,7 @@ import {
   markPlayerDisconnected,
   restorePlayerSession
 } from './rooms.js';
-import type { Room, ServerResponse } from './types.js';
+import type { Room, ServerResponse, ActiveQuestion} from './types.js';
 
 const PORT = Number(process.env.PORT) || 3001;
 const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:5173";
@@ -53,6 +53,31 @@ function playRoomSfx(room: Room, soundUrl: string) {
     version: currentSfx.version + 1,
     volume: currentSfx.volume
   };
+}
+
+function getActiveBoardQuestions(room: Room) {
+  const activeBoard = room.categoryBoards[room.activeBoardIndex];
+
+  if (!activeBoard) return [];
+
+  return activeBoard.categories.flatMap((category) => category.questions);
+}
+
+function isDoublePointsActive(room: Room) {
+  const questions = getActiveBoardQuestions(room);
+  const unusedCount = questions.filter((question) => !question.used).length;
+
+  return unusedCount <= 5;
+}
+
+function getActiveQuestionPoints(activeQuestion: ActiveQuestion) {
+  return activeQuestion.effectivePoints ?? activeQuestion.question.points;
+}
+
+function mapPlayerNames(room: Room, playerIds: string[]) {
+  return playerIds
+      .map((playerId: string) => room.players.find((player) => player.id === playerId)?.name)
+      .filter((name: string | undefined): name is string => Boolean(name));
 }
 
 function markActiveQuestionUsed(room: Room) {
@@ -119,6 +144,142 @@ io.on('connection', (socket) => {
     respond(callback, room, player.id);
     emitRoom(room);
   });
+
+  socket.on(
+      'joker:use-shield',
+      (
+          payload: { roomCode: string; playerId: string },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const roomCode = cleanRoomCode(payload.roomCode);
+        const room = getRoom(roomCode);
+
+        if (!room) {
+          callback({ ok: false, error: 'Room not found.' });
+          return;
+        }
+
+        const activeQuestion = room.activeQuestion;
+
+        if (!activeQuestion || room.phase !== 'question' || activeQuestion.revealed) {
+          callback({
+            ok: false,
+            error: 'Shield Joker can only be used before the question is revealed.'
+          });
+          return;
+        }
+
+        const player = room.players.find((item) => item.id === payload.playerId);
+
+        if (!player) {
+          callback({ ok: false, error: 'Player not found in this room.' });
+          return;
+        }
+
+        player.socketId = socket.id;
+        player.isConnected = true;
+
+        if (!player.jokerShieldAvailable) {
+          callback({ ok: false, error: 'Shield Joker already used.' });
+          return;
+        }
+
+        const shieldIds = new Set(activeQuestion.penaltyShieldPlayerIds ?? []);
+        shieldIds.add(player.id);
+
+        activeQuestion.penaltyShieldPlayerIds = Array.from(shieldIds);
+        activeQuestion.penaltyShieldPlayerNames = mapPlayerNames(
+            room,
+            activeQuestion.penaltyShieldPlayerIds
+        );
+
+        player.jokerShieldAvailable = false;
+
+        room.message = `${player.name} used Shield Joker for this question.`;
+
+        respond(callback, room, player.id);
+        emitRoom(room);
+      }
+  );
+
+  socket.on(
+      'joker:use-block',
+      (
+          payload: { roomCode: string; playerId: string; targetPlayerId: string },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const roomCode = cleanRoomCode(payload.roomCode);
+        const room = getRoom(roomCode);
+
+        if (!room) {
+          callback({ ok: false, error: 'Room not found.' });
+          return;
+        }
+
+        const activeQuestion = room.activeQuestion;
+
+        if (!activeQuestion || room.phase !== 'question' || activeQuestion.revealed) {
+          callback({
+            ok: false,
+            error: 'Block Joker can only be used before the question is revealed.'
+          });
+          return;
+        }
+
+        const player = room.players.find((item) => item.id === payload.playerId);
+
+        if (!player) {
+          callback({ ok: false, error: 'Player not found in this room.' });
+          return;
+        }
+
+        player.socketId = socket.id;
+        player.isConnected = true;
+
+        if (!player.jokerBlockAvailable) {
+          callback({ ok: false, error: 'Block Joker already used.' });
+          return;
+        }
+
+        const target = room.players.find((item) => item.id === payload.targetPlayerId);
+
+        if (!target) {
+          callback({ ok: false, error: 'Target player not found.' });
+          return;
+        }
+
+        if (target.id === player.id) {
+          callback({ ok: false, error: 'You cannot block yourself.' });
+          return;
+        }
+
+        const blockedIds = new Set(activeQuestion.buzzerBlockedPlayerIds ?? []);
+        blockedIds.add(target.id);
+
+        activeQuestion.buzzerBlockedPlayerIds = Array.from(blockedIds);
+        activeQuestion.buzzerBlockedPlayerNames = mapPlayerNames(
+            room,
+            activeQuestion.buzzerBlockedPlayerIds
+        );
+
+        activeQuestion.buzzerBlockEntries = [
+          ...(activeQuestion.buzzerBlockEntries ?? []),
+          {
+            sourcePlayerId: player.id,
+            sourcePlayerName: player.name,
+            targetPlayerId: target.id,
+            targetPlayerName: target.name
+          }
+        ];
+
+        player.jokerBlockAvailable = false;
+
+        room.message = `${player.name} used Block Joker. ${target.name} cannot buzz this question.`;
+
+        respond(callback, room, player.id);
+        emitRoom(room);
+      }
+  );
 
   socket.on(
       'board:switch',
@@ -207,11 +368,22 @@ io.on('connection', (socket) => {
           return;
         }
 
-        const penalty = Math.round(activeQuestion.question.points / 2);
+        const penalty = Math.round(getActiveQuestionPoints(activeQuestion) / 2);
         const penalizedIds = new Set(activeQuestion.pointPenalizedPlayerIds ?? []);
         const isAlreadyPenalized = penalizedIds.has(player.id);
 
         if (payload.penalized && !isAlreadyPenalized) {
+          const shieldIds = new Set(activeQuestion.penaltyShieldPlayerIds ?? []);
+          const hasPenaltyShield = shieldIds.has(player.id);
+
+          if (hasPenaltyShield) {
+            room.message = `${player.name}'s Shield Joker blocked the ${penalty} point penalty.`;
+
+            respond(callback, room);
+            emitRoom(room);
+            return;
+          }
+
           penalizedIds.add(player.id);
           player.score -= penalty;
           room.message = `${player.name} lost ${penalty} points.`;
@@ -226,9 +398,10 @@ io.on('connection', (socket) => {
         activeQuestion.pointPenalizedPlayerIds = Array.from(penalizedIds);
 
         activeQuestion.pointPenalizedPlayerNames =
-            activeQuestion.pointPenalizedPlayerIds
-                .map((playerId: string) => room.players.find((item) => item.id === playerId)?.name)
-                .filter((name: string | undefined): name is string => Boolean(name));
+            activeQuestion.pointPenalizedPlayerNames = mapPlayerNames(
+                room,
+                activeQuestion.pointPenalizedPlayerIds
+            );
 
         respond(callback, room);
         emitRoom(room);
@@ -292,7 +465,7 @@ io.on('connection', (socket) => {
           return;
         }
 
-        const points = activeQuestion.question.points;
+        const points = getActiveQuestionPoints(activeQuestion);
         const awardedIds = new Set(activeQuestion.pointAwardedPlayerIds ?? []);
         const isAlreadyAwarded = awardedIds.has(player.id);
 
@@ -1107,26 +1280,47 @@ io.on('connection', (socket) => {
       }
 
       room.phase = 'question';
+      const pointsMultiplier = isDoublePointsActive(room) ? 2 : 1;
+      const effectivePoints = question.points * pointsMultiplier;
+
       room.activeQuestion = {
         question,
         revealed: false,
         zoomStep: question.zoomStartIndex ?? 0,
         estimateAnswers: [],
+
+        effectivePoints,
+        pointsMultiplier,
+
         estimateAwardedPlayerIds: [],
         estimateAwardedPlayerNames: [],
+
         pointAwardedPlayerIds: [],
         pointAwardedPlayerNames: [],
+
         pointPenalizedPlayerIds: [],
         pointPenalizedPlayerNames: [],
+
+        penaltyShieldPlayerIds: [],
+        penaltyShieldPlayerNames: [],
+
+        buzzerBlockedPlayerIds: [],
+        buzzerBlockedPlayerNames: [],
+        buzzerBlockEntries: [],
+
         abilityBlurred: question.questionType === 'ability-fake',
         abilityView: 'question',
+
         buzzTimeouts: {},
         progressiveRevealCount: 0
       };
       room.buzzer.locked = true;
       room.buzzer.firstBuzz = null;
       room.buzzer.buzzOrder = [];
-      room.message = 'Question selected.';
+      room.message =
+          pointsMultiplier === 2
+              ? `Double points question selected: ${effectivePoints} points. Jokers can be used before reveal.`
+              : 'Question selected. Jokers can be used before reveal.';
 
       setRoomAudio(room, 'stopped', question.soundUrl ?? null);
 
@@ -1164,6 +1358,14 @@ io.on('connection', (socket) => {
     const player = room.players.find((item) => item.id === payload.playerId && item.socketId === socket.id);
     if (!player) {
       callback({ ok: false, error: 'Player not found in this room.' });
+      return;
+    }
+
+    if (room.activeQuestion?.buzzerBlockedPlayerIds?.includes(player.id)) {
+      callback({
+        ok: false,
+        error: 'Your buzzer is blocked for this question.'
+      });
       return;
     }
 

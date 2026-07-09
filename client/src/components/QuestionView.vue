@@ -34,7 +34,7 @@ const isZoomImage = computed(() => {
   <section class="question-view card">
     <div class="question-meta">
       <span v-if="state.activeQuestion" class="badge">
-        {{ state.activeQuestion.question.points }} pts
+{{ state.activeQuestion.effectivePoints ?? state.activeQuestion.question.points }} pts
       </span>
 
       <span

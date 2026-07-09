@@ -42,12 +42,16 @@ const emit = defineEmits<{
   'board-switch': [boardIndex: number];
 }>();
 
-const questionPenalty = computed(() => {
-  return Math.round(questionPoints.value / 2);
-});
-
 function isPointPenalized(playerId: string) {
   return activeQuestion.value?.pointPenalizedPlayerIds?.includes(playerId) ?? false;
+}
+
+function hasPenaltyShield(playerId: string) {
+  return activeQuestion.value?.penaltyShieldPlayerIds?.includes(playerId) ?? false;
+}
+
+function isBuzzerBlocked(playerId: string) {
+  return activeQuestion.value?.buzzerBlockedPlayerIds?.includes(playerId) ?? false;
 }
 
 function togglePointPenalty(playerId: string) {
@@ -84,7 +88,15 @@ const hasZoomImage = computed(() => {
 });
 
 const questionPoints = computed(() => {
-  return activeQuestion.value?.question.points ?? 0;
+  return activeQuestion.value?.effectivePoints ?? activeQuestion.value?.question.points ?? 0;
+});
+
+const questionPenalty = computed(() => {
+  return Math.round(questionPoints.value / 2);
+});
+
+const questionMultiplier = computed(() => {
+  return activeQuestion.value?.pointsMultiplier ?? 1;
 });
 
 const progressiveRevealCount = computed(() => {
@@ -425,10 +437,44 @@ function handleAudioVolume(event: Event) {
     >
       <p class="eyebrow">Manual points</p>
 
+      <p
+          v-if="questionMultiplier === 2"
+          class="double-points-host-info"
+      >
+        Double Points active: this question is worth {{ questionPoints }} points.
+      </p>
+
       <p class="muted">
         Give {{ questionPoints }} points or apply a wrong-answer penalty of
         {{ questionPenalty }} points.
       </p>
+
+      <div
+          v-if="activeQuestion.penaltyShieldPlayerNames?.length"
+          class="joker-status-list"
+      >
+        <p class="eyebrow">Shield Jokers</p>
+
+        <p class="muted">
+          Penalty shield active for:
+          <strong>{{ activeQuestion.penaltyShieldPlayerNames.join(', ') }}</strong>
+        </p>
+      </div>
+
+      <div
+          v-if="activeQuestion.buzzerBlockEntries?.length"
+          class="joker-status-list"
+      >
+        <p class="eyebrow">Block Jokers</p>
+
+        <p
+            v-for="entry in activeQuestion.buzzerBlockEntries"
+            :key="`${entry.sourcePlayerId}-${entry.targetPlayerId}`"
+            class="muted"
+        >
+          {{ entry.sourcePlayerName }} blocked {{ entry.targetPlayerName }}.
+        </p>
+      </div>
 
       <div
           v-for="player in state.players"
@@ -458,10 +504,13 @@ function handleAudioVolume(event: Event) {
             :class="{
         'manual-penalty-button--selected': isPointPenalized(player.id)
       }"
+            :disabled="hasPenaltyShield(player.id)"
             @click="togglePointPenalty(player.id)"
         >
           {{
-          isPointPenalized(player.id)
+          hasPenaltyShield(player.id)
+          ? 'Shield active'
+          : isPointPenalized(player.id)
           ? 'Remove penalty'
           : `Penalty -${questionPenalty} pts`
           }}

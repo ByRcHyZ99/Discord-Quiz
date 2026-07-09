@@ -33,6 +33,7 @@ export function createRoom(socketId: string, hostName: string): { room: Room; pl
     categoryBoards,
     boards: createBoardSummaries(categoryBoards),
     activeBoardIndex: 0,
+    activeBoardDoublePointsActive: false,
     activeQuestion: null,
     audio: {
       soundUrl: null,
@@ -107,6 +108,16 @@ export function getPublicRoom(room: Room): PublicRoom {
 
   const activeBoard = room.categoryBoards[room.activeBoardIndex];
 
+  const activeBoardQuestions = activeBoard.categories.flatMap(
+      (category) => category.questions
+  );
+
+  const unusedCount = activeBoardQuestions.filter(
+      (question) => !question.used
+  ).length;
+
+  const activeBoardDoublePointsActive = unusedCount <= 5;
+
   room.categories = activeBoard.categories;
   room.boards = createBoardSummaries(room.categoryBoards);
 
@@ -116,6 +127,7 @@ export function getPublicRoom(room: Room): PublicRoom {
     categories: activeBoard.categories,
     boards: createBoardSummaries(room.categoryBoards),
     activeBoardIndex: room.activeBoardIndex,
+    activeBoardDoublePointsActive,
     activeQuestion,
     players: room.players.map(({ socketId: _socketId, ...player }) => player)
   };
@@ -157,14 +169,16 @@ export function markPlayerDisconnected(socketId: string): Room | null {
   return room;
 }
 
-function createPlayer(socketId: string, name: string, isHostPlayer: boolean): Player {
+function createPlayer(socketId: string, name: string, isHost: boolean): Player {
   return {
-    id: randomUUID(),
+    id: crypto.randomUUID(),
     socketId,
     name,
     score: 0,
-    isHost: isHostPlayer,
-    isConnected: true
+    isHost,
+    isConnected: true,
+    jokerShieldAvailable: true,
+    jokerBlockAvailable: true
   };
 }
 
