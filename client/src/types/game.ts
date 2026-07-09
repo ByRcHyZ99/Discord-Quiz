@@ -85,6 +85,14 @@ export type Category = {
   questions: Question[];
 };
 
+export type BoardSummary = {
+  index: number;
+  id: string;
+  title: string;
+  usedCount: number;
+  totalCount: number;
+};
+
 export type Buzz = {
   playerId: string;
   playerName: string;
@@ -104,6 +112,12 @@ export type ActiveQuestion = {
   abilityView?: 'question' | 'solution';
   buzzTimeouts: Record<string, number>;
   progressiveRevealCount?: number;
+
+  pointAwardedPlayerIds?: string[];
+  pointAwardedPlayerNames?: string[];
+
+  pointPenalizedPlayerIds?: string[];
+  pointPenalizedPlayerNames?: string[];
 };
 
 export type BuzzerState = {
@@ -123,6 +137,9 @@ export type GameState = {
   audio: AudioState;
   sfx: SfxState;
   soundCheckBuzzes: SoundCheckBuzz[];
+  serverTime: number;
+  boards: BoardSummary[];
+  activeBoardIndex: number;
 };
 
 export type ServerResponse = {

@@ -56,6 +56,19 @@ function testSoundCheckBuzz() {
   );
 }
 
+function switchBoard(boardIndex: number) {
+  if (!gameState.value || !isHost.value) return;
+
+  socket.emit(
+      'board:switch',
+      {
+        roomCode: gameState.value.roomCode,
+        boardIndex
+      },
+      handleResponse
+  );
+}
+
 function playSoundCheckTestSound() {
   if (!gameState.value || !isHost.value) return;
 
@@ -216,6 +229,20 @@ function revealEstimateAnswer() {
   );
 }
 
+function setPointPenalty(payload: { playerId: string; penalized: boolean }) {
+  if (!gameState.value) return;
+
+  socket.emit(
+      'points:set-penalty',
+      {
+        roomCode: gameState.value.roomCode,
+        playerId: payload.playerId,
+        penalized: payload.penalized
+      },
+      handleResponse
+  );
+}
+
 function awardEstimatePoints(playerId: string) {
   if (!gameState.value) return;
 
@@ -281,6 +308,32 @@ function hideLastProgressiveClue() {
       'progressive:hide-last',
       {
         roomCode: gameState.value.roomCode
+      },
+      handleResponse
+  );
+}
+
+function blurAbilityView() {
+  if (!gameState.value) return;
+
+  socket.emit(
+      'ability:set-blur',
+      {
+        roomCode: gameState.value.roomCode,
+        blurred: true
+      },
+      handleResponse
+  );
+}
+
+function revealAbilityView() {
+  if (!gameState.value) return;
+
+  socket.emit(
+      'ability:set-blur',
+      {
+        roomCode: gameState.value.roomCode,
+        blurred: false
       },
       handleResponse
   );
@@ -498,6 +551,20 @@ function buzz() {
   );
 }
 
+function setPointAward(payload: { playerId: string; awarded: boolean }) {
+  if (!gameState.value) return;
+
+  socket.emit(
+      'points:set-award',
+      {
+        roomCode: gameState.value.roomCode,
+        playerId: payload.playerId,
+        awarded: payload.awarded
+      },
+      handleResponse
+  );
+}
+
 function lockBuzzer() {
   if (!gameState.value || !isHost.value) return;
   socket.emit('buzzer:lock', { roomCode: gameState.value.roomCode }, handleResponse);
@@ -657,12 +724,16 @@ function closeQuestion() {
               @image-reset="resetImageZoom"
               @estimate-close="closeEstimates"
               @estimate-reveal-answer="revealEstimateAnswer"
-              @estimate-award="awardEstimatePoints"
               @ability-show-question="showAbilityQuestionView"
               @ability-show-solution="showAbilitySolutionView"
               @progressive-reveal-next="revealNextProgressiveClue"
               @progressive-hide-last="hideLastProgressiveClue"
               @progressive-reset="resetProgressiveClues"
+              @ability-blur="blurAbilityView"
+              @ability-reveal="revealAbilityView"
+              @points-set-award="setPointAward"
+              @points-set-penalty="setPointPenalty"
+              @board-switch="switchBoard"
           />
         </aside>
 

@@ -121,6 +121,206 @@ io.on('connection', (socket) => {
   });
 
   socket.on(
+      'board:switch',
+      (
+          payload: { roomCode: string; boardIndex: number },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const room = requireHostRoom(payload.roomCode, socket.id, callback);
+        if (!room) return;
+
+        if (room.phase !== 'board') {
+          callback({
+            ok: false,
+            error: 'You can only switch boards while the game board is visible.'
+          });
+          return;
+        }
+
+        const boardIndex = payload.boardIndex;
+
+        if (
+            !Number.isInteger(boardIndex) ||
+            boardIndex < 0 ||
+            boardIndex >= room.categoryBoards.length
+        ) {
+          callback({ ok: false, error: 'Invalid board index.' });
+          return;
+        }
+
+        room.activeBoardIndex = boardIndex;
+        room.categories = room.categoryBoards[boardIndex].categories;
+
+        room.buzzer.locked = true;
+        room.buzzer.firstBuzz = null;
+        room.buzzer.buzzOrder = [];
+        room.activeQuestion = null;
+
+        room.boards = room.categoryBoards.map((board, index) => {
+          const questions = board.categories.flatMap((category) => category.questions);
+
+          return {
+            index,
+            id: board.id,
+            title: board.title,
+            usedCount: questions.filter((question) => question.used).length,
+            totalCount: questions.length
+          };
+        });
+
+        room.message = `${room.categoryBoards[boardIndex].title} opened.`;
+
+        respond(callback, room);
+        emitRoom(room);
+      }
+  );
+
+  socket.on(
+      'points:set-penalty',
+      (
+          payload: { roomCode: string; playerId: string; penalized: boolean },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const room = requireHostRoom(payload.roomCode, socket.id, callback);
+        if (!room) return;
+
+        const activeQuestion = room.activeQuestion;
+
+        if (!activeQuestion) {
+          callback({ ok: false, error: 'No active question.' });
+          return;
+        }
+
+        if (
+            room.phase !== 'question' &&
+            room.phase !== 'submissions' &&
+            room.phase !== 'answer'
+        ) {
+          callback({ ok: false, error: 'Penalties can only be changed during an active question.' });
+          return;
+        }
+
+        const player = room.players.find((item) => item.id === payload.playerId);
+
+        if (!player) {
+          callback({ ok: false, error: 'Player not found.' });
+          return;
+        }
+
+        const penalty = Math.round(activeQuestion.question.points / 2);
+        const penalizedIds = new Set(activeQuestion.pointPenalizedPlayerIds ?? []);
+        const isAlreadyPenalized = penalizedIds.has(player.id);
+
+        if (payload.penalized && !isAlreadyPenalized) {
+          penalizedIds.add(player.id);
+          player.score -= penalty;
+          room.message = `${player.name} lost ${penalty} points.`;
+        }
+
+        if (!payload.penalized && isAlreadyPenalized) {
+          penalizedIds.delete(player.id);
+          player.score += penalty;
+          room.message = `${player.name} got ${penalty} penalty points restored.`;
+        }
+
+        activeQuestion.pointPenalizedPlayerIds = Array.from(penalizedIds);
+
+        activeQuestion.pointPenalizedPlayerNames =
+            activeQuestion.pointPenalizedPlayerIds
+                .map((playerId: string) => room.players.find((item) => item.id === playerId)?.name)
+                .filter((name: string | undefined): name is string => Boolean(name));
+
+        respond(callback, room);
+        emitRoom(room);
+      }
+  );
+
+  socket.on(
+      'ability:set-blur',
+      (
+          payload: { roomCode: string; blurred: boolean },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const room = requireHostRoom(payload.roomCode, socket.id, callback);
+        if (!room) return;
+
+        if (
+            !room.activeQuestion ||
+            room.activeQuestion.question.questionType !== 'ability-fake'
+        ) {
+          callback({ ok: false, error: 'No ability fake question is active.' });
+          return;
+        }
+
+        room.activeQuestion.abilityBlurred = payload.blurred;
+        room.message = payload.blurred ? 'Ability view blurred.' : 'Ability view revealed.';
+
+        respond(callback, room);
+        emitRoom(room);
+      }
+  );
+
+  socket.on(
+      'points:set-award',
+      (
+          payload: { roomCode: string; playerId: string; awarded: boolean },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const room = requireHostRoom(payload.roomCode, socket.id, callback);
+        if (!room) return;
+
+        const activeQuestion = room.activeQuestion;
+
+        if (!activeQuestion) {
+          callback({ ok: false, error: 'No active question.' });
+          return;
+        }
+
+        if (
+            room.phase !== 'question' &&
+            room.phase !== 'submissions' &&
+            room.phase !== 'answer'
+        ) {
+          callback({ ok: false, error: 'Points can only be awarded during an active question.' });
+          return;
+        }
+
+        const player = room.players.find((item) => item.id === payload.playerId);
+
+        if (!player) {
+          callback({ ok: false, error: 'Player not found.' });
+          return;
+        }
+
+        const points = activeQuestion.question.points;
+        const awardedIds = new Set(activeQuestion.pointAwardedPlayerIds ?? []);
+        const isAlreadyAwarded = awardedIds.has(player.id);
+
+        if (payload.awarded && !isAlreadyAwarded) {
+          awardedIds.add(player.id);
+          player.score += points;
+          room.message = `${player.name} received ${points} points.`;
+        }
+
+        if (!payload.awarded && isAlreadyAwarded) {
+          awardedIds.delete(player.id);
+          player.score -= points;
+          room.message = `${player.name} lost ${points} awarded points.`;
+        }
+
+        activeQuestion.pointAwardedPlayerIds = Array.from(awardedIds);
+
+        activeQuestion.pointAwardedPlayerNames =
+            activeQuestion.pointAwardedPlayerIds
+                .map((playerId: string) => room.players.find((item) => item.id === playerId)?.name)
+                .filter((name: string | undefined): name is string => Boolean(name));
+
+        respond(callback, room);
+        emitRoom(room);
+      }
+  );
+
+  socket.on(
       'soundcheck:buzz',
       (
           payload: { roomCode: string; playerId: string },
@@ -372,7 +572,7 @@ io.on('connection', (socket) => {
   socket.on(
       'estimate:submit',
       (
-          payload: { roomCode: string; value: string },
+          payload: { roomCode: string; playerId: string; value: string },
           callback: (response: ServerResponse) => void
       ) => {
         const roomCode = cleanRoomCode(payload.roomCode);
@@ -383,39 +583,53 @@ io.on('connection', (socket) => {
           return;
         }
 
-        const player = room.players.find((item) => item.socketId === socket.id);
+        const activeQuestion = room.activeQuestion;
+
+        if (
+            !activeQuestion ||
+            activeQuestion.question.questionType !== 'estimate'
+        ) {
+          callback({ ok: false, error: 'No estimate question is active.' });
+          return;
+        }
+
+        if (room.phase !== 'question') {
+          callback({ ok: false, error: 'Estimate submissions are closed.' });
+          return;
+        }
+
+        if (!activeQuestion.revealed) {
+          callback({ ok: false, error: 'Question is not revealed yet.' });
+          return;
+        }
+
+        const player = room.players.find(
+            (item) =>
+                item.id === payload.playerId &&
+                item.socketId === socket.id
+        );
 
         if (!player) {
           callback({ ok: false, error: 'Player not found in this room.' });
           return;
         }
 
-        if (
-            room.phase !== 'question' ||
-            !room.activeQuestion ||
-            room.activeQuestion.question.questionType !== 'estimate' ||
-            !room.activeQuestion.revealed
-        ) {
-          callback({ ok: false, error: 'No open estimate question.' });
-          return;
-        }
-
-        const value = String(payload.value ?? '').trim().slice(0, 120);
+        const value = payload.value.trim();
 
         if (!value) {
-          callback({ ok: false, error: 'Please enter an answer.' });
+          callback({ ok: false, error: 'Answer cannot be empty.' });
           return;
         }
 
-        const existingAnswer = room.activeQuestion.estimateAnswers.find(
-            (answer) => answer.playerId === player.id
+        const existingAnswer = activeQuestion.estimateAnswers.find(
+            (answer: { playerId: string }) => answer.playerId === player.id
         );
 
         if (existingAnswer) {
           existingAnswer.value = value;
           existingAnswer.submittedAt = Date.now();
         } else {
-          room.activeQuestion.estimateAnswers.push({
+          activeQuestion.estimateAnswers.push({
             playerId: player.id,
             playerName: player.name,
             value,
@@ -423,7 +637,7 @@ io.on('connection', (socket) => {
           });
         }
 
-        room.message = `${player.name} submitted an answer.`;
+        room.message = `${player.name} submitted an estimate.`;
 
         respond(callback, room, player.id);
         emitRoom(room);
@@ -465,7 +679,7 @@ io.on('connection', (socket) => {
         }
 
         const hasSubmitted = activeQuestion.estimateAnswers.some(
-            (answer) => answer.playerId === winner.id
+            (answer: { playerId: string }) => answer.playerId === winner.id
         );
 
         if (!hasSubmitted) {
@@ -494,8 +708,8 @@ io.on('connection', (socket) => {
 
         activeQuestion.estimateAwardedPlayerNames =
             activeQuestion.estimateAwardedPlayerIds
-                .map((playerId) => room.players.find((player) => player.id === playerId)?.name)
-                .filter((name): name is string => Boolean(name));
+                .map((playerId: string) => room.players.find((player) => player.id === playerId)?.name)
+                .filter((name: string | undefined): name is string => Boolean(name));
 
         respond(callback, room);
         emitRoom(room);
@@ -869,7 +1083,11 @@ io.on('connection', (socket) => {
         estimateAnswers: [],
         estimateAwardedPlayerIds: [],
         estimateAwardedPlayerNames: [],
-        abilityBlurred: false,
+        pointAwardedPlayerIds: [],
+        pointAwardedPlayerNames: [],
+        pointPenalizedPlayerIds: [],
+        pointPenalizedPlayerNames: [],
+        abilityBlurred: question.questionType === 'ability-fake',
         abilityView: 'question',
         buzzTimeouts: {},
         progressiveRevealCount: 0
@@ -1013,7 +1231,18 @@ io.on('connection', (socket) => {
         const room = requireHostRoom(payload.roomCode, socket.id, callback);
         if (!room) return;
 
-        if (!room.activeQuestion || !room.buzzer.firstBuzz) {
+        if (!room.activeQuestion) {
+          callback({ ok: false, error: 'No active question.' });
+          return;
+        }
+
+        if (room.phase === 'answer') {
+          respond(callback, room);
+          emitRoom(room);
+          return;
+        }
+
+        if (!room.buzzer.firstBuzz) {
           callback({ ok: false, error: 'No first buzz to mark correct.' });
           return;
         }
@@ -1027,19 +1256,17 @@ io.on('connection', (socket) => {
           return;
         }
 
-        player.score += room.activeQuestion.question.points;
-
         markActiveQuestionUsed(room);
 
         room.phase = 'answer';
         room.buzzer.locked = true;
 
-        if (room.activeQuestion?.question.questionType === 'ability-fake') {
+        if (room.activeQuestion.question.questionType === 'ability-fake') {
           room.activeQuestion.abilityBlurred = false;
           room.activeQuestion.abilityView = 'solution';
         }
-        
-        room.message = `${player.name} got ${room.activeQuestion.question.points} points.`;
+
+        room.message = `${player.name} answered correctly.`;
 
         playRoomSfx(room, '/sounds/sfx/correct.mp3');
 
@@ -1074,10 +1301,6 @@ io.on('connection', (socket) => {
           return;
         }
 
-        const penalty = Math.round(activeQuestion.question.points / 2);
-
-        player.score -= penalty;
-
         activeQuestion.buzzTimeouts = {
           ...(activeQuestion.buzzTimeouts ?? {}),
           [player.id]: Date.now() + 5000
@@ -1091,7 +1314,7 @@ io.on('connection', (socket) => {
           activeQuestion.abilityBlurred = false;
         }
 
-        room.message = `${player.name} answered wrong, lost ${penalty} points, and cannot buzz for 5 seconds.`;
+        room.message = `${player.name} answered wrong and cannot buzz for 5 seconds.`;
 
         playRoomSfx(room, '/sounds/sfx/wrong.mp3');
 

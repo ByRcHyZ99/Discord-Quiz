@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import type { GameState } from '../types/game';
 
 const props = defineProps<{
@@ -12,8 +12,17 @@ const emit = defineEmits<{
 }>();
 
 const now = ref(Date.now());
+const stateReceivedAt = ref(Date.now());
 
 let intervalId: number | undefined;
+
+watch(
+    () => props.state.serverTime,
+    () => {
+      stateReceivedAt.value = Date.now();
+    },
+    { immediate: true }
+);
 
 onMounted(() => {
   intervalId = window.setInterval(() => {
@@ -27,6 +36,10 @@ onUnmounted(() => {
   }
 });
 
+const estimatedServerNow = computed(() => {
+  return props.state.serverTime + (now.value - stateReceivedAt.value);
+});
+
 const isEstimateQuestion = computed(() => {
   return (
       props.state.phase === 'question' &&
@@ -38,13 +51,11 @@ const isEstimateQuestion = computed(() => {
 const timeoutUntil = computed(() => {
   if (!props.currentPlayerId) return 0;
 
-  return (
-      props.state.activeQuestion?.buzzTimeouts?.[props.currentPlayerId] ?? 0
-  );
+  return props.state.activeQuestion?.buzzTimeouts?.[props.currentPlayerId] ?? 0;
 });
 
 const timeoutSecondsLeft = computed(() => {
-  const remaining = timeoutUntil.value - now.value;
+  const remaining = timeoutUntil.value - estimatedServerNow.value;
   return Math.max(0, Math.ceil(remaining / 1000));
 });
 

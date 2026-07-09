@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
-import { createQuestionSet } from './data/questions.js';
-import type { Player, PublicRoom, Question, Room } from './types.js';
+import type { Player, PublicRoom, Question, Room, QuizBoard, BoardSummary } from './types.js';
+import { createQuestionSet, createQuestionSetBoard2 } from './data/questions.js';
 
 const rooms = new Map<string, Room>();
 
@@ -8,12 +8,31 @@ export function createRoom(socketId: string, hostName: string): { room: Room; pl
   const roomCode = createRoomCode();
   const player = createPlayer(socketId, hostName, true);
 
+  const boardOneCategories = createQuestionSet();
+  const boardTwoCategories = createQuestionSetBoard2();
+
+  const categoryBoards: QuizBoard[] = [
+    {
+      id: 'board-1',
+      title: 'Board 1',
+      categories: boardOneCategories
+    },
+    {
+      id: 'board-2',
+      title: 'Board 2',
+      categories: boardTwoCategories
+    }
+  ];
+
   const room: Room = {
     roomCode,
     phase: 'lobby',
     hostId: player.id,
     players: [player],
-    categories: createQuestionSet(),
+    categories: categoryBoards[0].categories,
+    categoryBoards,
+    boards: createBoardSummaries(categoryBoards),
+    activeBoardIndex: 0,
     activeQuestion: null,
     audio: {
       soundUrl: null,
@@ -32,6 +51,7 @@ export function createRoom(socketId: string, hostName: string): { room: Room; pl
       buzzOrder: []
     },
     soundCheckBuzzes: [],
+    serverTime: Date.now(),
     message: 'Room created.'
   };
 
@@ -85,8 +105,17 @@ export function getPublicRoom(room: Room): PublicRoom {
       }
       : null;
 
+  const activeBoard = room.categoryBoards[room.activeBoardIndex];
+
+  room.categories = activeBoard.categories;
+  room.boards = createBoardSummaries(room.categoryBoards);
+
   return {
     ...room,
+    serverTime: Date.now(),
+    categories: activeBoard.categories,
+    boards: createBoardSummaries(room.categoryBoards),
+    activeBoardIndex: room.activeBoardIndex,
     activeQuestion,
     players: room.players.map(({ socketId: _socketId, ...player }) => player)
   };
@@ -148,4 +177,18 @@ function createRoomCode(): string {
   }
 
   return randomUUID().slice(0, 6).toUpperCase();
+}
+
+function createBoardSummaries(boards: QuizBoard[]): BoardSummary[] {
+  return boards.map((board, index) => {
+    const questions = board.categories.flatMap((category) => category.questions);
+
+    return {
+      index,
+      id: board.id,
+      title: board.title,
+      usedCount: questions.filter((question) => question.used).length,
+      totalCount: questions.length
+    };
+  });
 }

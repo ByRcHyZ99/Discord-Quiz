@@ -2,52 +2,47 @@ import type { Category } from '../types.js';
 
 export const createQuestionSet = (): Category[] => [
   {
-    id: 'Pi_*_Baron',
-    title: 'Pi * Baron',
+    id: 'board2-item-shop',
+    title: 'Item Shop',
     questions: [
       {
-        id: 'Pi_*_Baron-100',
-        categoryId: 'Pi_*_Baron',
+        id: 'board2-item-shop-100',
+        categoryId: 'board2-item-shop',
         points: 100,
-        text: 'Wie viele Voidgrubs können maximal vor dem Rift Herald in einem Spiel spawnen?',
-        answer: '6 Voidgrubs',
-        questionType: 'estimate',
+        text: 'Which item is most famously associated with putting yourself into stasis?',
+        answer: "Zhonya's Hourglass",
         used: false
       },
       {
-        id: 'Pi_*_Baron-200',
-        categoryId: 'Pi_*_Baron',
+        id: 'board2-item-shop-200',
+        categoryId: 'board2-item-shop',
         points: 200,
-        text: 'Wie viele Champs haben eine Fähigkeit die unendlich stacken kann?',
-        answer: '15 Champions',
-        questionType: 'estimate',
+        text: 'Which defensive stat reduces incoming physical damage?',
+        answer: 'Armor',
         used: false
       },
       {
-        id: 'Pi_*_Baron-300',
-        categoryId: 'Pi_*_Baron',
+        id: 'board2-item-shop-300',
+        categoryId: 'board2-item-shop',
         points: 300,
-        text: 'Wie viel Gold ist eine normale Minion-Wave ohne Cannon wert?',
-        answer: '105 Gold',
-        questionType: 'estimate',
+        text: 'Which defensive stat reduces incoming magic damage?',
+        answer: 'Magic Resist',
         used: false
       },
       {
-        id: 'Pi_*_Baron',
-        categoryId: 'Pi_*_Baron',
+        id: 'board2-item-shop-400',
+        categoryId: 'board2-item-shop',
         points: 400,
-        text: 'Wie viel Gold bekommt man, wenn man bis Minute 10:00 auf einer Lane perfekt last-hittet, ohne Kills, Plates oder passives Gold mitzuzählen?',
-        answer: '2295 Gold',
-        questionType: 'estimate',
+        text: 'Which item effect usually helps champions clear wards around them?',
+        answer: 'Sweeper / Oracle Lens effect',
         used: false
       },
       {
-        id: 'Pi_*_Baron-500',
-        categoryId: 'Pi_*_Baron',
+        id: 'board2-item-shop-500',
+        categoryId: 'board2-item-shop',
         points: 500,
-        text: 'Wie viele aktuelle Champs haben ein Apostroph im offiziellen Namen?',
-        answer: '8 Champions',
-        questionType: 'estimate',
+        text: 'What is the general name for items that give a powerful clickable effect?',
+        answer: 'Active items',
         used: false
       }
     ]
@@ -433,7 +428,7 @@ export const createQuestionSet = (): Category[] => [
         categoryId: 'riot',
         points: 200,
         text: 'Nenne die Ability',
-        answer: 'Nasus - Q (Dominus)',
+        answer: 'Nasus - R (Dominus)',
         questionType: 'progressive',
         progressiveClues: [
           'Halbiert den Cooldown einer anderen Fähigkeit',
@@ -487,3 +482,289 @@ export const createQuestionSet = (): Category[] => [
     ]
   }
 ];
+
+export function createQuestionSetBoard2(): Category[] {
+  return [
+
+    {
+      id: 'Pi_*_Baron',
+      title: 'Pi * Baron',
+      questions: [
+        {
+          id: 'Pi_*_Baron-100',
+          categoryId: 'Pi_*_Baron',
+          points: 100,
+          text: 'Wie viele Voidgrubs können maximal vor dem Rift Herald in einem Spiel spawnen?',
+          answer: '6 Voidgrubs',
+          questionType: 'estimate',
+          used: false
+        },
+        {
+          id: 'Pi_*_Baron-200',
+          categoryId: 'Pi_*_Baron',
+          points: 200,
+          text: 'Wie viele Champs haben eine Fähigkeit die unendlich stacken kann?',
+          answer: '15 Champions',
+          questionType: 'estimate',
+          used: false
+        },
+        {
+          id: 'Pi_*_Baron-300',
+          categoryId: 'Pi_*_Baron',
+          points: 300,
+          text: 'Wie viel Gold ist eine normale Minion-Wave ohne Cannon wert?',
+          answer: '105 Gold',
+          questionType: 'estimate',
+          used: false
+        },
+        {
+          id: 'Pi_*_Baron',
+          categoryId: 'Pi_*_Baron',
+          points: 400,
+          text: 'Wie viel Gold bekommt man, wenn man bis Minute 10:00 auf einer Lane perfekt last-hittet, ohne Kills, Plates oder passives Gold mitzuzählen?',
+          answer: '2295 Gold',
+          questionType: 'estimate',
+          used: false
+        },
+        {
+          id: 'Pi_*_Baron-500',
+          categoryId: 'Pi_*_Baron',
+          points: 500,
+          text: 'Wie viele aktuelle Champs haben ein Apostroph im offiziellen Namen?',
+          answer: '8 Champions',
+          questionType: 'estimate',
+          used: false
+        }
+      ]
+    },
+    {
+      id: 'board2-map-gap',
+      title: 'Map Gap',
+      questions: [
+        {
+          id: 'board2-map-gap-100',
+          categoryId: 'board2-map-gap',
+          points: 100,
+          text: 'How many lanes does Summoner’s Rift have?',
+          answer: '3 lanes: top, mid and bot',
+          used: false
+        },
+        {
+          id: 'board2-map-gap-200',
+          categoryId: 'board2-map-gap',
+          points: 200,
+          text: 'Which neutral monster is associated with the Hand of Baron buff?',
+          answer: 'Baron Nashor',
+          used: false
+        },
+        {
+          id: 'board2-map-gap-300',
+          categoryId: 'board2-map-gap',
+          points: 300,
+          text: 'Which objective destroys towers faster by spawning empowered minions?',
+          answer: 'Baron Nashor buff',
+          used: false
+        },
+        {
+          id: 'board2-map-gap-400',
+          categoryId: 'board2-map-gap',
+          points: 400,
+          text: 'What structure must usually fall before a team can damage the Nexus?',
+          answer: 'Inhibitors and Nexus turrets stand in the way, depending on game state.',
+          used: false
+        },
+        {
+          id: 'board2-map-gap-500',
+          categoryId: 'board2-map-gap',
+          points: 500,
+          text: 'What is the common name for controlling enemy jungle vision and movement before an objective?',
+          answer: 'Vision control / setting up vision',
+          used: false
+        }
+      ]
+    },
+    {
+      id: 'board2-lore-drop',
+      title: 'Lore',
+      questions: [
+        {
+          id: 'board2-lore-drop-100',
+          categoryId: 'board2-lore-drop',
+          points: 100,
+          text: 'Which region is commonly associated with Garen and Lux?',
+          answer: 'Demacia',
+          used: false
+        },
+        {
+          id: 'board2-lore-drop-200',
+          categoryId: 'board2-lore-drop',
+          points: 200,
+          text: 'Which region is commonly associated with Darius and Draven?',
+          answer: 'Noxus',
+          used: false
+        },
+        {
+          id: 'board2-lore-drop-300',
+          categoryId: 'board2-lore-drop',
+          points: 300,
+          text: 'Which region is commonly associated with Yasuo, Yone and Irelia?',
+          answer: 'Ionia',
+          used: false
+        },
+        {
+          id: 'board2-lore-drop-400',
+          categoryId: 'board2-lore-drop',
+          points: 400,
+          text: 'Which region is commonly associated with Azir and Xerath?',
+          answer: 'Shurima',
+          used: false
+        },
+        {
+          id: 'board2-lore-drop-500',
+          categoryId: 'board2-lore-drop',
+          points: 500,
+          text: 'Which shadowy island region is associated with Thresh, Viego and the Ruination?',
+          answer: 'The Shadow Isles',
+          used: false
+        }
+      ]
+    },
+    {
+      id: 'board2-numbers',
+      title: 'Zahlenfriedhof',
+      questions: [
+        {
+          id: 'board2-numbers-100',
+          categoryId: 'board2-numbers',
+          points: 100,
+          text: 'Estimate: How many champions were available when League of Legends launched?',
+          answer: '40 champions',
+          questionType: 'estimate',
+          used: false
+        },
+        {
+          id: 'board2-numbers-200',
+          categoryId: 'board2-numbers',
+          points: 200,
+          text: 'Estimate: How many players are in a normal Summoner’s Rift match?',
+          answer: '10 players',
+          questionType: 'estimate',
+          used: false
+        },
+        {
+          id: 'board2-numbers-300',
+          categoryId: 'board2-numbers',
+          points: 300,
+          text: 'Estimate: How many inhibitors does one team have on Summoner’s Rift?',
+          answer: '3 inhibitors',
+          questionType: 'estimate',
+          used: false
+        },
+        {
+          id: 'board2-numbers-400',
+          categoryId: 'board2-numbers',
+          points: 400,
+          text: 'Estimate: How many ability slots does a champion normally have if you count passive, Q, W, E and R?',
+          answer: '5 ability slots',
+          questionType: 'estimate',
+          used: false
+        },
+        {
+          id: 'board2-numbers-500',
+          categoryId: 'board2-numbers',
+          points: 500,
+          text: 'Estimate: How many teams play in one standard League game?',
+          answer: '2 teams',
+          questionType: 'estimate',
+          used: false
+        }
+      ]
+    },
+    {
+      id: 'board2-champion-crimes',
+      title: 'Champion Crimes',
+      questions: [
+        {
+          id: 'board2-champion-crimes-100',
+          categoryId: 'board2-champion-crimes',
+          points: 100,
+          text: 'Which champion is this?',
+          answer: 'Yuumi',
+          questionType: 'progressive',
+          progressiveClues: [
+            'This champion is often accused of not really playing the game.',
+            'It can attach to an ally.',
+            'It is a support champion.',
+            'It is a magical cat.',
+            'The answer makes half the lobby groan immediately.'
+          ],
+          used: false
+        },
+        {
+          id: 'board2-champion-crimes-200',
+          categoryId: 'board2-champion-crimes',
+          points: 200,
+          text: 'Which champion is this?',
+          answer: 'Teemo',
+          questionType: 'progressive',
+          progressiveClues: [
+            'This champion is small but emotionally damaging.',
+            'Walking into the wrong area can suddenly hurt a lot.',
+            'It uses traps.',
+            'It blinds enemies.',
+            'Captain Teemo on duty. Unfortunately.'
+          ],
+          used: false
+        },
+        {
+          id: 'board2-champion-crimes-300',
+          categoryId: 'board2-champion-crimes',
+          points: 300,
+          text: 'Which champion is this?',
+          answer: 'Yasuo',
+          questionType: 'progressive',
+          progressiveClues: [
+            'This champion is often either 0/10 or somehow carrying.',
+            'It has a very famous wall.',
+            'It can dash through units.',
+            'It interacts heavily with knockups.',
+            'Every solo queue team has suffered from one.'
+          ],
+          used: false
+        },
+        {
+          id: 'board2-champion-crimes-400',
+          categoryId: 'board2-champion-crimes',
+          points: 400,
+          text: 'Which champion is this?',
+          answer: 'Shaco',
+          questionType: 'progressive',
+          progressiveClues: [
+            'This champion makes the game feel less like League and more like harassment.',
+            'It uses boxes.',
+            'It can deceive enemies with a clone.',
+            'It often appears where it absolutely should not be.',
+            'The clown is not here to improve anyone’s evening.'
+          ],
+          used: false
+        },
+        {
+          id: 'board2-champion-crimes-500',
+          categoryId: 'board2-champion-crimes',
+          points: 500,
+          text: 'Which champion is this?',
+          answer: 'Kayn',
+          questionType: 'progressive',
+          progressiveClues: [
+            'This champion has two major transformation paths.',
+            'It can move through terrain.',
+            'It is a jungler.',
+            'It uses a scythe.',
+            'Red or blue, someone is about to complain.'
+          ],
+          used: false
+        }
+      ]
+    }
+  ];
+}

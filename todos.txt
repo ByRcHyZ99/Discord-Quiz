@@ -1,0 +1,5 @@
+timeout 200 sekunden zirka
+spamproof machen
+point managament anders handeln (wie bei schätzfrage aber mit minuspunkte aufpassen / bei schätzen gibts ja keine minus)
+bilder reinladen zu langsam wegen laden bei anderen nutzern (anfang blurren damit es reinlädt und dann revealen)
+namen anzeigen bei riot kategory wer gebuzzert hat

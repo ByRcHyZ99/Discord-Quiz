@@ -1210,3 +1210,425 @@ p {
     grid-template-columns: 1fr;
   }
 }
+
+.manual-award-list {
+  display: grid;
+  gap: 0.75rem;
+
+  padding: 1rem;
+  border-radius: 1rem;
+
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.manual-award-list .eyebrow,
+.manual-award-list .muted {
+  margin: 0;
+}
+
+.manual-award-button {
+  width: 100%;
+  padding: 0.9rem 1rem;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+
+  text-align: left;
+
+  border-radius: 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+
+  background: rgba(255, 255, 255, 0.07);
+  color: white;
+
+  cursor: pointer;
+}
+
+.manual-award-button:hover {
+  background: rgba(139, 92, 246, 0.22);
+  border-color: rgba(139, 92, 246, 0.65);
+}
+
+.manual-award-button--selected {
+  background: rgba(34, 197, 94, 0.24);
+  border-color: rgba(34, 197, 94, 0.85);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.14);
+}
+
+.manual-award-button span {
+  font-weight: 900;
+}
+
+.manual-award-button em {
+  font-style: normal;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.85rem;
+}
+
+.progressive-buzzed-box {
+  width: min(680px, 100%);
+  margin: 0 auto;
+  padding: 1rem 1.25rem;
+
+  display: grid;
+  gap: 0.25rem;
+  text-align: center;
+
+  border-radius: 1rem;
+  background: rgba(239, 68, 68, 0.16);
+  border: 1px solid rgba(239, 68, 68, 0.45);
+}
+
+.progressive-buzzed-box strong {
+  color: white;
+  font-size: clamp(1.3rem, 2vw, 2rem);
+}
+
+.progressive-buzzed-box span {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.manual-award-row {
+  display: grid;
+  grid-template-columns: 1fr minmax(130px, auto) minmax(150px, auto);
+  gap: 0.65rem;
+  align-items: center;
+
+  padding: 0.75rem;
+  border-radius: 0.95rem;
+
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.manual-award-player {
+  color: white;
+  font-weight: 900;
+}
+
+.manual-award-button,
+.manual-penalty-button {
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+
+  border-radius: 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+
+  color: white;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.manual-award-button {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.manual-award-button:hover {
+  background: rgba(139, 92, 246, 0.22);
+  border-color: rgba(139, 92, 246, 0.65);
+}
+
+.manual-award-button--selected {
+  background: rgba(34, 197, 94, 0.24);
+  border-color: rgba(34, 197, 94, 0.85);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.14);
+}
+
+.manual-penalty-button {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.manual-penalty-button:hover {
+  background: rgba(239, 68, 68, 0.22);
+  border-color: rgba(239, 68, 68, 0.65);
+}
+
+.manual-penalty-button--selected {
+  background: rgba(239, 68, 68, 0.28);
+  border-color: rgba(239, 68, 68, 0.9);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.14);
+}
+
+@media (max-width: 850px) {
+  .manual-award-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ----------------------------- */
+/* Layout hard fix after sidebar */
+/* ----------------------------- */
+
+* {
+  box-sizing: border-box;
+}
+
+.app-shell {
+  width: 100%;
+  max-width: none;
+  overflow-x: hidden;
+}
+
+.game-layout {
+  width: min(1800px, calc(100vw - 4rem));
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: minmax(320px, 380px) minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.side-panel {
+  width: 100%;
+  min-width: 0;
+
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+}
+
+.side-panel .panel,
+.side-panel .card {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.main-panel {
+  width: 100%;
+  min-width: 0;
+}
+
+.main-panel > .card,
+.question-view.card,
+.game-board.card {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.question-view {
+  overflow: hidden;
+}
+
+/* ----------------------------- */
+/* Host controls button cleanup */
+/* ----------------------------- */
+
+.host-controls {
+  overflow: hidden;
+}
+
+.control-stack,
+.buzzer-controls,
+.audio-controls,
+.image-controls,
+.progressive-controls,
+.estimate-controls,
+.ability-controls {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.65rem;
+  width: 100%;
+}
+
+.host-controls button,
+.control-stack button,
+.buzzer-controls button,
+.audio-controls button,
+.image-controls button,
+.progressive-controls button,
+.estimate-controls button,
+.ability-controls button {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+/* ----------------------------- */
+/* Manual points sidebar fix */
+/* ----------------------------- */
+
+.manual-award-list {
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.manual-award-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.6rem;
+
+  width: 100%;
+  min-width: 0;
+
+  padding: 0.75rem;
+  border-radius: 0.95rem;
+
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.manual-award-player {
+  display: block;
+  width: 100%;
+
+  color: white;
+  font-weight: 900;
+}
+
+.manual-award-button,
+.manual-penalty-button {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+
+  padding: 0.75rem 0.9rem;
+
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
+
+  border-radius: 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+
+  color: white;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.manual-award-button {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.manual-award-button:hover {
+  background: rgba(139, 92, 246, 0.22);
+  border-color: rgba(139, 92, 246, 0.65);
+}
+
+.manual-award-button--selected {
+  background: rgba(34, 197, 94, 0.24);
+  border-color: rgba(34, 197, 94, 0.85);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.14);
+}
+
+.manual-penalty-button {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.manual-penalty-button:hover {
+  background: rgba(239, 68, 68, 0.22);
+  border-color: rgba(239, 68, 68, 0.65);
+}
+
+.manual-penalty-button--selected {
+  background: rgba(239, 68, 68, 0.28);
+  border-color: rgba(239, 68, 68, 0.9);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.14);
+}
+
+/* ----------------------------- */
+/* Ability view sizing cleanup */
+/* ----------------------------- */
+
+.ability-fake-card {
+  width: min(980px, 100%);
+  margin: 0 auto;
+}
+
+.ability-splash-frame {
+  width: 100%;
+  max-width: 100%;
+}
+
+.ability-slots {
+  width: 100%;
+}
+
+/* ----------------------------- */
+/* Responsive fallback */
+/* ----------------------------- */
+
+@media (max-width: 1100px) {
+  .game-layout {
+    width: min(100%, calc(100vw - 2rem));
+    grid-template-columns: 1fr;
+  }
+
+  .side-panel {
+    position: static;
+  }
+}
+
+@media (max-width: 700px) {
+  .game-layout {
+    width: min(100%, calc(100vw - 1rem));
+    gap: 1rem;
+  }
+
+  .host-controls button {
+    font-size: 0.9rem;
+  }
+}
+
+.board-switcher {
+  display: grid;
+  gap: 0.75rem;
+
+  padding: 1rem;
+  border-radius: 1rem;
+
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.board-switcher .eyebrow {
+  margin: 0;
+}
+
+.board-switch-button {
+  width: 100%;
+  min-width: 0;
+
+  display: grid;
+  gap: 0.25rem;
+
+  padding: 0.9rem 1rem;
+  text-align: left;
+
+  border-radius: 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+
+  background: rgba(255, 255, 255, 0.07);
+  color: white;
+
+  cursor: pointer;
+}
+
+.board-switch-button:hover {
+  background: rgba(139, 92, 246, 0.22);
+  border-color: rgba(139, 92, 246, 0.65);
+}
+
+.board-switch-button--active {
+  background: rgba(34, 197, 94, 0.22);
+  border-color: rgba(34, 197, 94, 0.75);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.12);
+}
+
+.board-switch-button span {
+  font-weight: 950;
+}
+
+.board-switch-button strong {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.82rem;
+}

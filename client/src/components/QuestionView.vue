@@ -105,6 +105,7 @@ const isZoomImage = computed(() => {
         <template v-else-if="state.activeQuestion.question.questionType === 'progressive'">
           <ProgressiveQuestionView
               :active-question="state.activeQuestion"
+              :first-buzz-name="state.buzzer.firstBuzz?.playerName ?? null"
               show-all
           />
 
@@ -177,6 +178,7 @@ const isZoomImage = computed(() => {
       <ProgressiveQuestionView
           v-else-if="state.activeQuestion.question.questionType === 'progressive'"
           :active-question="state.activeQuestion"
+          :first-buzz-name="state.buzzer.firstBuzz?.playerName ?? null"
       />
 
       <template v-else>

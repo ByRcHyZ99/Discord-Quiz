@@ -5,6 +5,7 @@ import type { ActiveQuestion } from '../types/game';
 const props = defineProps<{
   activeQuestion: ActiveQuestion;
   showAll?: boolean;
+  firstBuzzName?: string | null;
 }>();
 
 const clues = computed(() => {
@@ -24,6 +25,14 @@ const visibleClues = computed(() => {
     <h2>
       {{ activeQuestion.question.text }}
     </h2>
+
+    <div
+        v-if="firstBuzzName"
+        class="progressive-buzzed-box"
+    >
+      <strong>{{ firstBuzzName }} buzzed!</strong>
+      <span>Waiting for host decision...</span>
+    </div>
 
     <div class="progressive-clue-stage">
       <p

@@ -61,11 +61,48 @@ export type AudioState = {
   volume: number;
 };
 
+export type QuizBoard = {
+  id: string;
+  title: string;
+  categories: Category[];
+};
+
+export type BoardSummary = {
+  index: number;
+  id: string;
+  title: string;
+  usedCount: number;
+  totalCount: number;
+};
+
 export type EstimateAnswer = {
   playerId: string;
   playerName: string;
   value: string;
   submittedAt: number;
+};
+
+export type ActiveQuestion = {
+  question: Question;
+  revealed: boolean;
+  zoomStep: number;
+  estimateAnswers: EstimateAnswer[];
+
+  estimateAwardedPlayerIds?: string[];
+  estimateAwardedPlayerNames?: string[];
+
+  pointAwardedPlayerIds?: string[];
+  pointAwardedPlayerNames?: string[];
+
+  abilityBlurred?: boolean;
+  abilityView?: 'question' | 'solution';
+
+  buzzTimeouts: Record<string, number>;
+
+  progressiveRevealCount?: number;
+
+  pointPenalizedPlayerIds?: string[];
+  pointPenalizedPlayerNames?: string[];
 };
 
 export type Category = {
@@ -84,21 +121,6 @@ export type Buzz = {
   playerId: string;
   playerName: string;
   timestamp: number;
-};
-
-export type ActiveQuestion = {
-  question: Question;
-  revealed: boolean;
-  zoomStep: number;
-  estimateAnswers: EstimateAnswer[];
-
-  estimateAwardedPlayerIds?: string[];
-  estimateAwardedPlayerNames?: string[];
-
-  abilityBlurred?: boolean;
-  abilityView?: 'question' | 'solution';
-  buzzTimeouts: Record<string, number>;
-  progressiveRevealCount?: number;
 };
 
 export type BuzzerState = {
@@ -125,6 +147,10 @@ export type Room = {
   audio: AudioState;
   sfx: SfxState;
   soundCheckBuzzes: SoundCheckBuzz[];
+  serverTime: number;
+  categoryBoards: QuizBoard[];
+  boards: BoardSummary[];
+  activeBoardIndex: number;
 };
 
 export type PublicPlayer = Omit<Player, 'socketId'>;
@@ -133,6 +159,7 @@ export type PublicRoom = Omit<Room, 'players'> & {
   players: PublicPlayer[];
   audio: AudioState;
   sfx: SfxState;
+  serverTime: number;
 };
 
 export type ServerResponse = {
