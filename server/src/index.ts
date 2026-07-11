@@ -146,6 +146,103 @@ io.on('connection', (socket) => {
   });
 
   socket.on(
+      'meme:reveal-next',
+      (
+          payload: { roomCode: string },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const room = requireHostRoom(payload.roomCode, socket.id, callback);
+        if (!room) return;
+
+        const activeQuestion = room.activeQuestion;
+
+        if (
+            !activeQuestion ||
+            activeQuestion.question.questionType !== 'meme-reveal'
+        ) {
+          callback({ ok: false, error: 'No meme reveal question is active.' });
+          return;
+        }
+
+        if (!activeQuestion.revealed) {
+          callback({ ok: false, error: 'Reveal the question first.' });
+          return;
+        }
+
+        const memes = activeQuestion.question.memeImages ?? [];
+        const currentCount = activeQuestion.memeRevealCount ?? 0;
+
+        activeQuestion.memeRevealCount = Math.min(
+            currentCount + 1,
+            memes.length
+        );
+
+        room.message = 'Next meme revealed.';
+
+        respond(callback, room);
+        emitRoom(room);
+      }
+  );
+
+  socket.on(
+      'meme:hide-last',
+      (
+          payload: { roomCode: string },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const room = requireHostRoom(payload.roomCode, socket.id, callback);
+        if (!room) return;
+
+        const activeQuestion = room.activeQuestion;
+
+        if (
+            !activeQuestion ||
+            activeQuestion.question.questionType !== 'meme-reveal'
+        ) {
+          callback({ ok: false, error: 'No meme reveal question is active.' });
+          return;
+        }
+
+        const currentCount = activeQuestion.memeRevealCount ?? 0;
+
+        activeQuestion.memeRevealCount = Math.max(currentCount - 1, 0);
+
+        room.message = 'Last meme hidden.';
+
+        respond(callback, room);
+        emitRoom(room);
+      }
+  );
+
+  socket.on(
+      'meme:reset',
+      (
+          payload: { roomCode: string },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const room = requireHostRoom(payload.roomCode, socket.id, callback);
+        if (!room) return;
+
+        const activeQuestion = room.activeQuestion;
+
+        if (
+            !activeQuestion ||
+            activeQuestion.question.questionType !== 'meme-reveal'
+        ) {
+          callback({ ok: false, error: 'No meme reveal question is active.' });
+          return;
+        }
+
+        activeQuestion.memeRevealCount = 0;
+
+        room.message = 'Memes reset.';
+
+        respond(callback, room);
+        emitRoom(room);
+      }
+  );
+
+  socket.on(
       'joker:use-shield',
       (
           payload: { roomCode: string; playerId: string },
@@ -588,6 +685,58 @@ io.on('connection', (socket) => {
   );
 
   socket.on(
+      'progressive:reveal-image',
+      (
+          payload: { roomCode: string },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const room = requireHostRoom(payload.roomCode, socket.id, callback);
+        if (!room) return;
+
+        const activeQuestion = room.activeQuestion;
+
+        if (
+            !activeQuestion ||
+            activeQuestion.question.questionType !== 'progressive'
+        ) {
+          callback({ ok: false, error: 'No progressive question is active.' });
+          return;
+        }
+
+        if (!activeQuestion.revealed) {
+          callback({ ok: false, error: 'Reveal the question first.' });
+          return;
+        }
+
+        const clues = activeQuestion.question.progressiveClues ?? [];
+        const revealCount = activeQuestion.progressiveRevealCount ?? 0;
+
+        if (revealCount < clues.length) {
+          callback({
+            ok: false,
+            error: 'Reveal all text hints before revealing the image.'
+          });
+          return;
+        }
+
+        if (!activeQuestion.question.progressiveImageUrl) {
+          callback({
+            ok: false,
+            error: 'This question has no progressive image.'
+          });
+          return;
+        }
+
+        activeQuestion.progressiveImageRevealed = true;
+
+        room.message = 'Image revealed.';
+
+        respond(callback, room);
+        emitRoom(room);
+      }
+  );
+
+  socket.on(
       'soundcheck:continue',
       (
           payload: { roomCode: string },
@@ -673,6 +822,7 @@ io.on('connection', (socket) => {
         const currentCount = activeQuestion.progressiveRevealCount ?? 0;
 
         activeQuestion.progressiveRevealCount = Math.max(currentCount - 1, 0);
+        activeQuestion.progressiveImageRevealed = false;
 
         room.message = 'Last description hidden.';
 
@@ -701,8 +851,9 @@ io.on('connection', (socket) => {
         }
 
         activeQuestion.progressiveRevealCount = 0;
+        activeQuestion.progressiveImageRevealed = false;
 
-        room.message = 'Descriptions reset.';
+        room.message = 'Descriptions and image reset.';
 
         respond(callback, room);
         emitRoom(room);
@@ -1312,8 +1463,11 @@ io.on('connection', (socket) => {
         abilityView: 'question',
 
         buzzTimeouts: {},
-        progressiveRevealCount: 0
+        progressiveRevealCount: 0,
+        progressiveImageRevealed: false,
+        memeRevealCount: 0
       };
+
       room.buzzer.locked = true;
       room.buzzer.firstBuzz = null;
       room.buzzer.buzzOrder = [];
@@ -1475,19 +1629,9 @@ io.on('connection', (socket) => {
           return;
         }
 
-        if (!room.buzzer.firstBuzz) {
-          callback({ ok: false, error: 'No first buzz to mark correct.' });
-          return;
-        }
-
-        const player = room.players.find(
-            (item) => item.id === room.buzzer.firstBuzz?.playerId
-        );
-
-        if (!player) {
-          callback({ ok: false, error: 'Buzzing player not found.' });
-          return;
-        }
+        const buzzedPlayer = room.buzzer.firstBuzz
+            ? room.players.find((item) => item.id === room.buzzer.firstBuzz?.playerId)
+            : null;
 
         markActiveQuestionUsed(room);
 
@@ -1499,7 +1643,9 @@ io.on('connection', (socket) => {
           room.activeQuestion.abilityView = 'solution';
         }
 
-        room.message = `${player.name} answered correctly.`;
+        room.message = buzzedPlayer
+            ? `${buzzedPlayer.name} answered correctly. Award points manually.`
+            : 'Answer revealed. Award points manually.';
 
         playRoomSfx(room, '/sounds/sfx/correct.mp3');
 

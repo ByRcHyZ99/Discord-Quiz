@@ -2,86 +2,86 @@ import type { Category } from '../types.js';
 
 export const createQuestionSet = (): Category[] => [
   {
-    id: 'board2-item-shop',
-    title: 'Item Shop',
+    id: 'emoji',
+    title: 'Emoji', //mithilfe von Emojis das Game erraten
     questions: [
       {
-        id: 'board2-item-shop-100',
-        categoryId: 'board2-item-shop',
+        id: 'emoji-100',
+        categoryId: 'emoji',
         points: 100,
-        text: 'Which item is most famously associated with putting yourself into stasis?',
-        answer: "Zhonya's Hourglass",
+        text: '🧱⛏️💎🧟',
+        answer: "Minecraft",
         used: false
       },
       {
-        id: 'board2-item-shop-200',
-        categoryId: 'board2-item-shop',
+        id: 'emoji-200',
+        categoryId: 'emoji',
         points: 200,
-        text: 'Which defensive stat reduces incoming physical damage?',
-        answer: 'Armor',
+        text: '🚗⚽🥅🚀',
+        answer: 'Rocket League',
         used: false
       },
       {
-        id: 'board2-item-shop-300',
-        categoryId: 'board2-item-shop',
+        id: 'emoji-300',
+        categoryId: 'emoji',
         points: 300,
-        text: 'Which defensive stat reduces incoming magic damage?',
-        answer: 'Magic Resist',
+        text: '🐎🤠🔫🌵',
+        answer: 'Red Dead Redemption',
         used: false
       },
       {
-        id: 'board2-item-shop-400',
-        categoryId: 'board2-item-shop',
+        id: 'emoji-400',
+        categoryId: 'emoji',
         points: 400,
-        text: 'Which item effect usually helps champions clear wards around them?',
-        answer: 'Sweeper / Oracle Lens effect',
+        text: '⚔️🔥💀🏰',
+        answer: 'Dark Souls',
         used: false
       },
       {
-        id: 'board2-item-shop-500',
-        categoryId: 'board2-item-shop',
+        id: 'emoji-500',
+        categoryId: 'emoji',
         points: 500,
-        text: 'What is the general name for items that give a powerful clickable effect?',
-        answer: 'Active items',
+        text: '🏹🤖🦖🌿',
+        answer: 'Horizon Zero Dawn',
         used: false
       }
     ]
   },
   {
-    id: 'splash',
-    title: 'Splash',
+    id: 'Cover',
+    title: 'Cover', //Game Cover reingezoomt und erkennen
     questions: [
       {
-        id: 'splash-100',
-        categoryId: 'splash',
+        id: 'cover-100',
+        categoryId: 'cover',
         points: 100,
-        text: 'Which champion is this?',
-        answer: 'Xhin Zhao',
-        imageUrl: '/images/lol/splashes/xhin.jpg',
+        text: 'Welches Game suchen wir?',
+        answer: 'Super Mario 64',
+        imageUrl: '/images/covers/supermario64.jpg',
         imageMode: 'zoom',
         zoomLevels: [3, 2.5, 2, 1.5, 1],
         zoomStartIndex: 0,
         used: false
       },
       {
-        id: 'splash-200',
-        categoryId: 'splash',
+        id: 'cover-200',
+        categoryId: 'cover',
         points: 200,
-        text: 'Which champion is this?',
-        answer: 'Ivern',
-        imageUrl: '/images/lol/splashes/ivern.jpg',
+        text: 'Welches Game suchen wir?',
+        answer: 'GTA 5',
+        imageUrl: '/images/covers/gta5.jpg',
         imageMode: 'zoom',
         zoomLevels: [3, 2.5, 2, 1.5, 1],
         zoomStartIndex: 0,
         used: false
       },
       {
-        id: 'splash-300',
-        categoryId: 'splash',
+        id: 'cover-300',
+        categoryId: 'cover',
         points: 300,
-        text: 'Which champion is this?',
-        answer: 'Yorick',
-        imageUrl: '/images/lol/splashes/yorick.jpg',
+        text: 'Welches Game suchen wir?',
+        answer: 'Cyberpunk',
+        imageUrl: '/images/covers/cyberpunk.jpg',
         imageMode: 'zoom',
         zoomLevels: [3, 2.5, 2, 1.5, 1],
         zoomStartIndex: 0,
@@ -91,9 +91,9 @@ export const createQuestionSet = (): Category[] => [
         id: 'splash-400',
         categoryId: 'splash',
         points: 400,
-        text: 'Which champion is this?',
-        answer: 'Jayce',
-        imageUrl: '/images/lol/splashes/jayce.jpg',
+        text: 'Welches Game suchen wir?',
+        answer: 'Doom Eternal',
+        imageUrl: '/images/covers/doom.jpg',
         imageMode: 'zoom',
         zoomLevels: [3, 2.5, 2, 1.5, 1],
         zoomStartIndex: 0,
@@ -103,9 +103,9 @@ export const createQuestionSet = (): Category[] => [
         id: 'splash-500',
         categoryId: 'splash',
         points: 500,
-        text: 'Which champion is this?',
-        answer: 'Lux',
-        imageUrl: '/images/lol/splashes/lux.jpg',
+        text: 'Welches Game suchen wir?',
+        answer: 'Elden Ring',
+        imageUrl: '/images/covers/eldenring.jpg',
         imageMode: 'zoom',
         zoomLevels: [3, 2.5, 2, 1.5, 1],
         zoomStartIndex: 0,
@@ -115,56 +115,137 @@ export const createQuestionSet = (): Category[] => [
   },
   {
     id: 'ohrwurm',
-    title: 'Ohrwurm',
+    title: 'Ohrwurm', //Ingame Sound von Spiel
     questions: [
       {
         id: 'ohrwurm-100',
         categoryId: 'ohrwurm',
         points: 100,
-        text: 'Welcher Champion ist das?"',
-        answer: 'Viego',
-        soundUrl: '/sounds/viego.mp3',
+        text: 'Zu welchem Game gehört dieser Sound?',
+        answer: 'Minecraft - Creeper',
+        soundUrl: '/sounds/creeper.mp3',
         used: false
       },
       {
         id: 'ohrwurm-200',
         categoryId: 'ohrwurm',
         points: 200,
-        text: 'Welcher Champion ist das?',
-        answer: 'K`sante - W',
-        soundUrl: '/sounds/ksante.mp3',
+        text: 'Zu welchem Game gehört dieser Sound?',
+        answer: 'Among Us - Emergency Meeting',
+        soundUrl: '/sounds/amongUs_emergencyMeeting.mp3',
         used: false
       },
       {
         id: 'ohrwurm-300',
         categoryId: 'ohrwurm',
         points: 300,
-        text: 'Welcher Champion ist das?',
-        answer: 'Rakan - Q',
-        soundUrl: '/sounds/rakan.mp3',
+        text: 'Zu welchem Game gehört dieser Sound?',
+        answer: 'Legend of Zelda - Chest',
+        soundUrl: '/sounds/zelda_chest.mp3',
         used: false
       },
       {
         id: 'ohrwurm-400',
         categoryId: 'ohrwurm',
         points: 400,
-        text: 'Welcher Champion ist das?',
-        answer: 'Nilah - Emote',
-        soundUrl: '/sounds/nilah.mp3',
+        text: 'Zu welchem Game gehört dieser Sound?',
+        answer: 'Valorant - Defuse',
+        soundUrl: '/sounds/valorant_defuse.mp3',
         used: false
       },
       {
         id: 'ohrwurm-500',
         categoryId: 'ohrwurm',
         points: 500,
-        text: 'Welchen Champion gehört dieses Login-Theme',
-        answer: 'Tristana',
-        soundUrl: '/sounds/dragon_trainer_tristana.mp3',
+        text: 'Zu welchem Game gehört dieser Sound?',
+        answer: 'Portal',
+        soundUrl: '/sounds/portal.mp3',
         used: false
       }
     ]
   },
   {
+    id: 'memeit',
+    title: 'Meme it', //drei Memes anzeigen und dadurch das Game erraten
+    questions: [
+      {
+        id: 'memeit-100',
+        categoryId: 'memeit',
+        points: 100,
+        text: 'Welches Game suchen wir?',
+        answer: 'League of Legends',
+        questionType: 'meme-reveal',
+        memeImages: [
+          '/images/memes/lol1.png',
+          '/images/memes/lol2.jpg',
+          '/images/memes/lol3.jpg',
+          '/images/memes/lol4.jpg'
+        ],
+        used: false
+      },
+      {
+        id: 'memeit-200',
+        categoryId: 'memeit',
+        points: 200,
+        text: 'Welches Game suchen wir?',
+        answer: 'Skyrim',
+        questionType: 'meme-reveal',
+        memeImages: [
+          '/images/memes/skyrim1.jpg',
+          '/images/memes/skyrim3.jpg',
+          '/images/memes/skyrim4.png',
+          '/images/memes/skyrim2.jpg'
+        ],
+        used: false
+      },
+      {
+        id: 'memeit-300',
+        categoryId: 'memeit',
+        points: 300,
+        text: 'Welches Game suchen wir?',
+        answer: 'Counter-Strike 2',
+        questionType: 'meme-reveal',
+        memeImages: [
+          '/images/memes/cs1.jpg',
+          '/images/memes/cs2.png',
+          '/images/memes/cs3.jpg',
+          '/images/memes/cs4.jpg'
+        ],
+        used: false
+      },
+      {
+        id: 'memeit-400',
+        categoryId: 'memeit',
+        points: 400,
+        text: 'Welches Game suchen wir?',
+        answer: 'Dark Souls',
+        questionType: 'meme-reveal',
+        memeImages: [
+          '/images/memes/darksouls1.jpg',
+          '/images/memes/darksouls2.jpg',
+          '/images/memes/darksouls3.jpg',
+          '/images/memes/darksouls4.jpg'
+        ],
+        used: false
+      },
+      {
+        id: 'memeit-500',
+        categoryId: 'memeit',
+        points: 500,
+        text: 'Welches Game suchen wir?',
+        answer: 'Among Us',
+        questionType: 'meme-reveal',
+        memeImages: [
+          '/images/memes/amongUs1.jpg',
+          '/images/memes/amongUs2.jpg',
+          '/images/memes/amongUs3.png',
+          '/images/memes/amongUs4.jpg'
+        ],
+        used: false
+      }
+    ]
+  },
+  /*{
     id: 'viegod',
     title: "Viego'd",
     questions: [
@@ -404,79 +485,84 @@ export const createQuestionSet = (): Category[] => [
         used: false
       }
     ]
-  },
+  },*/
   {
-    id: 'riot',
-    title: 'Riot?',
+    id: 'what-do-you-meme',
+    title: 'What do you meme?', //3 tipps anzeigen und meme erraten
     questions: [
       {
-        id: 'riot-100',
-        categoryId: 'riot',
+        id: 'what-do-you-meme-100',
+        categoryId: 'what-do-you-meme',
         points: 100,
-        text: 'Nenne die Ability!',
-        answer: 'Renata - W (Bailout)',
+        text: 'Welches Meme suchen wir?',
+        answer: 'This is fine',
         questionType: 'progressive',
         progressiveClues: [
-          'Mit dieser Fähigkeit kann man True Damage an Vermündeten verursachen',
-          'Ziel erhält 5 Sekunden lang Bonus Attack Speed & Movement Speed. Verdoppelt sich über den Zeitraum',
-          'Der Buff erneuert sich, wenn das Ziel einen Takedown erzielt'
+          'Eine Figur bleibt trotz einer Katastrophe ruhig',
+          'Die Umgebung wird zunehmend gefährlicher',
+          'Ein Hund sitzt in einem brennenden Raum'
         ],
+        progressiveImageUrl: '/images/memes/thisIsFine.jpg',
         used: false
       },
       {
-        id: 'riot-200',
-        categoryId: 'riot',
+        id: 'what-do-you-meme-200',
+        categoryId: 'what-do-you-meme',
         points: 200,
-        text: 'Nenne die Ability',
-        answer: 'Nasus - R (Dominus)',
+        text: 'Welches Meme suchen wir?',
+        answer: 'Hide the Pain Harold',
         questionType: 'progressive',
         progressiveClues: [
-          'Halbiert den Cooldown einer anderen Fähigkeit',
-          'Verursacht magischen Schaden abhängig vom maximalen Leben des Gegners',
-          'Caster wird größer'
+          'Eine Person versucht, ihre wahren Gefühle zu verstecken',
+          'Ein älterer Mann lächelt sichtbar gezwungen',
+          'Der grauhaarige Mann sitzt mit Kaffeetasse oder Laptop da und verbirgt seinen Schmerz'
         ],
+        progressiveImageUrl: '/images/memes/harold.jpg',
         used: false
       },
       {
-        id: 'riot-300',
-        categoryId: 'riot',
+        id: 'what-do-you-meme-300',
+        categoryId: 'what-do-you-meme',
         points: 300,
-        text: 'Nenne die Ability',
-        answer: 'Kayle - E (Starfire Spellblade)',
+        text: 'Welches Meme suchen wir?',
+        answer: 'Expanding Brain',
         questionType: 'progressive',
         progressiveClues: [
-          'Skaliert mit Bonus AD, AP, % missing HP & Crit Modifier',
-          'passiver Teil gibt On-Hit Damage, aktiver Teil einen Auto Attack Reset',
-          'erhöht Attack Range auf 525'
+          'Jemand vertritt öffentlich eine provokante Meinung',
+          'Vor der Person steht ein Tisch mit einem Schild',
+          'Steven Crowder sitzt hinter dem Schild „Change My Mind"'
         ],
+        progressiveImageUrl: '/images/memes/changeMyMind.jpg',
         used: false
       },
       {
-        id: 'riot-400',
-        categoryId: 'riot',
+        id: 'what-do-you-meme-400',
+        categoryId: 'what-do-you-meme',
         points: 400,
-        text: 'Nenne die Ability',
-        answer: 'Vi - Q (Vault Breaker)',
+        text: 'Welches Meme suchen wir?',
+        answer: 'Handsome Squidward',
         questionType: 'progressive',
         progressiveClues: [
-          'getroffene Minions und Monster werden zum Caster gezogen',
-          'Caster verlangsamt sich beim Channeln selbst',
-          'getroffene Champions werden zurückgestoßen'
+          'Eine normalerweise schlecht gelaunte Figur erhält durch einen Unfall ein vollkommen neues Aussehen',
+          'Das neue Gesicht ist übertrieben symmetrisch, kantig und wirkt wie eine parodierte Version eines männlichen Models',
+          'Eine bekannte Figur aus SpongeBob hat plötzlich einen extrem markanten Kiefer, hohe Wangenknochen und einen verführerischen Gesichtsausdruck'
         ],
+        progressiveImageUrl: '/images/memes/thaddäus.jpg',
         used: false
       },
       {
-        id: 'riot-500',
-        categoryId: 'riot',
+        id: 'what-do-you-meme-500',
+        categoryId: 'what-do-you-meme',
         points: 500,
-        text: 'Nenne die Ability',
-        answer: 'Zyra - W (Rampant Growth)',
+        text: 'Welches Meme suchen wir?',
+        answer: 'Chill Guy',
         questionType: 'progressive',
         progressiveClues: [
-          'Zwei Ladungen und interagiert mit den anderen Fähigkeiten',
-          'Champion Takedowns frischen eine Ladung auf',
-          'Gibt in einem kleinen Radius Sicht und kann als Ziel für Teleport benutzt werden'
+          'Eine Figur bleibt selbst dann völlig gelassen, wenn rundherum eigentlich alles eskaliert',
+          'Ein menschenähnliches Tier steht mit leichtem Grinsen und beiden Händen in den Hosentaschen da',
+          'Ein brauner Hund trägt einen grauen Pullover, blaue Jeans und rote Schuhe. Sein gesamtes Konzept besteht darin, einfach entspannt zu sein'
         ],
+        progressiveImageUrl: '/images/memes/chillGuy.jpg',
         used: false
       }
     ]
@@ -487,51 +573,51 @@ export function createQuestionSetBoard2(): Category[] {
   return [
 
     {
-      id: 'Pi_*_Baron',
-      title: 'Pi * Baron',
+      id: 'Pi_*_Daumen',
+      title: 'Pi * 👍', //Schätzfragen für Gaming
       questions: [
         {
-          id: 'Pi_*_Baron-600',
-          categoryId: 'Pi_*_Baron',
+          id: 'Pi_*_Daumen-600',
+          categoryId: 'Pi_*_Daumen',
           points: 600,
-          text: 'Wie viele Voidgrubs können maximal vor dem Rift Herald in einem Spiel spawnen?',
-          answer: '6 Voidgrubs',
+          text: 'Wie viele Stunden an unterschiedlichen filmischen Sequenzen und Dialogszenen wurden insgesamt für Baldur’s Gate 3 produziert?',
+          answer: '174 Stunden',
           questionType: 'estimate',
           used: false
         },
         {
-          id: 'Pi_*_Baron-700',
-          categoryId: 'Pi_*_Baron',
+          id: 'Pi_*_Daumen-700',
+          categoryId: 'Pi_*_Daumen',
           points: 700,
-          text: 'Wie viele Champs haben eine Fähigkeit die unendlich stacken kann?',
-          answer: '15 Champions',
+          text: 'Wie viele Flughäfen sind in Microsoft Flight Simulator (2020) weltweit enthalten?',
+          answer: '~ 37.000 Flughäfen',
           questionType: 'estimate',
           used: false
         },
         {
-          id: 'Pi_*_Baron-800',
-          categoryId: 'Pi_*_Baron',
+          id: 'Pi_*_Daumen-800',
+          categoryId: 'Pi_*_Daumen',
           points: 800,
-          text: 'Wie viel Gold ist eine normale Minion-Wave ohne Cannon wert?',
-          answer: '105 Gold',
+          text: 'Wie viele gesprochene Dialogzeilen enthält Red Dead Redemption 2 ungefähr?',
+          answer: '500.000 Dialogzeilen',
           questionType: 'estimate',
           used: false
         },
         {
-          id: 'Pi_*_Baron-900',
-          categoryId: 'Pi_*_Baron',
+          id: 'Pi_*_Daumen-900',
+          categoryId: 'Pi_*_Daumen',
           points: 900,
-          text: 'Wie viel Gold bekommt man, wenn man bis Minute 10:00 auf einer Lane perfekt last-hittet, ohne Kills, Plates oder passives Gold mitzuzählen?',
-          answer: '2295 Gold',
+          text: 'Wie viele einzelne Blockpositionen umfasst ein vollständiger Minecraft-Overworld-Chunk, inklusive leerer Luftblöcke?',
+          answer: '98.304 Blockpositionen (16 x 16 x 384)', //Ein Chunk ist 16 Blöcke breit, 16 Blöcke lang und im normalen Overworld insgesamt 384 Blöcke hoch.
           questionType: 'estimate',
           used: false
         },
         {
-          id: 'Pi_*_Baron-1000',
-          categoryId: 'Pi_*_Baron',
+          id: 'Pi_*_Daumen-1000',
+          categoryId: 'Pi_*_Daumen',
           points: 1000,
-          text: 'Wie viele aktuelle Champs haben ein Apostroph im offiziellen Namen?',
-          answer: '8 Champions',
+          text: 'Angenommen, man würde in No Man’s Sky jede Sekunde einen neuen Planeten besuchen: Wie viele Jahre würde es dauern, alle theoretisch möglichen Planeten zu besuchen?',
+          answer: '585 Milliarde Jahre', //Das Spiel basiert auf einem 64-Bit-System mit theoretisch 18.446.744.073.709.551.616 möglichen Planeten. Weil normale Zahlen offenbar nicht mehr gereicht haben.
           questionType: 'estimate',
           used: false
         }
@@ -539,229 +625,264 @@ export function createQuestionSetBoard2(): Category[] {
     },
     {
       id: 'board2-map-gap',
-      title: 'Map Gap',
+      title: 'Map Gap', //ingame map zeigen und dadurch spiel erraten
       questions: [
         {
-          id: 'board2-map-gap-100',
+          id: 'board2-map-gap-600',
           categoryId: 'board2-map-gap',
-          points: 100,
-          text: 'How many lanes does Summoner’s Rift have?',
-          answer: '3 lanes: top, mid and bot',
+          points: 600,
+          text: 'Welches Game suchen wir?',
+          answer: 'GTA 5',
+          imageUrl: '/images/maps/gta5.png',
           used: false
         },
         {
-          id: 'board2-map-gap-200',
+          id: 'board2-map-gap-700',
           categoryId: 'board2-map-gap',
-          points: 200,
-          text: 'Which neutral monster is associated with the Hand of Baron buff?',
-          answer: 'Baron Nashor',
+          points: 700,
+          text: 'Welches Game suchen wir?',
+          answer: 'Sea of Thieves',
+          imageUrl: '/images/maps/seaOfThieves.jpg',
           used: false
         },
         {
-          id: 'board2-map-gap-300',
+          id: 'board2-map-gap-800',
           categoryId: 'board2-map-gap',
-          points: 300,
-          text: 'Which objective destroys towers faster by spawning empowered minions?',
-          answer: 'Baron Nashor buff',
+          points: 800,
+          text: 'Welches Game suchen wir?',
+          answer: 'Death Stranding',
+          imageUrl: '/images/maps/deathStranding.jpg',
           used: false
         },
         {
-          id: 'board2-map-gap-400',
+          id: 'board2-map-gap-900',
           categoryId: 'board2-map-gap',
-          points: 400,
-          text: 'What structure must usually fall before a team can damage the Nexus?',
-          answer: 'Inhibitors and Nexus turrets stand in the way, depending on game state.',
+          points: 900,
+          text: 'Welches Game suchen wir?',
+          answer: 'Hollow Knight',
+          imageUrl: '/images/maps/hollowKnight.jpg',
           used: false
         },
         {
-          id: 'board2-map-gap-500',
+          id: 'board2-map-gap-1000',
           categoryId: 'board2-map-gap',
-          points: 500,
-          text: 'What is the common name for controlling enemy jungle vision and movement before an objective?',
-          answer: 'Vision control / setting up vision',
+          points: 1000,
+          text: 'Welches Game suchen wir?',
+          answer: 'Assassins Creed - Black Flag',
+          imageUrl: '/images/maps/assassinsCreed.jpg',
           used: false
         }
       ]
     },
     {
-      id: 'board2-lore-drop',
-      title: 'Lore',
+      id: 'logo-fusion',
+      title: 'Logo Fusion', //zwei gaming logos oder auch marken oder consolen logos vermischen und erraten lassen
       questions: [
         {
-          id: 'board2-lore-drop-100',
-          categoryId: 'board2-lore-drop',
-          points: 100,
-          text: 'Which region is commonly associated with Garen and Lux?',
-          answer: 'Demacia',
+          id: 'logo-fusion-600',
+          categoryId: 'logo-fusion',
+          points: 600,
+          text: 'Welche Logos wurden vermischt?',
+          answer: 'Playstation + League of Legends',
+          questionType: 'logo-fusion',
+          fusionImageUrl: '/images/logo-fusion/playstationLolFusion.png',
+          logoFusionLeftName: 'Playstation',
+          logoFusionLeftImageUrl: '/images/logo-fusion/playstation.png',
+          logoFusionRightName: 'League of Legends',
+          logoFusionRightImageUrl: '/images/logo-fusion/leagueOfLegends.png',
           used: false
         },
         {
-          id: 'board2-lore-drop-200',
-          categoryId: 'board2-lore-drop',
-          points: 200,
-          text: 'Which region is commonly associated with Darius and Draven?',
-          answer: 'Noxus',
+          id: 'logo-fusion-700',
+          categoryId: 'logo-fusion',
+          points: 700,
+          text: 'Welche Logos wurden vermischt?',
+          answer: 'XBOX + Among Us',
+          questionType: 'logo-fusion',
+          fusionImageUrl: '/images/logo-fusion/xboxAmongUsFusion.png',
+          logoFusionLeftName: 'XBOX',
+          logoFusionLeftImageUrl: '/images/logo-fusion/xbox.png',
+          logoFusionRightName: 'Among Us',
+          logoFusionRightImageUrl: '/images/logo-fusion/amongUs.png',
           used: false
         },
         {
-          id: 'board2-lore-drop-300',
-          categoryId: 'board2-lore-drop',
-          points: 300,
-          text: 'Which region is commonly associated with Yasuo, Yone and Irelia?',
-          answer: 'Ionia',
+          id: 'logo-fusion-800',
+          categoryId: 'logo-fusion',
+          points: 800,
+          text: 'Welche Logos wurden vermischt?',
+          answer: 'Steam + CS2',
+          questionType: 'logo-fusion',
+          fusionImageUrl: '/images/logo-fusion/steamCs2Fusion.png',
+          logoFusionLeftName: 'Steam',
+          logoFusionLeftImageUrl: '/images/logo-fusion/steam.png',
+          logoFusionRightName: 'CS2',
+          logoFusionRightImageUrl: '/images/logo-fusion/cs2.png',
           used: false
         },
         {
-          id: 'board2-lore-drop-400',
-          categoryId: 'board2-lore-drop',
-          points: 400,
-          text: 'Which region is commonly associated with Azir and Xerath?',
-          answer: 'Shurima',
+          id: 'logo-fusion-900',
+          categoryId: 'logo-fusion',
+          points: 900,
+          text: 'Welche Logos wurden vermischt?',
+          answer: 'Nintendo 64 + Minecraft',
+          questionType: 'logo-fusion',
+          fusionImageUrl: '/images/logo-fusion/minecraftN64Fusion.png',
+          logoFusionLeftName: 'Nintendo 64',
+          logoFusionLeftImageUrl: '/images/logo-fusion/n64.png',
+          logoFusionRightName: 'Minecraft',
+          logoFusionRightImageUrl: '/images/logo-fusion/minecraft.png',
           used: false
         },
         {
-          id: 'board2-lore-drop-500',
-          categoryId: 'board2-lore-drop',
-          points: 500,
-          text: 'Which shadowy island region is associated with Thresh, Viego and the Ruination?',
-          answer: 'The Shadow Isles',
+          id: 'logo-fusion-1000',
+          categoryId: 'logo-fusion',
+          points: 1000,
+          text: 'Welche Logos wurden vermischt?',
+          answer: 'Rocket League + Candy Crush',
+          questionType: 'logo-fusion',
+          fusionImageUrl: '/images/logo-fusion/RocketLeagueCandyCrushFusion.png',
+          logoFusionLeftName: 'Rocket League',
+          logoFusionLeftImageUrl: '/images/logo-fusion/rocketLeague.png',
+          logoFusionRightName: 'Candy Crush',
+          logoFusionRightImageUrl: '/images/logo-fusion/candyCrush.png',
           used: false
         }
       ]
     },
     {
-      id: 'board2-numbers',
-      title: 'Zahlenfriedhof',
+      id: 'board2-polyglot',
+      title: 'Polyglot', //ein gaming wort in einer sehr fremden sprache zeigen und es wird immer einfacher und erkennbarer bis zur deutschen sprache
       questions: [
         {
-          id: 'board2-numbers-100',
-          categoryId: 'board2-numbers',
-          points: 100,
-          text: 'Estimate: How many champions were available when League of Legends launched?',
-          answer: '40 champions',
-          questionType: 'estimate',
+          id: 'board2-polyglot-600',
+          categoryId: 'board2-polyglot',
+          points: 600,
+          text: 'Welches Wort ist gesucht?',
+          answer: 'Spieler',
+          questionType: 'progressive',
+          progressiveClues: [
+            'プレイヤー',
+            'pelaaja',
+            'jugador',
+            'speler',
+            'player'
+          ],
           used: false
         },
         {
-          id: 'board2-numbers-200',
-          categoryId: 'board2-numbers',
-          points: 200,
-          text: 'Estimate: How many players are in a normal Summoner’s Rift match?',
-          answer: '10 players',
-          questionType: 'estimate',
+          id: 'board2-polyglot-700',
+          categoryId: 'board2-polyglot',
+          points: 700,
+          text: 'Welches Wort ist gesucht?',
+          answer: 'Schatz',
+          questionType: 'progressive',
+          progressiveClues: [
+            '宝',
+            'hazine',
+            'tesoro',
+            'schat',
+            'treasure'
+          ],
           used: false
         },
         {
-          id: 'board2-numbers-300',
-          categoryId: 'board2-numbers',
-          points: 300,
-          text: 'Estimate: How many inhibitors does one team have on Summoner’s Rift?',
-          answer: '3 inhibitors',
-          questionType: 'estimate',
+          id: 'board2-polyglot-800',
+          categoryId: 'board2-polyglot',
+          points: 800,
+          text: 'Welches Wort ist gesucht?',
+          answer: 'Zauber',
+          questionType: 'progressive',
+          progressiveClues: [
+            '魔法',
+            'büyü',
+            'hechizo',
+            'toverij',
+            'spell'
+          ],
           used: false
         },
         {
-          id: 'board2-numbers-400',
-          categoryId: 'board2-numbers',
-          points: 400,
-          text: 'Estimate: How many ability slots does a champion normally have if you count passive, Q, W, E and R?',
-          answer: '5 ability slots',
-          questionType: 'estimate',
+          id: 'board2-polyglot-900',
+          categoryId: 'board2-polyglot',
+          points: 900,
+          text: 'Welches Wort ist gesucht?',
+          answer: 'Rüstung',
+          questionType: 'progressive',
+          progressiveClues: [
+            '鎧',
+            'zırh',
+            'armadura',
+            'uitrusting',
+            'armor'
+          ],
           used: false
         },
         {
-          id: 'board2-numbers-500',
-          categoryId: 'board2-numbers',
-          points: 500,
-          text: 'Estimate: How many teams play in one standard League game?',
-          answer: '2 teams',
-          questionType: 'estimate',
+          id: 'board2-polyglot-1000',
+          categoryId: 'board2-polyglot',
+          points: 1000,
+          text: 'Welches Wort ist gesucht?',
+          answer: 'Schwert',
+          questionType: 'progressive',
+          progressiveClues: [
+            '剣',
+            'kılıç',
+            'espada',
+            'zwaard',
+            'sword'
+          ],
           used: false
-        }
+        },
       ]
     },
     {
-      id: 'board2-champion-crimes',
-      title: 'Champion Crimes',
+      id: 'board2-fun-with-flags',
+      title: 'Spaß mit Flaggen', //Spaß mit flaggen
       questions: [
         {
-          id: 'board2-champion-crimes-100',
-          categoryId: 'board2-champion-crimes',
-          points: 100,
-          text: 'Which champion is this?',
-          answer: 'Yuumi',
-          questionType: 'progressive',
-          progressiveClues: [
-            'This champion is often accused of not really playing the game.',
-            'It can attach to an ally.',
-            'It is a support champion.',
-            'It is a magical cat.',
-            'The answer makes half the lobby groan immediately.'
-          ],
+          id: 'board2-fun-with-flags-600',
+          categoryId: 'board2-fun-with-flags',
+          points: 600,
+          text: 'Welches Land ist das?',
+          answer: 'Elfenbeinküste',
+          imageUrl: '/images/flaggen/elfenbeinküste.png',
           used: false
         },
         {
-          id: 'board2-champion-crimes-200',
-          categoryId: 'board2-champion-crimes',
-          points: 200,
-          text: 'Which champion is this?',
-          answer: 'Teemo',
-          questionType: 'progressive',
-          progressiveClues: [
-            'This champion is small but emotionally damaging.',
-            'Walking into the wrong area can suddenly hurt a lot.',
-            'It uses traps.',
-            'It blinds enemies.',
-            'Captain Teemo on duty. Unfortunately.'
-          ],
+          id: 'board2-fun-with-flags-700',
+          categoryId: 'board2-fun-with-flags',
+          points: 700,
+          text: 'Welches Land ist das?',
+          answer: 'Nigeria',
+          imageUrl: '/images/flaggen/nigeria.png',
           used: false
         },
         {
-          id: 'board2-champion-crimes-300',
-          categoryId: 'board2-champion-crimes',
-          points: 300,
-          text: 'Which champion is this?',
-          answer: 'Yasuo',
-          questionType: 'progressive',
-          progressiveClues: [
-            'This champion is often either 0/10 or somehow carrying.',
-            'It has a very famous wall.',
-            'It can dash through units.',
-            'It interacts heavily with knockups.',
-            'Every solo queue team has suffered from one.'
-          ],
+          id: 'board2-fun-with-flags-800',
+          categoryId: 'board2-fun-with-flags',
+          points: 800,
+          text: 'Welches Land ist das?',
+          answer: 'Uganda',
+          imageUrl: '/images/flaggen/uganda.png',
           used: false
         },
         {
-          id: 'board2-champion-crimes-400',
-          categoryId: 'board2-champion-crimes',
-          points: 400,
-          text: 'Which champion is this?',
-          answer: 'Shaco',
-          questionType: 'progressive',
-          progressiveClues: [
-            'This champion makes the game feel less like League and more like harassment.',
-            'It uses boxes.',
-            'It can deceive enemies with a clone.',
-            'It often appears where it absolutely should not be.',
-            'The clown is not here to improve anyone’s evening.'
-          ],
+          id: 'board2-fun-with-flags-900',
+          categoryId: 'board2-fun-with-flags',
+          points: 900,
+          text: 'Welches Land ist das?',
+          answer: 'Chad',
+          imageUrl: '/images/flaggen/chad.png',
           used: false
         },
         {
-          id: 'board2-champion-crimes-500',
-          categoryId: 'board2-champion-crimes',
-          points: 500,
-          text: 'Which champion is this?',
-          answer: 'Kayn',
-          questionType: 'progressive',
-          progressiveClues: [
-            'This champion has two major transformation paths.',
-            'It can move through terrain.',
-            'It is a jungler.',
-            'It uses a scythe.',
-            'Red or blue, someone is about to complain.'
-          ],
+          id: 'board2-fun-with-flags-1000',
+          categoryId: 'board2-fun-with-flags',
+          points: 1000,
+          text: 'Welches Land ist das?',
+          answer: 'Malediven',
+          imageUrl: '/images/flaggen/malediven.png',
           used: false
         }
       ]

@@ -36,7 +36,7 @@ export type Question = {
   answer: string;
   used: boolean;
 
-  questionType?: 'normal' | 'estimate' | 'ability-fake' | 'progressive';
+  questionType?: 'normal' | 'estimate' | 'ability-fake' | 'progressive' | 'meme-reveal' | 'logo-fusion';
 
   soundUrl?: string;
 
@@ -52,6 +52,16 @@ export type Question = {
   fakeAbilityFrom?: string;
   fakeAbilityName?: string;
   progressiveClues?: string[];
+  memeImages?: string[];
+  progressiveImageUrl?: string;
+
+  fusionImageUrl?: string;
+
+  logoFusionLeftName?: string;
+  logoFusionLeftImageUrl?: string;
+
+  logoFusionRightName?: string;
+  logoFusionRightImageUrl?: string;
 };
 
 export type AudioStatus = 'stopped' | 'playing' | 'paused';
@@ -122,6 +132,8 @@ export type ActiveQuestion = {
   buzzerBlockedPlayerIds?: string[];
   buzzerBlockedPlayerNames?: string[];
   buzzerBlockEntries?: BuzzerBlockEntry[];
+  memeRevealCount?: number;
+  progressiveImageRevealed?: boolean;
 };
 
 export type Category = {

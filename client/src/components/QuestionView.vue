@@ -3,6 +3,8 @@ import { computed } from 'vue';
 import type { GameState } from '../types/game';
 import AbilityFakeQuestionView from './AbilityFakeQuestionView.vue';
 import ProgressiveQuestionView from './ProgressiveQuestionView.vue';
+import MemeQuestionView from './MemeQuestionView.vue';
+import LogoFusionQuestionView from './LogoFusionQuestionView.vue';
 
 const props = defineProps<{
   state: GameState;
@@ -118,6 +120,30 @@ const isZoomImage = computed(() => {
           </div>
         </template>
 
+        <template v-else-if="state.activeQuestion.question.questionType === 'meme-reveal'">
+          <MemeQuestionView
+              :active-question="state.activeQuestion"
+              :first-buzz-name="state.buzzer.firstBuzz?.playerName ?? null"
+              show-all
+          />
+
+          <div class="meme-answer-box">
+            <p class="eyebrow">Correct answer</p>
+
+            <h2 class="answer-text">
+              {{ state.activeQuestion.question.answer }}
+            </h2>
+          </div>
+        </template>
+
+        <template v-else-if="state.activeQuestion.question.questionType === 'logo-fusion'">
+          <LogoFusionQuestionView
+              :active-question="state.activeQuestion"
+              :first-buzz-name="state.buzzer.firstBuzz?.playerName ?? null"
+              show-answer
+          />
+        </template>
+
         <template v-else>
           <p class="eyebrow">Correct answer</p>
 
@@ -177,6 +203,18 @@ const isZoomImage = computed(() => {
 
       <ProgressiveQuestionView
           v-else-if="state.activeQuestion.question.questionType === 'progressive'"
+          :active-question="state.activeQuestion"
+          :first-buzz-name="state.buzzer.firstBuzz?.playerName ?? null"
+      />
+
+      <MemeQuestionView
+          v-else-if="state.activeQuestion.question.questionType === 'meme-reveal'"
+          :active-question="state.activeQuestion"
+          :first-buzz-name="state.buzzer.firstBuzz?.playerName ?? null"
+      />
+
+      <LogoFusionQuestionView
+          v-else-if="state.activeQuestion.question.questionType === 'logo-fusion'"
           :active-question="state.activeQuestion"
           :first-buzz-name="state.buzzer.firstBuzz?.playerName ?? null"
       />

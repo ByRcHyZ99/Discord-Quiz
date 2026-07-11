@@ -209,6 +209,18 @@ function submitEstimateFromOverlay() {
   );
 }
 
+function revealProgressiveImage() {
+  if (!gameState.value) return;
+
+  socket.emit(
+      'progressive:reveal-image',
+      {
+        roomCode: gameState.value.roomCode
+      },
+      handleResponse
+  );
+}
+
 function submitEstimateAnswer(value: string) {
   if (!gameState.value) return;
 
@@ -311,6 +323,42 @@ function revealNextProgressiveClue() {
 
   socket.emit(
       'progressive:reveal-next',
+      {
+        roomCode: gameState.value.roomCode
+      },
+      handleResponse
+  );
+}
+
+function revealNextMeme() {
+  if (!gameState.value) return;
+
+  socket.emit(
+      'meme:reveal-next',
+      {
+        roomCode: gameState.value.roomCode
+      },
+      handleResponse
+  );
+}
+
+function hideLastMeme() {
+  if (!gameState.value) return;
+
+  socket.emit(
+      'meme:hide-last',
+      {
+        roomCode: gameState.value.roomCode
+      },
+      handleResponse
+  );
+}
+
+function resetMemes() {
+  if (!gameState.value) return;
+
+  socket.emit(
+      'meme:reset',
       {
         roomCode: gameState.value.roomCode
       },
@@ -782,6 +830,10 @@ function closeQuestion() {
               @points-set-award="setPointAward"
               @points-set-penalty="setPointPenalty"
               @board-switch="switchBoard"
+              @meme-reveal-next="revealNextMeme"
+              @meme-hide-last="hideLastMeme"
+              @meme-reset="resetMemes"
+              @progressive-reveal-image="revealProgressiveImage"
           />
         </aside>
 

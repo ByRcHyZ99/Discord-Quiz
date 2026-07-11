@@ -1742,3 +1742,335 @@ p {
   color: white;
   font-weight: 900;
 }
+
+.meme-controls {
+  display: grid;
+  gap: 0.75rem;
+
+  padding: 1rem;
+  border-radius: 1rem;
+
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.meme-controls .eyebrow,
+.meme-controls .muted {
+  margin: 0;
+}
+
+.meme-controls button {
+  width: 100%;
+}
+
+.meme-question {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.meme-question h2 {
+  margin: 0;
+  font-size: clamp(1.8rem, 3vw, 3rem);
+  line-height: 1.1;
+}
+
+.meme-stage {
+  min-height: 420px;
+  width: min(1100px, 100%);
+  margin: 0 auto;
+  padding: 1.5rem;
+
+  display: grid;
+  align-items: center;
+
+  border-radius: 1.5rem;
+  background:
+          radial-gradient(circle at top, rgba(250, 204, 21, 0.15), transparent 55%),
+          rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.3);
+}
+
+.meme-empty {
+  margin: 0;
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 850;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.meme-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.meme-card {
+  display: grid;
+  gap: 0.65rem;
+
+  padding: 0.85rem;
+  border-radius: 1rem;
+
+  background: rgba(255, 255, 255, 0.075);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+
+  animation: meme-pop 0.22s ease-out;
+}
+
+.meme-card img {
+  width: 100%;
+  height: min(320px, 36vh);
+
+  object-fit: contain;
+
+  border-radius: 0.8rem;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.meme-number {
+  display: inline-flex;
+  width: fit-content;
+
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+
+  background: rgba(250, 204, 21, 0.2);
+  border: 1px solid rgba(250, 204, 21, 0.5);
+
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 950;
+}
+
+.meme-answer-box {
+  margin-top: 1.5rem;
+  padding: 1.25rem;
+
+  border-radius: 1.25rem;
+  background: rgba(34, 197, 94, 0.13);
+  border: 1px solid rgba(34, 197, 94, 0.42);
+}
+
+.meme-buzzed-box {
+  width: min(680px, 100%);
+  margin: 0 auto;
+  padding: 1rem 1.25rem;
+
+  display: grid;
+  gap: 0.25rem;
+  text-align: center;
+
+  border-radius: 1rem;
+  background: rgba(239, 68, 68, 0.16);
+  border: 1px solid rgba(239, 68, 68, 0.45);
+}
+
+.meme-buzzed-box strong {
+  color: white;
+  font-size: clamp(1.3rem, 2vw, 2rem);
+}
+
+.meme-buzzed-box span {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+@keyframes meme-pop {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.progressive-image-box {
+  width: min(850px, 100%);
+  margin: 0 auto;
+  padding: 1rem;
+
+  display: grid;
+  gap: 0.75rem;
+
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+
+  animation: progressive-pop 0.22s ease-out;
+}
+
+.progressive-image-box .eyebrow {
+  margin: 0;
+}
+
+.progressive-image-box img {
+  width: 100%;
+  max-height: 460px;
+
+  object-fit: contain;
+
+  border-radius: 1rem;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.progressive-image-box {
+  width: min(850px, 100%);
+  margin: 0 auto;
+  padding: 1rem;
+
+  display: grid;
+  gap: 0.75rem;
+
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+
+  animation: progressive-pop 0.22s ease-out;
+}
+
+.progressive-image-box .eyebrow {
+  margin: 0;
+}
+
+.progressive-image-box img {
+  width: 100%;
+  max-height: 460px;
+
+  object-fit: contain;
+
+  border-radius: 1rem;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.logo-fusion-question {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.logo-fusion-question h2 {
+  margin: 0;
+  font-size: clamp(1.8rem, 3vw, 3rem);
+  line-height: 1.1;
+}
+
+.logo-fusion-main-image {
+  width: min(900px, 100%);
+  margin: 0 auto;
+  padding: 1rem;
+
+  display: grid;
+  gap: 0.75rem;
+
+  border-radius: 1.5rem;
+  background:
+          radial-gradient(circle at top, rgba(139, 92, 246, 0.16), transparent 55%),
+          rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.3);
+}
+
+.logo-fusion-main-image .eyebrow {
+  margin: 0;
+}
+
+.logo-fusion-main-image img {
+  width: 100%;
+  max-height: 460px;
+
+  object-fit: contain;
+
+  border-radius: 1.1rem;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.logo-fusion-answer-area {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.logo-fusion-answer-area > .eyebrow {
+  margin: 0;
+  text-align: center;
+}
+
+.logo-fusion-source-grid {
+  width: min(900px, 100%);
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.logo-fusion-source-card {
+  display: grid;
+  gap: 0.85rem;
+
+  padding: 1rem;
+  border-radius: 1.25rem;
+
+  background: rgba(255, 255, 255, 0.075);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.logo-fusion-source-card h3 {
+  margin: 0;
+  text-align: center;
+
+  color: white;
+  font-size: clamp(1.2rem, 2vw, 1.8rem);
+  font-weight: 1000;
+}
+
+.logo-fusion-source-card img {
+  width: 100%;
+  height: min(300px, 32vh);
+
+  object-fit: contain;
+
+  border-radius: 1rem;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.logo-fusion-answer-box {
+  width: min(900px, 100%);
+  margin: 0 auto;
+  padding: 1.25rem;
+
+  border-radius: 1.25rem;
+  background: rgba(34, 197, 94, 0.13);
+  border: 1px solid rgba(34, 197, 94, 0.42);
+}
+
+.logo-fusion-buzzed-box {
+  width: min(680px, 100%);
+  margin: 0 auto;
+  padding: 1rem 1.25rem;
+
+  display: grid;
+  gap: 0.25rem;
+  text-align: center;
+
+  border-radius: 1rem;
+  background: rgba(239, 68, 68, 0.16);
+  border: 1px solid rgba(239, 68, 68, 0.45);
+}
+
+.logo-fusion-buzzed-box strong {
+  color: white;
+  font-size: clamp(1.3rem, 2vw, 2rem);
+}
+
+.logo-fusion-buzzed-box span {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+@media (max-width: 800px) {
+  .logo-fusion-source-grid {
+    grid-template-columns: 1fr;
+  }
+}

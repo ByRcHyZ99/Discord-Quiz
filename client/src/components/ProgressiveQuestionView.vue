@@ -18,6 +18,16 @@ const visibleClues = computed(() => {
   const count = props.activeQuestion.progressiveRevealCount ?? 0;
   return clues.value.slice(0, count);
 });
+
+const shouldShowImage = computed(() => {
+  return (
+      Boolean(props.activeQuestion.question.progressiveImageUrl) &&
+      (
+          props.showAll === true ||
+          props.activeQuestion.progressiveImageRevealed === true
+      )
+  );
+});
 </script>
 
 <template>
@@ -60,6 +70,18 @@ const visibleClues = computed(() => {
           </p>
         </article>
       </div>
+    </div>
+
+    <div
+        v-if="shouldShowImage"
+        class="progressive-image-box"
+    >
+      <p class="eyebrow">Revealed image</p>
+
+      <img
+          :src="activeQuestion.question.progressiveImageUrl"
+          alt="Revealed answer image"
+      />
     </div>
   </section>
 </template>

@@ -40,6 +40,12 @@ const emit = defineEmits<{
   'points-set-penalty': [payload: { playerId: string; penalized: boolean }];
 
   'board-switch': [boardIndex: number];
+
+  'meme-reveal-next': [];
+  'meme-hide-last': [];
+  'meme-reset': [];
+
+  'progressive-reveal-image': [];
 }>();
 
 function isPointPenalized(playerId: string) {
@@ -79,6 +85,40 @@ const isProgressiveQuestion = computed(() => {
   return questionType.value === 'progressive';
 });
 
+const isLogoFusionQuestion = computed(() => {
+  return questionType.value === 'logo-fusion';
+});
+
+const canRevealAnswer = computed(() => {
+  return (
+      Boolean(activeQuestion.value?.revealed) &&
+      (
+          Boolean(props.state.buzzer.firstBuzz) ||
+          isLogoFusionQuestion.value
+      )
+  );
+});
+
+const isMemeRevealQuestion = computed(() => {
+  return questionType.value === 'meme-reveal';
+});
+
+const memeRevealCount = computed(() => {
+  return activeQuestion.value?.memeRevealCount ?? 0;
+});
+
+const memeTotalCount = computed(() => {
+  return activeQuestion.value?.question.memeImages?.length ?? 0;
+});
+
+const canRevealNextMeme = computed(() => {
+  return memeRevealCount.value < memeTotalCount.value;
+});
+
+const canHideMeme = computed(() => {
+  return memeRevealCount.value > 0;
+});
+
 const hasSoundQuestion = computed(() => {
   return Boolean(activeQuestion.value?.question.soundUrl);
 });
@@ -113,6 +153,23 @@ const canRevealNextProgressiveClue = computed(() => {
 
 const canHideProgressiveClue = computed(() => {
   return progressiveRevealCount.value > 0;
+});
+
+const hasProgressiveImage = computed(() => {
+  return Boolean(activeQuestion.value?.question.progressiveImageUrl);
+});
+
+const canRevealProgressiveImage = computed(() => {
+  if (!activeQuestion.value) return false;
+
+  const totalClues = activeQuestion.value.question.progressiveClues?.length ?? 0;
+  const revealedClues = activeQuestion.value.progressiveRevealCount ?? 0;
+
+  return (
+      hasProgressiveImage.value &&
+      revealedClues >= totalClues &&
+      activeQuestion.value.progressiveImageRevealed !== true
+  );
 });
 
 const showManualPoints = computed(() => {
@@ -281,6 +338,14 @@ function handleAudioVolume(event: Event) {
             </button>
 
             <button
+                class="big-action"
+                :disabled="!canRevealProgressiveImage"
+                @click="emit('progressive-reveal-image')"
+            >
+              Reveal Image
+            </button>
+
+            <button
                 :disabled="!canHideProgressiveClue"
                 @click="emit('progressive-hide-last')"
             >
@@ -292,6 +357,43 @@ function handleAudioVolume(event: Event) {
                 @click="emit('progressive-reset')"
             >
               Reset Descriptions
+            </button>
+          </div>
+
+          <!-- MEME IT CONTROLS -->
+          <div
+              v-if="isMemeRevealQuestion"
+              class="meme-controls"
+          >
+            <p class="eyebrow">Meme reveal</p>
+
+            <p class="muted">
+              Revealed:
+              {{ memeRevealCount }}
+              /
+              {{ memeTotalCount }}
+            </p>
+
+            <button
+                class="big-action"
+                :disabled="!canRevealNextMeme"
+                @click="emit('meme-reveal-next')"
+            >
+              Reveal Next Meme
+            </button>
+
+            <button
+                :disabled="!canHideMeme"
+                @click="emit('meme-hide-last')"
+            >
+              Hide Last Meme
+            </button>
+
+            <button
+                :disabled="!canHideMeme"
+                @click="emit('meme-reset')"
+            >
+              Reset Memes
             </button>
           </div>
 
@@ -333,10 +435,14 @@ function handleAudioVolume(event: Event) {
 
             <button
                 class="big-action"
-                :disabled="!state.buzzer.firstBuzz"
+                :disabled="!canRevealAnswer"
                 @click="emit('mark-correct')"
             >
-              Mark Correct / Reveal Answer
+              {{
+                isLogoFusionQuestion && !state.buzzer.firstBuzz
+                    ? 'Reveal Logo Solution'
+                    : 'Mark Correct / Reveal Answer'
+              }}
             </button>
 
             <button
