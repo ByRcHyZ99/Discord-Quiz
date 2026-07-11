@@ -134,6 +134,7 @@ export type ActiveQuestion = {
   buzzerBlockEntries?: BuzzerBlockEntry[];
   memeRevealCount?: number;
   progressiveImageRevealed?: boolean;
+  pointPenaltyCounts?: Record<string, number>;
 };
 
 export type Category = {

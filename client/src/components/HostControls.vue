@@ -48,8 +48,26 @@ const emit = defineEmits<{
   'progressive-reveal-image': [];
 }>();
 
+function getPenaltyCount(playerId: string) {
+  return activeQuestion.value?.pointPenaltyCounts?.[playerId] ?? 0;
+}
+
 function isPointPenalized(playerId: string) {
-  return activeQuestion.value?.pointPenalizedPlayerIds?.includes(playerId) ?? false;
+  return getPenaltyCount(playerId) > 0;
+}
+
+function applyPointPenalty(playerId: string) {
+  emit('points-set-penalty', {
+    playerId,
+    penalized: true
+  });
+}
+
+function removePointPenalty(playerId: string) {
+  emit('points-set-penalty', {
+    playerId,
+    penalized: false
+  });
 }
 
 function hasPenaltyShield(playerId: string) {
@@ -58,13 +76,6 @@ function hasPenaltyShield(playerId: string) {
 
 function isBuzzerBlocked(playerId: string) {
   return activeQuestion.value?.buzzerBlockedPlayerIds?.includes(playerId) ?? false;
-}
-
-function togglePointPenalty(playerId: string) {
-  emit('points-set-penalty', {
-    playerId,
-    penalized: !isPointPenalized(playerId)
-  });
 }
 
 const activeQuestion = computed(() => props.state.activeQuestion);
@@ -608,18 +619,28 @@ function handleAudioVolume(event: Event) {
         <button
             class="manual-penalty-button"
             :class="{
-        'manual-penalty-button--selected': isPointPenalized(player.id)
-      }"
+    'manual-penalty-button--selected': isPointPenalized(player.id)
+  }"
             :disabled="hasPenaltyShield(player.id)"
-            @click="togglePointPenalty(player.id)"
+            @click="applyPointPenalty(player.id)"
         >
           {{
-          hasPenaltyShield(player.id)
-          ? 'Shield active'
-          : isPointPenalized(player.id)
-          ? 'Remove penalty'
-          : `Penalty -${questionPenalty} pts`
+            hasPenaltyShield(player.id)
+                ? 'Shield active'
+                : `Penalty -${questionPenalty} pts`
           }}
+
+          <small v-if="getPenaltyCount(player.id) > 0">
+            Applied: {{ getPenaltyCount(player.id) }}x
+          </small>
+        </button>
+
+        <button
+            class="manual-penalty-undo-button"
+            :disabled="getPenaltyCount(player.id) <= 0"
+            @click="removePointPenalty(player.id)"
+        >
+          Undo penalty
         </button>
       </div>
 

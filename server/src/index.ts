@@ -454,7 +454,10 @@ io.on('connection', (socket) => {
             room.phase !== 'submissions' &&
             room.phase !== 'answer'
         ) {
-          callback({ ok: false, error: 'Penalties can only be changed during an active question.' });
+          callback({
+            ok: false,
+            error: 'Penalties can only be changed during an active question.'
+          });
           return;
         }
 
@@ -466,39 +469,67 @@ io.on('connection', (socket) => {
         }
 
         const penalty = Math.round(getActiveQuestionPoints(activeQuestion) / 2);
-        const penalizedIds = new Set(activeQuestion.pointPenalizedPlayerIds ?? []);
-        const isAlreadyPenalized = penalizedIds.has(player.id);
 
-        if (payload.penalized && !isAlreadyPenalized) {
-          const shieldIds = new Set(activeQuestion.penaltyShieldPlayerIds ?? []);
-          const hasPenaltyShield = shieldIds.has(player.id);
+        const shieldIds = new Set(activeQuestion.penaltyShieldPlayerIds ?? []);
+        const hasPenaltyShield = shieldIds.has(player.id);
 
-          if (hasPenaltyShield) {
-            room.message = `${player.name}'s Shield Joker blocked the ${penalty} point penalty.`;
+        if (payload.penalized && hasPenaltyShield) {
+          room.message = `${player.name}'s Shield Joker blocked the ${penalty} point penalty.`;
 
-            respond(callback, room);
-            emitRoom(room);
+          respond(callback, room);
+          emitRoom(room);
+          return;
+        }
+
+        const penaltyCounts: Record<string, number> = {
+          ...(activeQuestion.pointPenaltyCounts ?? {})
+        };
+
+        const currentCount = penaltyCounts[player.id] ?? 0;
+
+        if (payload.penalized) {
+          penaltyCounts[player.id] = currentCount + 1;
+          player.score -= penalty;
+
+          room.message = `${player.name} lost ${penalty} points. Penalties on this question: ${penaltyCounts[player.id]}.`;
+        } else {
+          if (currentCount <= 0) {
+            callback({ ok: false, error: 'This player has no penalty to remove.' });
             return;
           }
 
-          penalizedIds.add(player.id);
-          player.score -= penalty;
-          room.message = `${player.name} lost ${penalty} points.`;
-        }
+          const nextCount = currentCount - 1;
 
-        if (!payload.penalized && isAlreadyPenalized) {
-          penalizedIds.delete(player.id);
+          if (nextCount <= 0) {
+            delete penaltyCounts[player.id];
+          } else {
+            penaltyCounts[player.id] = nextCount;
+          }
+
           player.score += penalty;
-          room.message = `${player.name} got ${penalty} penalty points restored.`;
+
+          room.message = `${player.name} got ${penalty} penalty points restored. Remaining penalties on this question: ${nextCount}.`;
         }
 
-        activeQuestion.pointPenalizedPlayerIds = Array.from(penalizedIds);
+        activeQuestion.pointPenaltyCounts = penaltyCounts;
+
+        activeQuestion.pointPenalizedPlayerIds = Object.keys(penaltyCounts).filter(
+            (playerId: string) => penaltyCounts[playerId] > 0
+        );
 
         activeQuestion.pointPenalizedPlayerNames =
-            activeQuestion.pointPenalizedPlayerNames = mapPlayerNames(
-                room,
-                activeQuestion.pointPenalizedPlayerIds
-            );
+            activeQuestion.pointPenalizedPlayerIds
+                .map((playerId: string) => {
+                  const penalizedPlayer = room.players.find((item) => item.id === playerId);
+                  if (!penalizedPlayer) return undefined;
+
+                  const count = penaltyCounts[playerId] ?? 0;
+
+                  return count > 1
+                      ? `${penalizedPlayer.name} x${count}`
+                      : penalizedPlayer.name;
+                })
+                .filter((name: string | undefined): name is string => Boolean(name));
 
         respond(callback, room);
         emitRoom(room);
@@ -1465,7 +1496,8 @@ io.on('connection', (socket) => {
         buzzTimeouts: {},
         progressiveRevealCount: 0,
         progressiveImageRevealed: false,
-        memeRevealCount: 0
+        memeRevealCount: 0,
+        pointPenaltyCounts: {},
       };
 
       room.buzzer.locked = true;

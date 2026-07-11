@@ -1293,9 +1293,12 @@ p {
 
 .manual-award-row {
   display: grid;
-  grid-template-columns: 1fr minmax(130px, auto) minmax(150px, auto);
-  gap: 0.65rem;
+  grid-template-columns: 1fr;
+  gap: 0.6rem;
   align-items: center;
+
+  width: 100%;
+  min-width: 0;
 
   padding: 0.75rem;
   border-radius: 0.95rem;
@@ -2073,4 +2076,47 @@ p {
   .logo-fusion-source-grid {
     grid-template-columns: 1fr;
   }
+}
+
+.manual-penalty-button {
+  display: grid;
+  gap: 0.15rem;
+  justify-items: center;
+}
+
+.manual-penalty-button small {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.manual-penalty-undo-button {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+
+  padding: 0.75rem 0.9rem;
+
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
+
+  border-radius: 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+
+  background: rgba(255, 255, 255, 0.07);
+  color: white;
+
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.manual-penalty-undo-button:hover:not(:disabled) {
+  background: rgba(139, 92, 246, 0.22);
+  border-color: rgba(139, 92, 246, 0.65);
+}
+
+.manual-penalty-undo-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
