@@ -2120,3 +2120,1237 @@ p {
   opacity: 0.45;
   cursor: not-allowed;
 }
+
+.buzzer-overlay {
+  position: fixed;
+  left: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 120000;
+
+  width: 260px;
+  max-width: calc(100vw - 2rem);
+
+  display: grid;
+  gap: 0.35rem;
+
+  pointer-events: none;
+}
+
+.fixed-buzzer-button {
+  width: 100%;
+  min-height: 54px;
+
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+
+  color: white;
+  font-size: 1.15rem;
+  font-weight: 1000;
+  letter-spacing: 0.04em;
+
+  cursor: pointer;
+  pointer-events: auto;
+
+  box-shadow:
+          0 14px 36px rgba(0, 0, 0, 0.38),
+          inset 0 1px 0 rgba(255, 255, 255, 0.18);
+
+  transition:
+          transform 0.08s ease,
+          filter 0.15s ease,
+          opacity 0.15s ease;
+}
+
+.fixed-buzzer-button--ready {
+  background:
+          radial-gradient(circle at top, rgba(255, 255, 255, 0.18), transparent 45%),
+          linear-gradient(135deg, rgba(239, 68, 68, 0.92), rgba(185, 28, 28, 0.92));
+}
+
+.fixed-buzzer-button--ready:hover {
+  filter: brightness(1.08);
+}
+
+.fixed-buzzer-button--ready:active {
+  transform: scale(0.97);
+}
+
+.fixed-buzzer-button--locked {
+  background:
+          radial-gradient(circle at top, rgba(255, 255, 255, 0.1), transparent 45%),
+          linear-gradient(135deg, rgba(71, 85, 105, 0.92), rgba(30, 41, 59, 0.92));
+
+  opacity: 0.68;
+  cursor: not-allowed;
+}
+
+.buzzer-overlay-status {
+  margin: 0;
+  padding: 0.3rem 0.55rem;
+
+  border-radius: 0.75rem;
+  background: rgba(15, 23, 42, 0.84);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+/* Mobile: still fixed, but not gigantic */
+@media (max-width: 700px) {
+  .buzzer-overlay {
+    left: 0.75rem;
+    bottom: 0.75rem;
+    width: 180px;
+  }
+
+  .fixed-buzzer-button {
+    min-height: 46px;
+    font-size: 0.95rem;
+    border-radius: 0.85rem;
+  }
+
+  .buzzer-overlay-status {
+    font-size: 0.65rem;
+    padding: 0.25rem 0.45rem;
+  }
+}
+
+.image-preloader {
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.patch-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+
+  display: grid;
+  place-items: center;
+
+  padding: 2rem;
+  background: rgba(2, 6, 23, 0.72);
+  backdrop-filter: blur(8px);
+}
+
+.patch-question-view {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+
+  display: grid;
+  gap: 1rem;
+
+  text-align: center;
+}
+
+.patch-question-view h2 {
+  max-width: 980px;
+  margin: 0 auto;
+
+  font-size: clamp(2rem, 3vw, 3.4rem);
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+}
+
+.patch-question-view > .muted {
+  margin: 0 auto 0.75rem;
+  max-width: 720px;
+
+  font-size: 1rem;
+  font-weight: 650;
+  text-align: center;
+}
+
+/* The actual A/B/C/D grid */
+.patch-answer-grid {
+  width: 100%;
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+/* Compact cards instead of aircraft hangars */
+.patch-answer-card {
+  min-height: 0;
+  padding: 1rem 1.1rem;
+
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 0.75rem;
+
+  text-align: left;
+
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.065);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+}
+
+.patch-answer-card--correct-fake {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: rgba(34, 197, 94, 0.7);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+}
+
+.patch-answer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.patch-answer-header strong {
+  flex: 0 0 auto;
+
+  width: 2rem;
+  height: 2rem;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 999px;
+  background: rgba(139, 92, 246, 0.34);
+  border: 1px solid rgba(139, 92, 246, 0.65);
+
+  color: white;
+  font-size: 1rem;
+  font-weight: 1000;
+}
+
+/* Main answer text */
+.patch-answer-card > p {
+  margin: 0;
+
+  align-self: center;
+
+  color: white;
+  font-size: clamp(0.95rem, 1.25vw, 1.15rem);
+  font-weight: 800;
+  line-height: 1.35;
+  text-align: left;
+}
+
+/* "Chosen by" row */
+.patch-player-answers {
+  margin-top: 0.25rem;
+  padding-top: 0.65rem;
+
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+  text-align: left;
+}
+
+.patch-player-answers .muted {
+  margin: 0;
+
+  flex: 0 0 auto;
+
+  font-size: 0.8rem;
+  font-weight: 750;
+  color: rgba(255, 255, 255, 0.48);
+}
+
+.patch-player-answers strong,
+.patch-player-answers em {
+  margin: 0;
+
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.9rem;
+  font-weight: 900;
+  text-align: right;
+}
+
+/* Fake badge on answer reveal */
+.patch-fake-badge {
+  padding: 0.22rem 0.55rem;
+
+  border-radius: 999px;
+  background: rgba(34, 197, 94, 0.22);
+  border: 1px solid rgba(34, 197, 94, 0.65);
+
+  color: white;
+  font-size: 0.72rem;
+  font-weight: 950;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Final answer box */
+.patch-final-answer-box {
+  width: min(900px, 100%);
+  margin: 0.5rem auto 0;
+  padding: 1rem 1.25rem;
+
+  border-radius: 1rem;
+  background: rgba(34, 197, 94, 0.13);
+  border: 1px solid rgba(34, 197, 94, 0.42);
+
+  text-align: center;
+}
+
+.patch-final-answer-box .eyebrow {
+  margin: 0 0 0.35rem;
+}
+
+.patch-final-answer-box .answer-text {
+  margin: 0;
+
+  font-size: clamp(1.4rem, 2.2vw, 2.3rem);
+  line-height: 1.15;
+}
+
+/* Player answer modal also less ridiculous */
+.patch-modal {
+  width: min(760px, calc(100vw - 2rem));
+  padding: 1.4rem;
+
+  gap: 0.85rem;
+}
+
+.patch-modal h2 {
+  font-size: clamp(1.35rem, 2.2vw, 2rem);
+}
+
+.patch-choice-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.patch-choice-button {
+  min-height: 0;
+  padding: 0.9rem;
+
+  grid-template-columns: auto 1fr;
+  align-items: start;
+
+  text-align: left;
+}
+
+.patch-choice-button strong {
+  width: 1.9rem;
+  height: 1.9rem;
+}
+
+.patch-choice-button span {
+  font-size: 0.95rem;
+  line-height: 1.3;
+  font-weight: 750;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .patch-answer-grid,
+  .patch-choice-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .patch-question-view h2 {
+    font-size: clamp(1.8rem, 7vw, 2.6rem);
+  }
+
+  .patch-player-answers {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .patch-player-answers strong,
+  .patch-player-answers em {
+    text-align: left;
+  }
+}
+
+.patch-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 2rem;
+  background: rgba(2, 6, 23, 0.74);
+  backdrop-filter: blur(8px);
+
+  text-align: left;
+}
+
+.patch-overlay .patch-modal {
+  width: min(880px, calc(100vw - 2rem));
+  margin: 0 auto;
+  padding: 1.5rem;
+
+  display: grid;
+  gap: 1rem;
+
+  border-radius: 1.35rem;
+  background: rgba(15, 23, 42, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 28px 90px rgba(0, 0, 0, 0.62);
+
+  text-align: left;
+}
+
+.patch-overlay .patch-modal .eyebrow {
+  margin: 0;
+
+  color: rgba(196, 181, 253, 0.95);
+  font-size: 0.8rem;
+  font-weight: 950;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.patch-overlay .patch-modal h2 {
+  margin: 0;
+
+  color: white;
+  font-size: clamp(1.55rem, 2.6vw, 2.35rem);
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+}
+
+.patch-overlay .patch-modal .muted {
+  margin: 0;
+
+  color: rgba(203, 213, 225, 0.74);
+  font-size: 1rem;
+  font-weight: 650;
+}
+
+.patch-overlay .patch-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+
+  width: 100%;
+}
+
+.patch-overlay .patch-choice-button {
+  width: 100%;
+  min-height: 104px;
+  padding: 1rem;
+
+  display: grid;
+  grid-template-columns: 2.25rem 1fr;
+  gap: 0.85rem;
+  align-items: start;
+
+  text-align: left;
+
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+
+  background: rgba(255, 255, 255, 0.075);
+  color: white;
+
+  box-shadow: none;
+  transform: none;
+  cursor: pointer;
+}
+
+.patch-overlay .patch-choice-button:hover {
+  background: rgba(139, 92, 246, 0.18);
+  border-color: rgba(139, 92, 246, 0.5);
+}
+
+.patch-overlay .patch-choice-button--selected {
+  background: rgba(34, 197, 94, 0.18);
+  border-color: rgba(34, 197, 94, 0.78);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.13);
+}
+
+.patch-overlay .patch-choice-button strong {
+  width: 2.25rem;
+  height: 2.25rem;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 999px;
+  background: rgba(139, 92, 246, 0.32);
+  border: 1px solid rgba(139, 92, 246, 0.65);
+
+  color: white;
+  font-size: 1rem;
+  font-weight: 1000;
+  line-height: 1;
+}
+
+.patch-overlay .patch-choice-button span {
+  display: block;
+
+  color: white;
+  font-size: 0.98rem;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.patch-overlay .patch-choice-button--selected strong {
+  background: rgba(34, 197, 94, 0.28);
+  border-color: rgba(34, 197, 94, 0.72);
+}
+
+.patch-overlay .patch-modal p:last-child {
+  color: rgba(203, 213, 225, 0.82);
+}
+
+.patch-overlay .patch-modal p:last-child strong {
+  color: white;
+}
+
+@media (max-width: 800px) {
+  .patch-overlay {
+    padding: 1rem;
+    align-items: flex-start;
+    overflow-y: auto;
+  }
+
+  .patch-overlay .patch-modal {
+    margin-top: 1rem;
+    padding: 1.15rem;
+  }
+
+  .patch-overlay .patch-choice-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .patch-overlay .patch-choice-button {
+    min-height: 0;
+    padding: 0.9rem;
+  }
+}
+
+/* ========================================================= */
+/* MOBILE PARTY MODE OVERRIDES */
+/* Put this at the very bottom of main.css */
+/* ========================================================= */
+
+html {
+  width: 100%;
+  min-width: 320px;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  width: 100%;
+  overflow-x: hidden;
+  touch-action: manipulation;
+}
+
+button,
+input,
+select,
+textarea {
+  font-size: 16px;
+}
+
+/* App shell should not waste mobile width */
+.app-shell {
+  width: 100%;
+  max-width: none;
+  padding: clamp(0.75rem, 2vw, 2rem);
+}
+
+/* Cards/panels more compact on small screens */
+.card,
+.panel {
+  max-width: 100%;
+}
+
+/* General buttons: easier tapping, less giant desktop nonsense */
+button {
+  min-height: 44px;
+}
+
+.big-action {
+  min-height: 48px;
+  padding: 0.85rem 1rem;
+  font-size: 1rem;
+}
+
+/* ========================================================= */
+/* Layout */
+/* ========================================================= */
+
+@media (max-width: 900px) {
+  .app-shell {
+    padding: 0.75rem;
+  }
+
+  .game-layout {
+    width: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  /* On phones, show the actual game content first.
+     Scoreboard/controls below. Revolutionary: players see the quiz. */
+  .main-panel {
+    order: 1;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .side-panel {
+    order: 2;
+    position: static;
+    width: 100%;
+    min-width: 0;
+    gap: 0.75rem;
+  }
+
+  .side-panel .card,
+  .side-panel .panel {
+    padding: 0.9rem;
+    border-radius: 1rem;
+  }
+
+  .top-bar {
+    display: grid;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .top-bar h1 {
+    font-size: 1.25rem;
+    letter-spacing: 0.08em;
+  }
+
+  .top-bar__right {
+    gap: 0.45rem;
+  }
+
+  .badge {
+    padding: 0.3rem 0.55rem;
+    font-size: 0.75rem;
+  }
+
+  .leave-game-button {
+    top: 0.6rem;
+    right: 0.6rem;
+    padding: 0.55rem 0.75rem;
+    font-size: 0.78rem;
+  }
+}
+
+/* ========================================================= */
+/* Start / Lobby / Soundcheck */
+/* ========================================================= */
+
+@media (max-width: 760px) {
+  .start-screen {
+    gap: 1rem;
+  }
+
+  .start-screen__intro h1 {
+    font-size: clamp(2.1rem, 13vw, 3.6rem);
+    line-height: 0.95;
+  }
+
+  .start-grid {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+
+  .lobby-screen {
+    gap: 1rem;
+  }
+
+  .player-list__item,
+  .score-row {
+    padding: 0.75rem;
+    gap: 0.65rem;
+  }
+
+  .soundcheck-header {
+    display: grid;
+  }
+
+  .soundcheck-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .soundcheck-player {
+    padding: 0.75rem;
+  }
+}
+
+/* ========================================================= */
+/* Board mobile */
+/* ========================================================= */
+
+@media (max-width: 900px) {
+  .game-board.card {
+    padding: 0.75rem;
+    overflow: hidden;
+  }
+
+  .board-grid {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(118px, 138px);
+    grid-template-columns: none;
+
+    gap: 0.55rem;
+    padding-bottom: 0.45rem;
+
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .category-column {
+    min-width: 118px;
+    grid-template-rows: auto repeat(5, 68px);
+    gap: 0.55rem;
+    scroll-snap-align: start;
+  }
+
+  .category-title {
+    min-height: 58px;
+    padding: 0.55rem;
+    border-radius: 0.75rem;
+
+    font-size: 0.68rem;
+    line-height: 1.15;
+    letter-spacing: 0.045em;
+    overflow-wrap: anywhere;
+  }
+
+  .question-tile {
+    min-height: 68px;
+    padding: 0.55rem;
+    border-radius: 0.75rem;
+    font-size: clamp(1.15rem, 6vw, 1.8rem);
+  }
+
+  .double-points-badge {
+    font-size: 0.62rem;
+    padding: 0.08rem 0.35rem;
+  }
+
+  .board-note {
+    font-size: 0.85rem;
+  }
+}
+
+/* ========================================================= */
+/* Question view mobile */
+/* ========================================================= */
+
+@media (max-width: 900px) {
+  .question-view {
+    min-height: auto;
+    padding: 1rem;
+    gap: 1rem;
+    overflow: visible;
+  }
+
+  .question-view.card {
+    border-radius: 1rem;
+  }
+
+  .question-view h2 {
+    max-width: 100%;
+    font-size: clamp(1.55rem, 8vw, 2.65rem);
+    line-height: 1.08;
+    letter-spacing: -0.035em;
+  }
+
+  .question-view .muted {
+    max-width: 100%;
+    font-size: 0.95rem;
+  }
+
+  .question-meta {
+    gap: 0.4rem;
+  }
+
+  .first-buzz {
+    width: 100%;
+    padding: 0.8rem 1rem;
+  }
+
+  .first-buzz strong {
+    font-size: 1.35rem;
+  }
+}
+
+/* ========================================================= */
+/* Images / covers / zoom questions */
+/* ========================================================= */
+
+@media (max-width: 900px) {
+  .question-image-frame {
+    width: 100%;
+    max-height: 58vh;
+    margin: 0.75rem auto;
+    border-radius: 1rem;
+  }
+
+  .question-image-frame--zoom {
+    height: min(54vh, 420px);
+  }
+
+  .question-image-frame--answer {
+    max-height: 42vh;
+  }
+
+  .question-image {
+    max-height: 58vh;
+  }
+
+  .image-controls {
+    padding: 0.85rem;
+  }
+}
+
+/* ========================================================= */
+/* Fixed small buzzer for phones */
+/* ========================================================= */
+
+@media (max-width: 900px) {
+  .buzzer-overlay {
+    left: 0.65rem;
+    bottom: max(0.65rem, env(safe-area-inset-bottom));
+    width: 156px;
+    max-width: 45vw;
+    z-index: 120000;
+  }
+
+  .fixed-buzzer-button {
+    min-height: 48px;
+    padding: 0.55rem 0.75rem;
+
+    border-radius: 0.85rem;
+
+    font-size: 0.95rem;
+    letter-spacing: 0.035em;
+  }
+
+  .buzzer-overlay-status {
+    font-size: 0.65rem;
+    padding: 0.25rem 0.45rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .buzzer-overlay {
+    width: 136px;
+  }
+
+  .fixed-buzzer-button {
+    min-height: 44px;
+    font-size: 0.82rem;
+  }
+}
+
+/* ========================================================= */
+/* Estimate overlay */
+/* ========================================================= */
+
+@media (max-width: 760px) {
+  .estimate-overlay {
+    padding: 0.85rem;
+    align-items: start;
+    overflow-y: auto;
+  }
+
+  .estimate-modal {
+    width: 100%;
+    margin-top: 0.75rem;
+    padding: 1rem;
+    border-radius: 1rem;
+  }
+
+  .estimate-modal h2 {
+    font-size: clamp(1.35rem, 7vw, 2rem);
+  }
+
+  .estimate-input {
+    min-height: 48px;
+    font-size: 16px;
+  }
+
+  .estimate-answer-list {
+    width: 100%;
+    margin: 1rem auto 0;
+  }
+
+  .estimate-answer-card {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+    padding: 0.85rem;
+  }
+}
+
+/* ========================================================= */
+/* Patch oder Quatsch mobile */
+/* ========================================================= */
+
+@media (max-width: 760px) {
+  .patch-overlay {
+    padding: 0.75rem;
+    align-items: flex-start;
+    overflow-y: auto;
+  }
+
+  .patch-overlay .patch-modal {
+    width: 100%;
+    margin-top: 0.5rem;
+    padding: 1rem;
+    gap: 0.85rem;
+    border-radius: 1rem;
+  }
+
+  .patch-overlay .patch-modal h2 {
+    font-size: clamp(1.35rem, 7vw, 2rem);
+  }
+
+  .patch-overlay .patch-choice-grid {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+  }
+
+  .patch-overlay .patch-choice-button {
+    min-height: 0;
+    padding: 0.85rem;
+
+    grid-template-columns: 2rem 1fr;
+    gap: 0.7rem;
+  }
+
+  .patch-overlay .patch-choice-button strong {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .patch-overlay .patch-choice-button span {
+    font-size: 0.95rem;
+    line-height: 1.28;
+  }
+
+  .patch-question-view {
+    width: 100%;
+    gap: 0.85rem;
+  }
+
+  .patch-question-view h2 {
+    font-size: clamp(1.45rem, 7.5vw, 2.25rem);
+  }
+
+  .patch-answer-grid {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+  }
+
+  .patch-answer-card {
+    padding: 0.85rem;
+    gap: 0.6rem;
+  }
+
+  .patch-answer-card > p {
+    font-size: 0.95rem;
+  }
+
+  .patch-player-answers {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .patch-player-answers strong,
+  .patch-player-answers em {
+    text-align: left;
+  }
+}
+
+/* ========================================================= */
+/* Riot / progressive questions */
+/* ========================================================= */
+
+@media (max-width: 760px) {
+  .progressive-question {
+    width: 100%;
+    gap: 1rem;
+  }
+
+  .progressive-question h2 {
+    font-size: clamp(1.45rem, 7vw, 2.25rem);
+  }
+
+  .progressive-clue-stage {
+    min-height: 220px;
+    width: 100%;
+    padding: 0.85rem;
+    border-radius: 1rem;
+  }
+
+  .progressive-clue-list {
+    gap: 0.65rem;
+  }
+
+  .progressive-clue-card {
+    padding: 0.85rem;
+    gap: 0.65rem;
+    grid-template-columns: 1.8rem 1fr;
+  }
+
+  .progressive-clue-number {
+    width: 1.8rem;
+    height: 1.8rem;
+  }
+
+  .progressive-clue-card p {
+    font-size: 1rem;
+    line-height: 1.3;
+  }
+
+  .progressive-image-box {
+    width: 100%;
+    padding: 0.75rem;
+  }
+
+  .progressive-image-box img {
+    max-height: 42vh;
+  }
+}
+
+/* ========================================================= */
+/* Meme it */
+/* ========================================================= */
+
+@media (max-width: 760px) {
+  .meme-question {
+    width: 100%;
+    gap: 1rem;
+  }
+
+  .meme-question h2 {
+    font-size: clamp(1.45rem, 7vw, 2.25rem);
+  }
+
+  .meme-stage {
+    min-height: 220px;
+    width: 100%;
+    padding: 0.85rem;
+    border-radius: 1rem;
+  }
+
+  .meme-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .meme-card {
+    padding: 0.65rem;
+  }
+
+  .meme-card img {
+    height: auto;
+    max-height: 42vh;
+  }
+}
+
+/* ========================================================= */
+/* Logo Fusion */
+/* ========================================================= */
+
+@media (max-width: 760px) {
+  .logo-fusion-question {
+    width: 100%;
+    gap: 1rem;
+  }
+
+  .logo-fusion-question h2 {
+    font-size: clamp(1.45rem, 7vw, 2.25rem);
+  }
+
+  .logo-fusion-main-image {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 1rem;
+  }
+
+  .logo-fusion-main-image img {
+    max-height: 42vh;
+  }
+
+  .logo-fusion-source-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .logo-fusion-source-card {
+    padding: 0.75rem;
+  }
+
+  .logo-fusion-source-card h3 {
+    font-size: 1.2rem;
+  }
+
+  .logo-fusion-source-card img {
+    height: auto;
+    max-height: 32vh;
+  }
+}
+
+/* ========================================================= */
+/* Viego'd / ability fake */
+/* ========================================================= */
+
+@media (max-width: 760px) {
+  .ability-fake-card {
+    width: 100%;
+  }
+
+  .ability-fake-content {
+    gap: 0.85rem;
+  }
+
+  .ability-fake-header {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .ability-fake-header h2 {
+    font-size: clamp(1.35rem, 7vw, 2.1rem);
+  }
+
+  .ability-splash-frame {
+    height: min(180px, 26vh);
+    border-radius: 1rem;
+  }
+
+  .ability-slots {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+  }
+
+  .ability-slot {
+    padding: 0.65rem;
+    gap: 0.4rem;
+  }
+
+  .ability-slot:last-child {
+    grid-column: span 2;
+  }
+
+  .ability-icon-frame {
+    width: 58px;
+    height: 58px;
+    border-radius: 0.7rem;
+  }
+
+  .ability-slot strong {
+    font-size: 1.15rem;
+  }
+
+  .ability-name {
+    font-size: 0.75rem;
+  }
+
+  .ability-blur-overlay strong {
+    font-size: clamp(1.6rem, 11vw, 3rem);
+  }
+}
+
+/* ========================================================= */
+/* Host controls / score / manual points on phones */
+/* ========================================================= */
+
+@media (max-width: 900px) {
+  .host-controls,
+  .player-controls,
+  .scoreboard {
+    gap: 0.75rem;
+  }
+
+  .control-stack,
+  .buzzer-controls,
+  .audio-controls,
+  .image-controls,
+  .progressive-controls,
+  .estimate-controls,
+  .ability-controls,
+  .meme-controls,
+  .board-switcher,
+  .joker-panel,
+  .manual-award-list,
+  .estimate-award-list {
+    padding: 0.85rem;
+    gap: 0.6rem;
+    border-radius: 0.9rem;
+  }
+
+  .manual-award-row {
+    padding: 0.65rem;
+    gap: 0.5rem;
+  }
+
+  .manual-award-button,
+  .manual-penalty-button,
+  .manual-penalty-undo-button,
+  .estimate-award-button,
+  .board-switch-button,
+  .joker-button {
+    padding: 0.7rem 0.8rem;
+    font-size: 0.88rem;
+  }
+
+  .score-row {
+    font-size: 0.9rem;
+  }
+}
+
+/* ========================================================= */
+/* Very small phones */
+/* ========================================================= */
+
+@media (max-width: 380px) {
+  .app-shell {
+    padding: 0.5rem;
+  }
+
+  .question-view {
+    padding: 0.75rem;
+  }
+
+  .question-view h2 {
+    font-size: clamp(1.35rem, 8.5vw, 2.1rem);
+  }
+
+  .category-column {
+    min-width: 108px;
+    grid-template-rows: auto repeat(5, 62px);
+  }
+
+  .question-tile {
+    min-height: 62px;
+    font-size: 1.15rem;
+  }
+
+  .category-title {
+    min-height: 52px;
+    font-size: 0.62rem;
+  }
+}

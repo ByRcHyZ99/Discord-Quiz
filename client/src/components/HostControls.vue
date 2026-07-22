@@ -46,6 +46,9 @@ const emit = defineEmits<{
   'meme-reset': [];
 
   'progressive-reveal-image': [];
+
+  'patch-close': [];
+  'patch-reveal-answer': [];
 }>();
 
 function getPenaltyCount(playerId: string) {
@@ -98,6 +101,10 @@ const isProgressiveQuestion = computed(() => {
 
 const isLogoFusionQuestion = computed(() => {
   return questionType.value === 'logo-fusion';
+});
+
+const isPatchQuestion = computed(() => {
+  return questionType.value === 'patch-quatsch';
 });
 
 const canRevealAnswer = computed(() => {
@@ -408,71 +415,88 @@ function handleAudioVolume(event: Event) {
             </button>
           </div>
 
-          <!-- ESTIMATE QUESTION CONTROLS -->
-          <div
-              v-if="isEstimateQuestion"
-              class="estimate-controls"
-          >
-            <p class="eyebrow">Estimate question</p>
+          <!-- ESTIMATE / PATCH / BUZZER CONTROLS -->
+          <template v-if="isEstimateQuestion">
+            <div class="estimate-controls">
+              <p class="eyebrow">Estimate question</p>
 
-            <button
-                class="big-action"
-                @click="emit('estimate-close')"
-            >
-              Close Submissions
-            </button>
-          </div>
+              <button
+                  class="big-action"
+                  @click="emit('estimate-close')"
+              >
+                Close Submissions
+              </button>
+            </div>
+          </template>
 
-          <!-- NORMAL BUZZER CONTROLS -->
-          <div
-              v-else
-              class="buzzer-controls"
-          >
-            <p class="eyebrow">Buzzer</p>
+          <template v-else-if="isPatchQuestion">
+            <div class="estimate-controls">
+              <p class="eyebrow">Patch oder Quatsch</p>
 
-            <button
-                :disabled="!state.buzzer.locked"
-                @click="emit('unlock-buzzer')"
-            >
-              Unlock Buzzer
-            </button>
+              <p class="muted">
+                Submitted:
+                {{ activeQuestion.patchAnswers.length }}
+                /
+                {{ state.players.length }}
+              </p>
 
-            <button
-                :disabled="state.buzzer.locked"
-                @click="emit('lock-buzzer')"
-            >
-              Lock Buzzer
-            </button>
+              <button
+                  class="big-action"
+                  @click="emit('patch-close')"
+              >
+                Close Answers
+              </button>
+            </div>
+          </template>
 
-            <button
-                class="big-action"
-                :disabled="!canRevealAnswer"
-                @click="emit('mark-correct')"
-            >
-              {{
-                isLogoFusionQuestion && !state.buzzer.firstBuzz
-                    ? 'Reveal Logo Solution'
-                    : 'Mark Correct / Reveal Answer'
-              }}
-            </button>
+          <template v-else>
+            <div class="buzzer-controls">
+              <p class="eyebrow">Buzzer</p>
 
-            <button
-                class="danger"
-                :disabled="!state.buzzer.firstBuzz"
-                @click="emit('mark-wrong')"
-            >
-              Mark Wrong
-            </button>
+              <button
+                  :disabled="!state.buzzer.locked"
+                  @click="emit('unlock-buzzer')"
+              >
+                Unlock Buzzer
+              </button>
 
-            <p v-if="state.buzzer.firstBuzz" class="muted">
-              First buzz:
-              <strong>{{ state.buzzer.firstBuzz.playerName }}</strong>
-            </p>
+              <button
+                  :disabled="state.buzzer.locked"
+                  @click="emit('lock-buzzer')"
+              >
+                Lock Buzzer
+              </button>
 
-            <p v-else class="muted">
-              No player has buzzed yet.
-            </p>
-          </div>
+              <button
+                  class="big-action"
+                  :disabled="!canRevealAnswer"
+                  @click="emit('mark-correct')"
+              >
+                {{
+                  isLogoFusionQuestion && !state.buzzer.firstBuzz
+                      ? 'Reveal Logo Solution'
+                      : 'Mark Correct / Reveal Answer'
+                }}
+              </button>
+
+              <button
+                  class="danger"
+                  :disabled="!state.buzzer.firstBuzz"
+                  @click="emit('mark-wrong')"
+              >
+                Mark Wrong
+              </button>
+
+              <p v-if="state.buzzer.firstBuzz" class="muted">
+                First buzz:
+                <strong>{{ state.buzzer.firstBuzz.playerName }}</strong>
+              </p>
+
+              <p v-else class="muted">
+                No player has buzzed yet.
+              </p>
+            </div>
+          </template>
 
           <button @click="emit('close-question')">
             Back to Board
@@ -487,10 +511,19 @@ function handleAudioVolume(event: Event) {
         <p class="eyebrow">Submissions closed</p>
 
         <button
+            v-if="isEstimateQuestion"
             class="big-action"
             @click="emit('estimate-reveal-answer')"
         >
           Reveal Correct Answer
+        </button>
+
+        <button
+            v-else-if="isPatchQuestion"
+            class="big-action"
+            @click="emit('patch-reveal-answer')"
+        >
+          Reveal Fake Fact
         </button>
 
         <button @click="emit('close-question')">

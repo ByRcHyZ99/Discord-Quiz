@@ -94,14 +94,17 @@ export function getRoom(roomCode: string): Room | null {
 }
 
 export function getPublicRoom(room: Room): PublicRoom {
-  const shouldShowEstimateAnswers =
+  const shouldShowPrivateAnswers =
       room.phase === 'submissions' || room.phase === 'answer';
 
   const activeQuestion = room.activeQuestion
       ? {
         ...room.activeQuestion,
-        estimateAnswers: shouldShowEstimateAnswers
+        estimateAnswers: shouldShowPrivateAnswers
             ? room.activeQuestion.estimateAnswers
+            : [],
+        patchAnswers: shouldShowPrivateAnswers
+            ? room.activeQuestion.patchAnswers
             : []
       }
       : null;

@@ -9,40 +9,40 @@ export const createQuestionSet = (): Category[] => [
         id: 'emoji-100',
         categoryId: 'emoji',
         points: 100,
-        text: '🧱⛏️💎🧟',
-        answer: "Minecraft",
+        text: '🐐🏙️💥🚗',
+        answer: "Goat Simulator",
         used: false
       },
       {
         id: 'emoji-200',
         categoryId: 'emoji',
         points: 200,
-        text: '🚗⚽🥅🚀',
-        answer: 'Rocket League',
+        text: '📦❗🕵️‍♂️🐍',
+        answer: 'Metal Gear Solid',
         used: false
       },
       {
         id: 'emoji-300',
         categoryId: 'emoji',
         points: 300,
-        text: '🐎🤠🔫🌵',
-        answer: 'Red Dead Redemption',
+        text: '🐒🎈🎯💥',
+        answer: 'Bloons TD',
         used: false
       },
       {
         id: 'emoji-400',
         categoryId: 'emoji',
         points: 400,
-        text: '⚔️🔥💀🏰',
-        answer: 'Dark Souls',
+        text: '🏥🧟‍♂️💊🔫',
+        answer: 'Left 4 Dead',
         used: false
       },
       {
         id: 'emoji-500',
         categoryId: 'emoji',
         points: 500,
-        text: '🏹🤖🦖🌿',
-        answer: 'Horizon Zero Dawn',
+        text: '🚀👨‍🚀🌍🔧',
+        answer: 'Kerbal Space Program',
         used: false
       }
     ]
@@ -56,8 +56,8 @@ export const createQuestionSet = (): Category[] => [
         categoryId: 'cover',
         points: 100,
         text: 'Welches Game suchen wir?',
-        answer: 'Super Mario 64',
-        imageUrl: '/images/covers/supermario64.jpg',
+        answer: 'Fall Guys',
+        imageUrl: '/images/covers/fallGuys.jpg',
         imageMode: 'zoom',
         zoomLevels: [3, 2.5, 2, 1.5, 1],
         zoomStartIndex: 0,
@@ -68,8 +68,8 @@ export const createQuestionSet = (): Category[] => [
         categoryId: 'cover',
         points: 200,
         text: 'Welches Game suchen wir?',
-        answer: 'GTA 5',
-        imageUrl: '/images/covers/gta5.jpg',
+        answer: 'Raft',
+        imageUrl: '/images/covers/raft.jpg',
         imageMode: 'zoom',
         zoomLevels: [3, 2.5, 2, 1.5, 1],
         zoomStartIndex: 0,
@@ -80,32 +80,32 @@ export const createQuestionSet = (): Category[] => [
         categoryId: 'cover',
         points: 300,
         text: 'Welches Game suchen wir?',
-        answer: 'Cyberpunk',
-        imageUrl: '/images/covers/cyberpunk.jpg',
+        answer: 'The Surge 2',
+        imageUrl: '/images/covers/theSurge2.jpg',
         imageMode: 'zoom',
         zoomLevels: [3, 2.5, 2, 1.5, 1],
         zoomStartIndex: 0,
         used: false
       },
       {
-        id: 'splash-400',
-        categoryId: 'splash',
+        id: 'cover-400',
+        categoryId: 'cover',
         points: 400,
         text: 'Welches Game suchen wir?',
-        answer: 'Doom Eternal',
-        imageUrl: '/images/covers/doom.jpg',
+        answer: 'Warframe',
+        imageUrl: '/images/covers/warframe.jpg',
         imageMode: 'zoom',
         zoomLevels: [3, 2.5, 2, 1.5, 1],
         zoomStartIndex: 0,
         used: false
       },
       {
-        id: 'splash-500',
-        categoryId: 'splash',
+        id: 'cover-500',
+        categoryId: 'cover',
         points: 500,
         text: 'Welches Game suchen wir?',
-        answer: 'Elden Ring',
-        imageUrl: '/images/covers/eldenring.jpg',
+        answer: 'PUBG',
+        imageUrl: '/images/covers/pubg.jpg',
         imageMode: 'zoom',
         zoomLevels: [3, 2.5, 2, 1.5, 1],
         zoomStartIndex: 0,
@@ -122,8 +122,8 @@ export const createQuestionSet = (): Category[] => [
         categoryId: 'ohrwurm',
         points: 100,
         text: 'Zu welchem Game gehört dieser Sound?',
-        answer: 'Minecraft - Creeper',
-        soundUrl: '/sounds/creeper.mp3',
+        answer: 'Mario Kart - Item Box',
+        soundUrl: '/sounds/marioKartItemBox.mp3',
         used: false
       },
       {
@@ -131,8 +131,8 @@ export const createQuestionSet = (): Category[] => [
         categoryId: 'ohrwurm',
         points: 200,
         text: 'Zu welchem Game gehört dieser Sound?',
-        answer: 'Among Us - Emergency Meeting',
-        soundUrl: '/sounds/amongUs_emergencyMeeting.mp3',
+        answer: 'Overwatch - High Noon Ult',
+        soundUrl: '/sounds/overwatchHighNoon.mp3',
         used: false
       },
       {
@@ -140,8 +140,8 @@ export const createQuestionSet = (): Category[] => [
         categoryId: 'ohrwurm',
         points: 300,
         text: 'Zu welchem Game gehört dieser Sound?',
-        answer: 'Legend of Zelda - Chest',
-        soundUrl: '/sounds/zelda_chest.mp3',
+        answer: 'The Binding of Isaac - Damage',
+        soundUrl: '/sounds/theBindingOfIsaac.mp3',
         used: false
       },
       {
@@ -149,8 +149,8 @@ export const createQuestionSet = (): Category[] => [
         categoryId: 'ohrwurm',
         points: 400,
         text: 'Zu welchem Game gehört dieser Sound?',
-        answer: 'Valorant - Defuse',
-        soundUrl: '/sounds/valorant_defuse.mp3',
+        answer: 'Dying Light - Night Scream',
+        soundUrl: '/sounds/dyingLightNightScream.mp3',
         used: false
       },
       {
@@ -158,8 +158,8 @@ export const createQuestionSet = (): Category[] => [
         categoryId: 'ohrwurm',
         points: 500,
         text: 'Zu welchem Game gehört dieser Sound?',
-        answer: 'Portal',
-        soundUrl: '/sounds/portal.mp3',
+        answer: 'Stronghold Crusador - Schatzkammer',
+        soundUrl: '/sounds/strongholdCrusader.mp3',
         used: false
       }
     ]
@@ -173,13 +173,13 @@ export const createQuestionSet = (): Category[] => [
         categoryId: 'memeit',
         points: 100,
         text: 'Welches Game suchen wir?',
-        answer: 'League of Legends',
+        answer: 'Hell Divers 2',
         questionType: 'meme-reveal',
         memeImages: [
-          '/images/memes/lol1.png',
-          '/images/memes/lol2.jpg',
-          '/images/memes/lol3.jpg',
-          '/images/memes/lol4.jpg'
+          '/images/memes/hellDivers1.jpg',
+          '/images/memes/hellDivers2.jpg',
+          '/images/memes/hellDivers3.jpg',
+          '/images/memes/hellDivers4.jpg'
         ],
         used: false
       },
@@ -188,13 +188,13 @@ export const createQuestionSet = (): Category[] => [
         categoryId: 'memeit',
         points: 200,
         text: 'Welches Game suchen wir?',
-        answer: 'Skyrim',
+        answer: 'The Sims',
         questionType: 'meme-reveal',
         memeImages: [
-          '/images/memes/skyrim1.jpg',
-          '/images/memes/skyrim3.jpg',
-          '/images/memes/skyrim4.png',
-          '/images/memes/skyrim2.jpg'
+          '/images/memes/theSims1.jpg',
+          '/images/memes/theSims2.jpg',
+          '/images/memes/theSims3.jpg',
+          '/images/memes/theSims4.jpg'
         ],
         used: false
       },
@@ -203,13 +203,13 @@ export const createQuestionSet = (): Category[] => [
         categoryId: 'memeit',
         points: 300,
         text: 'Welches Game suchen wir?',
-        answer: 'Counter-Strike 2',
+        answer: 'Minecraft',
         questionType: 'meme-reveal',
         memeImages: [
-          '/images/memes/cs1.jpg',
-          '/images/memes/cs2.png',
-          '/images/memes/cs3.jpg',
-          '/images/memes/cs4.jpg'
+          '/images/memes/minecraft1.jpg',
+          '/images/memes/minecraft2.jpg',
+          '/images/memes/minecraft3.jpg',
+          '/images/memes/minecraft4.jpg'
         ],
         used: false
       },
@@ -218,13 +218,13 @@ export const createQuestionSet = (): Category[] => [
         categoryId: 'memeit',
         points: 400,
         text: 'Welches Game suchen wir?',
-        answer: 'Dark Souls',
+        answer: 'GTA 5',
         questionType: 'meme-reveal',
         memeImages: [
-          '/images/memes/darksouls1.jpg',
-          '/images/memes/darksouls2.jpg',
-          '/images/memes/darksouls3.jpg',
-          '/images/memes/darksouls4.jpg'
+          '/images/memes/gta1.jpg',
+          '/images/memes/gta2.jpg',
+          '/images/memes/gta3.jpg',
+          '/images/memes/gta4.jpg'
         ],
         used: false
       },
@@ -233,13 +233,13 @@ export const createQuestionSet = (): Category[] => [
         categoryId: 'memeit',
         points: 500,
         text: 'Welches Game suchen wir?',
-        answer: 'Among Us',
+        answer: 'Call of Duty',
         questionType: 'meme-reveal',
         memeImages: [
-          '/images/memes/amongUs1.jpg',
-          '/images/memes/amongUs2.jpg',
-          '/images/memes/amongUs3.png',
-          '/images/memes/amongUs4.jpg'
+          '/images/memes/cod1.jpg',
+          '/images/memes/cod2.jpg',
+          '/images/memes/cod3.jpg',
+          '/images/memes/cod4.jpg'
         ],
         used: false
       }
@@ -486,7 +486,7 @@ export const createQuestionSet = (): Category[] => [
       }
     ]
   },*/
-  {
+  /*{
     id: 'what-do-you-meme',
     title: 'What do you meme?', //3 tipps anzeigen und meme erraten
     questions: [
@@ -566,6 +566,58 @@ export const createQuestionSet = (): Category[] => [
         used: false
       }
     ]
+  }*/
+
+  {
+    id: 'HUDini',
+    title: 'HUDini', //Ingame Hud zeigen und Spiel erraten
+    questions: [
+      {
+        id: 'HUDini-100',
+        categoryId: 'HUDini',
+        points: 100,
+        text: 'Welches Game suchen wir?',
+        answer: 'Mario Kart',
+        imageUrl: '/images/hud/marioKart.png',
+        used: false
+      },
+      {
+        id: 'HUDini-200',
+        categoryId: 'HUDini',
+        points: 200,
+        text: 'Welches Game suchen wir?',
+        answer: 'Black Ops 4 Zombies',
+        imageUrl: '/images/hud/blackOpsZombies.png',
+        used: false
+      },
+      {
+        id: 'HUDini-300',
+        categoryId: 'HUDini',
+        points: 300,
+        text: 'Welches Game suchen wir?',
+        answer: 'Borderlands 3',
+        imageUrl: '/images/hud/borderlands.png',
+        used: false
+      },
+      {
+        id: 'HUDini-400',
+        categoryId: 'HUDini',
+        points: 400,
+        text: 'Welches Game suchen wir?',
+        answer: 'Payday 2',
+        imageUrl: '/images/hud/payday.png',
+        used: false
+      },
+      {
+        id: 'HUDini-500',
+        categoryId: 'HUDini',
+        points: 500,
+        text: 'Welches Game suchen wir?',
+        answer: 'Halo',
+        imageUrl: '/images/hud/halo.png',
+        used: false
+      }
+    ]
   }
 ];
 
@@ -580,8 +632,8 @@ export function createQuestionSetBoard2(): Category[] {
           id: 'Pi_*_Daumen-600',
           categoryId: 'Pi_*_Daumen',
           points: 600,
-          text: 'Wie viele Stunden an unterschiedlichen filmischen Sequenzen und Dialogszenen wurden insgesamt für Baldur’s Gate 3 produziert?',
-          answer: '174 Stunden',
+          text: 'Wie viele gesprochene Dialogzeilen enthält Skyrim ungefähr?',
+          answer: '~ 60.000 Dialogzeilen',
           questionType: 'estimate',
           used: false
         },
@@ -589,8 +641,8 @@ export function createQuestionSetBoard2(): Category[] {
           id: 'Pi_*_Daumen-700',
           categoryId: 'Pi_*_Daumen',
           points: 700,
-          text: 'Wie viele Flughäfen sind in Microsoft Flight Simulator (2020) weltweit enthalten?',
-          answer: '~ 37.000 Flughäfen',
+          text: 'Wie viele Schauspieler waren ungefähr, an der Produktion von Red Dead Redemption 2, beteiligt?',
+          answer: '~ 1.200 Schauspieler',
           questionType: 'estimate',
           used: false
         },
@@ -598,8 +650,8 @@ export function createQuestionSetBoard2(): Category[] {
           id: 'Pi_*_Daumen-800',
           categoryId: 'Pi_*_Daumen',
           points: 800,
-          text: 'Wie viele gesprochene Dialogzeilen enthält Red Dead Redemption 2 ungefähr?',
-          answer: '500.000 Dialogzeilen',
+          text: 'Wie viele unterschiedliche Streckenlayouts bietet Gran Turismo 7 ungefähr?',
+          answer: '110 Streckenlayouts', //110 Streckenlayouts auf 37 Strecken
           questionType: 'estimate',
           used: false
         },
@@ -607,8 +659,8 @@ export function createQuestionSetBoard2(): Category[] {
           id: 'Pi_*_Daumen-900',
           categoryId: 'Pi_*_Daumen',
           points: 900,
-          text: 'Wie viele einzelne Blockpositionen umfasst ein vollständiger Minecraft-Overworld-Chunk, inklusive leerer Luftblöcke?',
-          answer: '98.304 Blockpositionen (16 x 16 x 384)', //Ein Chunk ist 16 Blöcke breit, 16 Blöcke lang und im normalen Overworld insgesamt 384 Blöcke hoch.
+          text: 'Wie viele Menschen hatten The Sims 4 bis April 2023 weltweit gespielt?',
+          answer: '~ 70 Mio. Spieler', //Mehr als 70 Millionen Spieler
           questionType: 'estimate',
           used: false
         },
@@ -616,8 +668,8 @@ export function createQuestionSetBoard2(): Category[] {
           id: 'Pi_*_Daumen-1000',
           categoryId: 'Pi_*_Daumen',
           points: 1000,
-          text: 'Angenommen, man würde in No Man’s Sky jede Sekunde einen neuen Planeten besuchen: Wie viele Jahre würde es dauern, alle theoretisch möglichen Planeten zu besuchen?',
-          answer: '585 Milliarde Jahre', //Das Spiel basiert auf einem 64-Bit-System mit theoretisch 18.446.744.073.709.551.616 möglichen Planeten. Weil normale Zahlen offenbar nicht mehr gereicht haben.
+          text: 'Wie viele Menschen sahen das Finale der League-of-Legends-Weltmeisterschaft 2019 gleichzeitig in der Spitze?',
+          answer: '~ 44 Mio. Zuschauer', //Rund 44 Millionen Zuscheier gleichzeitig
           questionType: 'estimate',
           used: false
         }
@@ -632,8 +684,8 @@ export function createQuestionSetBoard2(): Category[] {
           categoryId: 'board2-map-gap',
           points: 600,
           text: 'Welches Game suchen wir?',
-          answer: 'GTA 5',
-          imageUrl: '/images/maps/gta5.png',
+          answer: 'PUBG - Erangel',
+          imageUrl: '/images/maps/pubgErangel.jpg',
           used: false
         },
         {
@@ -641,8 +693,8 @@ export function createQuestionSetBoard2(): Category[] {
           categoryId: 'board2-map-gap',
           points: 700,
           text: 'Welches Game suchen wir?',
-          answer: 'Sea of Thieves',
-          imageUrl: '/images/maps/seaOfThieves.jpg',
+          answer: 'Pokemon - Diamond',
+          imageUrl: '/images/maps/pokemonDiamond.jpg',
           used: false
         },
         {
@@ -650,8 +702,8 @@ export function createQuestionSetBoard2(): Category[] {
           categoryId: 'board2-map-gap',
           points: 800,
           text: 'Welches Game suchen wir?',
-          answer: 'Death Stranding',
-          imageUrl: '/images/maps/deathStranding.jpg',
+          answer: 'World of Warcraft',
+          imageUrl: '/images/maps/wow.jpg',
           used: false
         },
         {
@@ -659,8 +711,8 @@ export function createQuestionSetBoard2(): Category[] {
           categoryId: 'board2-map-gap',
           points: 900,
           text: 'Welches Game suchen wir?',
-          answer: 'Hollow Knight',
-          imageUrl: '/images/maps/hollowKnight.jpg',
+          answer: 'Need for Speed - Most Wanted',
+          imageUrl: '/images/maps/nfsMostWanted.jpg',
           used: false
         },
         {
@@ -668,8 +720,8 @@ export function createQuestionSetBoard2(): Category[] {
           categoryId: 'board2-map-gap',
           points: 1000,
           text: 'Welches Game suchen wir?',
-          answer: 'Assassins Creed - Black Flag',
-          imageUrl: '/images/maps/assassinsCreed.jpg',
+          answer: 'World of Tanks',
+          imageUrl: '/images/maps/wot.jpg',
           used: false
         }
       ]
@@ -751,138 +803,203 @@ export function createQuestionSetBoard2(): Category[] {
       ]
     },
     {
-      id: 'board2-polyglot',
-      title: 'Polyglot', //ein gaming wort in einer sehr fremden sprache zeigen und es wird immer einfacher und erkennbarer bis zur deutschen sprache
+      id: 'patch-quatsch',
+      title: 'Patch oder Quatsch',
       questions: [
         {
-          id: 'board2-polyglot-600',
-          categoryId: 'board2-polyglot',
-          points: 600,
-          text: 'Welches Wort ist gesucht?',
-          answer: 'Spieler',
-          questionType: 'progressive',
-          progressiveClues: [
-            'プレイヤー',
-            'pelaaja',
-            'jugador',
-            'speler',
-            'player'
+          id: 'patch-quatsch-100',
+          categoryId: 'patch-quatsch',
+          points: 100,
+          text: 'Minecraft: Which fact is completely made up?',
+          answer: 'C is fake: Creepers were not originally designed as pigs with texture glitches.',
+          questionType: 'patch-quatsch',
+          patchCorrectChoiceKey: 'C',
+          patchChoices: [
+            {
+              key: 'A',
+              text: 'Creepers were created from a failed pig model.'
+            },
+            {
+              key: 'B',
+              text: 'Endermen were inspired by creepy internet horror vibes and were later changed because they were too unsettling.'
+            },
+            {
+              key: 'C',
+              text: 'Creepers were originally peaceful farm animals that exploded only when struck by lightning.',
+              isFake: true
+            },
+            {
+              key: 'D',
+              text: 'The Nether was added as a dangerous fast-travel-like dimension concept.'
+            }
           ],
           used: false
         },
         {
-          id: 'board2-polyglot-700',
-          categoryId: 'board2-polyglot',
-          points: 700,
-          text: 'Welches Wort ist gesucht?',
-          answer: 'Schatz',
-          questionType: 'progressive',
-          progressiveClues: [
-            '宝',
-            'hazine',
-            'tesoro',
-            'schat',
-            'treasure'
+          id: 'patch-quatsch-200',
+          categoryId: 'patch-quatsch',
+          points: 200,
+          text: 'Counter-Strike: Which fact is completely made up?',
+          answer: 'B is fake: CS did not start as an official Valve-made standalone game.',
+          questionType: 'patch-quatsch',
+          patchCorrectChoiceKey: 'B',
+          patchChoices: [
+            {
+              key: 'A',
+              text: 'Counter-Strike originally started as a mod.'
+            },
+            {
+              key: 'B',
+              text: 'Counter-Strike was first released as a full official Valve sequel to Team Fortress.',
+              isFake: true
+            },
+            {
+              key: 'C',
+              text: 'Defusal and hostage rescue became two of the most iconic objective modes.'
+            },
+            {
+              key: 'D',
+              text: 'Weapon recoil control became one of the defining skill checks of the game.'
+            }
           ],
           used: false
         },
         {
-          id: 'board2-polyglot-800',
-          categoryId: 'board2-polyglot',
-          points: 800,
-          text: 'Welches Wort ist gesucht?',
-          answer: 'Zauber',
-          questionType: 'progressive',
-          progressiveClues: [
-            '魔法',
-            'büyü',
-            'hechizo',
-            'toverij',
-            'spell'
+          id: 'patch-quatsch-300',
+          categoryId: 'patch-quatsch',
+          points: 300,
+          text: 'League of Legends: Which fact is completely made up?',
+          answer: 'D is fake: Baron does not randomly swap teams.',
+          questionType: 'patch-quatsch',
+          patchCorrectChoiceKey: 'D',
+          patchChoices: [
+            {
+              key: 'A',
+              text: 'Some champions have been heavily reworked after release.'
+            },
+            {
+              key: 'B',
+              text: 'The game has removed and replaced several items over time.'
+            },
+            {
+              key: 'C',
+              text: 'Champion abilities can be changed dramatically by patches.'
+            },
+            {
+              key: 'D',
+              text: 'Baron Nashor used to randomly change teams if nobody damaged him for long enough.',
+              isFake: true
+            }
           ],
           used: false
         },
         {
-          id: 'board2-polyglot-900',
-          categoryId: 'board2-polyglot',
-          points: 900,
-          text: 'Welches Wort ist gesucht?',
-          answer: 'Rüstung',
-          questionType: 'progressive',
-          progressiveClues: [
-            '鎧',
-            'zırh',
-            'armadura',
-            'uitrusting',
-            'armor'
+          id: 'patch-quatsch-400',
+          categoryId: 'patch-quatsch',
+          points: 400,
+          text: 'Pokémon: Which fact is completely made up?',
+          answer: 'A is fake: MissingNo. was not intentionally added as a secret legendary Pokémon.',
+          questionType: 'patch-quatsch',
+          patchCorrectChoiceKey: 'A',
+          patchChoices: [
+            {
+              key: 'A',
+              text: 'MissingNo. was intentionally added as a secret legendary Pokémon that players were meant to discover.',
+              isFake: true
+            },
+            {
+              key: 'B',
+              text: 'Some glitches in early Pokémon games became extremely well known among players.'
+            },
+            {
+              key: 'C',
+              text: 'Different Pokémon versions encouraged trading by having version-exclusive Pokémon.'
+            },
+            {
+              key: 'D',
+              text: 'The series has repeatedly used evolution methods beyond simply leveling up.'
+            }
           ],
           used: false
         },
         {
-          id: 'board2-polyglot-1000',
-          categoryId: 'board2-polyglot',
-          points: 1000,
-          text: 'Welches Wort ist gesucht?',
-          answer: 'Schwert',
-          questionType: 'progressive',
-          progressiveClues: [
-            '剣',
-            'kılıç',
-            'espada',
-            'zwaard',
-            'sword'
+          id: 'patch-quatsch-500',
+          categoryId: 'patch-quatsch',
+          points: 500,
+          text: 'The Legend of Zelda: Which fact is completely made up?',
+          answer: 'C is fake: Link was not named because he links controller ports.',
+          questionType: 'patch-quatsch',
+          patchCorrectChoiceKey: 'C',
+          patchChoices: [
+            {
+              key: 'A',
+              text: 'The name Link reflects the idea of connecting the player to the game world.'
+            },
+            {
+              key: 'B',
+              text: 'The series has used different versions of Link across different eras and timelines.'
+            },
+            {
+              key: 'C',
+              text: 'Link was named after the physical link cable used to connect early Nintendo controllers.',
+              isFake: true
+            },
+            {
+              key: 'D',
+              text: 'Music, exploration and puzzle solving are recurring pillars of the series.'
+            }
           ],
           used: false
-        },
+        }
       ]
     },
     {
       id: 'board2-fun-with-flags',
-      title: 'Spaß mit Flaggen', //Spaß mit flaggen
+      title: 'Spaß mit Flaggen', //Flaggen von Games (ingame)
       questions: [
         {
           id: 'board2-fun-with-flags-600',
           categoryId: 'board2-fun-with-flags',
           points: 600,
-          text: 'Welches Land ist das?',
-          answer: 'Elfenbeinküste',
-          imageUrl: '/images/flaggen/elfenbeinküste.png',
+          text: 'Welches Game suchen wir?',
+          answer: 'Fallout - New Vegas',
+          imageUrl: '/images/flaggen/falloutNewVegas.png',
           used: false
         },
         {
           id: 'board2-fun-with-flags-700',
           categoryId: 'board2-fun-with-flags',
           points: 700,
-          text: 'Welches Land ist das?',
+          text: 'Welches Game suchen wir?',
           answer: 'Nigeria',
-          imageUrl: '/images/flaggen/nigeria.png',
+          imageUrl: '/images/flaggen/skyrim.jpg',
           used: false
         },
         {
           id: 'board2-fun-with-flags-800',
           categoryId: 'board2-fun-with-flags',
           points: 800,
-          text: 'Welches Land ist das?',
-          answer: 'Uganda',
-          imageUrl: '/images/flaggen/uganda.png',
+          text: 'Welches Game suchen wir?',
+          answer: 'The Legend of Zelda',
+          imageUrl: '/images/flaggen/theLegendofZelda.jpg',
           used: false
         },
         {
           id: 'board2-fun-with-flags-900',
           categoryId: 'board2-fun-with-flags',
           points: 900,
-          text: 'Welches Land ist das?',
-          answer: 'Chad',
-          imageUrl: '/images/flaggen/chad.png',
+          text: 'Welches Game suchen wir?',
+          answer: 'Hell Divers 2',
+          imageUrl: '/images/flaggen/hellDivers.jpg',
           used: false
         },
         {
           id: 'board2-fun-with-flags-1000',
           categoryId: 'board2-fun-with-flags',
           points: 1000,
-          text: 'Welches Land ist das?',
-          answer: 'Malediven',
-          imageUrl: '/images/flaggen/malediven.png',
+          text: 'Welches Game suchen wir?',
+          answer: 'Cyberpunk 2077', //Nusa Flagge
+          imageUrl: '/images/flaggen/cyberpunk.jpg',
           used: false
         }
       ]

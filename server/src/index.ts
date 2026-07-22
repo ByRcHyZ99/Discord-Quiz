@@ -146,6 +146,143 @@ io.on('connection', (socket) => {
   });
 
   socket.on(
+      'patch:submit',
+      (
+          payload: { roomCode: string; playerId: string; choiceKey: 'A' | 'B' | 'C' | 'D' },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const roomCode = cleanRoomCode(payload.roomCode);
+        const room = getRoom(roomCode);
+
+        if (!room) {
+          callback({ ok: false, error: 'Room not found.' });
+          return;
+        }
+
+        const activeQuestion = room.activeQuestion;
+
+        if (
+            !activeQuestion ||
+            activeQuestion.question.questionType !== 'patch-quatsch'
+        ) {
+          callback({ ok: false, error: 'No Patch oder Quatsch question is active.' });
+          return;
+        }
+
+        if (room.phase !== 'question') {
+          callback({ ok: false, error: 'Answers are closed.' });
+          return;
+        }
+
+        if (!activeQuestion.revealed) {
+          callback({ ok: false, error: 'Question is not revealed yet.' });
+          return;
+        }
+
+        const player = room.players.find((item) => item.id === payload.playerId);
+
+        if (!player) {
+          callback({ ok: false, error: 'Player not found in this room.' });
+          return;
+        }
+
+        player.socketId = socket.id;
+        player.isConnected = true;
+
+        const choices = activeQuestion.question.patchChoices ?? [];
+        const selectedChoice = choices.find((choice) => choice.key === payload.choiceKey);
+
+        if (!selectedChoice) {
+          callback({ ok: false, error: 'Invalid answer choice.' });
+          return;
+        }
+
+        const existingAnswer = activeQuestion.patchAnswers.find(
+            (answer: { playerId: string }) => answer.playerId === player.id
+        );
+
+        if (existingAnswer) {
+          existingAnswer.choiceKey = payload.choiceKey;
+          existingAnswer.submittedAt = Date.now();
+        } else {
+          activeQuestion.patchAnswers.push({
+            playerId: player.id,
+            playerName: player.name,
+            choiceKey: payload.choiceKey,
+            submittedAt: Date.now()
+          });
+        }
+
+        room.message = `${player.name} locked in answer ${payload.choiceKey}.`;
+
+        respond(callback, room, player.id);
+        emitRoom(room);
+      }
+  );
+
+  socket.on(
+      'patch:close',
+      (
+          payload: { roomCode: string },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const room = requireHostRoom(payload.roomCode, socket.id, callback);
+        if (!room) return;
+
+        if (
+            !room.activeQuestion ||
+            room.activeQuestion.question.questionType !== 'patch-quatsch'
+        ) {
+          callback({ ok: false, error: 'No Patch oder Quatsch question is active.' });
+          return;
+        }
+
+        room.phase = 'submissions';
+        room.buzzer.locked = true;
+        room.buzzer.firstBuzz = null;
+        room.buzzer.buzzOrder = [];
+
+        room.message = 'Patch oder Quatsch answers are locked.';
+
+        respond(callback, room);
+        emitRoom(room);
+      }
+  );
+
+  socket.on(
+      'patch:reveal-answer',
+      (
+          payload: { roomCode: string },
+          callback: (response: ServerResponse) => void
+      ) => {
+        const room = requireHostRoom(payload.roomCode, socket.id, callback);
+        if (!room) return;
+
+        if (
+            !room.activeQuestion ||
+            room.activeQuestion.question.questionType !== 'patch-quatsch'
+        ) {
+          callback({ ok: false, error: 'No Patch oder Quatsch question is active.' });
+          return;
+        }
+
+        markActiveQuestionUsed(room);
+
+        room.phase = 'answer';
+        room.buzzer.locked = true;
+        room.buzzer.firstBuzz = null;
+        room.buzzer.buzzOrder = [];
+
+        room.message = 'Correct fake fact revealed. Award points manually.';
+
+        playRoomSfx(room, '/sounds/sfx/correct.mp3');
+
+        respond(callback, room);
+        emitRoom(room);
+      }
+  );
+
+  socket.on(
       'meme:reveal-next',
       (
           payload: { roomCode: string },
@@ -1470,6 +1607,7 @@ io.on('connection', (socket) => {
         revealed: false,
         zoomStep: question.zoomStartIndex ?? 0,
         estimateAnswers: [],
+        patchAnswers: [],
 
         effectivePoints,
         pointsMultiplier,

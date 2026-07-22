@@ -124,6 +124,7 @@ const canBuzz = computed(() => {
       props.state.phase === 'question' &&
       props.state.activeQuestion?.revealed &&
       props.state.activeQuestion.question.questionType !== 'estimate' &&
+      props.state.activeQuestion.question.questionType !== 'patch-quatsch' &&
       !props.state.buzzer.locked &&
       !isTimedOut.value &&
       !isBuzzerBlocked.value
@@ -243,14 +244,6 @@ function useBlockJoker() {
       <p v-if="isBuzzerBlocked" class="timeout-warning">
         Your buzzer is blocked for this question.
       </p>
-
-      <button
-          class="big-action"
-          :disabled="!canBuzz"
-          @click="emit('buzz')"
-      >
-        Buzz
-      </button>
 
       <p v-if="state.buzzer.locked" class="muted">
         Buzzer is locked.

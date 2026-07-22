@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue';
 import { socket } from './services/socket';
-import type { GameState, ServerResponse } from './types/game';
+import type { GameState, PatchChoiceKey, ServerResponse } from './types/game';
 import StartScreen from './components/StartScreen.vue';
 import LobbyScreen from './components/LobbyScreen.vue';
 import GameBoard from './components/GameBoard.vue';
@@ -12,12 +12,16 @@ import HostControls from './components/HostControls.vue';
 import AudioSync from './components/AudioSync.vue';
 import SfxSync from './components/SfxSync.vue';
 import SoundCheckScreen from './components/SoundCheckScreen.vue';
+import BuzzerOverlay from './components/BuzzerOverlay.vue';
+import ImagePreloader from './components/ImagePreloader.vue';
 
 const gameState = ref<GameState | null>(null);
 const currentPlayerId = ref<string | null>(null);
 const connectionError = ref('');
 const estimateValue = ref('');
 const estimateSubmitted = ref(false);
+const patchChoiceKey = ref<PatchChoiceKey | ''>('');
+const patchSubmitted = ref(false);
 
 const SESSION_STORAGE_KEY = 'discord-quiz-session';
 
@@ -119,11 +123,23 @@ const showEstimateInput = computed(() => {
   );
 });
 
+const showPatchInput = computed(() => {
+  return (
+      gameState.value?.phase === 'question' &&
+      gameState.value.activeQuestion?.revealed === true &&
+      gameState.value.activeQuestion.question.questionType === 'patch-quatsch' &&
+      !isHost.value
+  );
+});
+
 watch(
     () => gameState.value?.activeQuestion?.question.id,
     () => {
       estimateValue.value = '';
       estimateSubmitted.value = false;
+
+      patchChoiceKey.value = '';
+      patchSubmitted.value = false;
     }
 );
 
@@ -141,6 +157,52 @@ function saveSession(roomCode: string, playerId: string) {
         roomCode,
         playerId
       })
+  );
+}
+
+function submitPatchChoice(choiceKey: PatchChoiceKey) {
+  if (!gameState.value || !currentPlayerId.value) return;
+
+  patchChoiceKey.value = choiceKey;
+
+  socket.emit(
+      'patch:submit',
+      {
+        roomCode: gameState.value.roomCode,
+        playerId: currentPlayerId.value,
+        choiceKey
+      },
+      (response: ServerResponse) => {
+        handleResponse(response);
+
+        if (response.ok) {
+          patchSubmitted.value = true;
+        }
+      }
+  );
+}
+
+function closePatchAnswers() {
+  if (!gameState.value || !isHost.value) return;
+
+  socket.emit(
+      'patch:close',
+      {
+        roomCode: gameState.value.roomCode
+      },
+      handleResponse
+  );
+}
+
+function revealPatchAnswer() {
+  if (!gameState.value || !isHost.value) return;
+
+  socket.emit(
+      'patch:reveal-answer',
+      {
+        roomCode: gameState.value.roomCode
+      },
+      handleResponse
   );
 }
 
@@ -723,6 +785,45 @@ function closeQuestion() {
       </p>
     </section>
   </div>
+
+  <div
+      v-if="showPatchInput"
+      class="patch-overlay"
+  >
+    <section class="patch-modal">
+      <p class="eyebrow">Patch oder Quatsch</p>
+
+      <h2>
+        {{ gameState?.activeQuestion?.question.text }}
+      </h2>
+
+      <p class="muted">
+        Select the one fake fact and lock it in.
+      </p>
+
+      <div class="patch-choice-grid">
+        <button
+            v-for="choice in gameState?.activeQuestion?.question.patchChoices ?? []"
+            :key="choice.key"
+            class="patch-choice-button"
+            :class="{
+          'patch-choice-button--selected': patchChoiceKey === choice.key
+        }"
+            @click="submitPatchChoice(choice.key)"
+        >
+          <strong>{{ choice.key }}</strong>
+          <span>{{ choice.text }}</span>
+        </button>
+      </div>
+
+      <p
+          v-if="patchSubmitted"
+          class="muted"
+      >
+        Submitted: <strong>{{ patchChoiceKey }}</strong>. You can change it until the host closes answers.
+      </p>
+    </section>
+  </div>
   <main class="app-shell">
     <button
         v-if="gameState"
@@ -741,6 +842,18 @@ function closeQuestion() {
         v-if="gameState"
         :sfx="gameState.sfx"
         :local-volume="sfxLocalVolume"
+    />
+
+    <BuzzerOverlay
+        v-if="gameState && !isHost"
+        :state="gameState"
+        :current-player-id="currentPlayerId"
+        @buzz="buzz"
+    />
+
+    <ImagePreloader
+        v-if="gameState"
+        :state="gameState"
     />
 
     <section v-if="connectionError" class="error-box">
@@ -834,6 +947,8 @@ function closeQuestion() {
               @meme-hide-last="hideLastMeme"
               @meme-reset="resetMemes"
               @progressive-reveal-image="revealProgressiveImage"
+              @patch-close="closePatchAnswers"
+              @patch-reveal-answer="revealPatchAnswer"
           />
         </aside>
 

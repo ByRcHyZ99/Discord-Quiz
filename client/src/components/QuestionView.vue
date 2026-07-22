@@ -5,6 +5,7 @@ import AbilityFakeQuestionView from './AbilityFakeQuestionView.vue';
 import ProgressiveQuestionView from './ProgressiveQuestionView.vue';
 import MemeQuestionView from './MemeQuestionView.vue';
 import LogoFusionQuestionView from './LogoFusionQuestionView.vue';
+import PatchQuestionView from './PatchQuestionView.vue';
 
 const props = defineProps<{
   state: GameState;
@@ -56,32 +57,40 @@ const isZoomImage = computed(() => {
       </span>
     </div>
 
-    <!-- ESTIMATE SUBMISSIONS SCREEN -->
+    <!-- SUBMISSIONS SCREEN -->
     <template v-if="state.phase === 'submissions'">
       <template v-if="state.activeQuestion">
-        <p class="eyebrow">Player answers</p>
+        <PatchQuestionView
+            v-if="state.activeQuestion.question.questionType === 'patch-quatsch'"
+            :active-question="state.activeQuestion"
+            show-submissions
+        />
 
-        <h2>
-          {{ state.activeQuestion.question.text }}
-        </h2>
+        <template v-else>
+          <p class="eyebrow">Player answers</p>
 
-        <div
-            v-if="state.activeQuestion.estimateAnswers.length"
-            class="estimate-answer-list"
-        >
+          <h2>
+            {{ state.activeQuestion.question.text }}
+          </h2>
+
           <div
-              v-for="answer in state.activeQuestion.estimateAnswers"
-              :key="answer.playerId"
-              class="estimate-answer-card"
+              v-if="state.activeQuestion.estimateAnswers.length"
+              class="estimate-answer-list"
           >
-            <strong>{{ answer.playerName }}</strong>
-            <span>{{ answer.value }}</span>
+            <div
+                v-for="answer in state.activeQuestion.estimateAnswers"
+                :key="answer.playerId"
+                class="estimate-answer-card"
+            >
+              <strong>{{ answer.playerName }}</strong>
+              <span>{{ answer.value }}</span>
+            </div>
           </div>
-        </div>
 
-        <p v-else class="muted">
-          Nobody submitted an answer.
-        </p>
+          <p v-else class="muted">
+            Nobody submitted an answer.
+          </p>
+        </template>
       </template>
 
       <template v-else>
@@ -140,6 +149,14 @@ const isZoomImage = computed(() => {
           <LogoFusionQuestionView
               :active-question="state.activeQuestion"
               :first-buzz-name="state.buzzer.firstBuzz?.playerName ?? null"
+              show-answer
+          />
+        </template>
+
+        <template v-else-if="state.activeQuestion.question.questionType === 'patch-quatsch'">
+          <PatchQuestionView
+              :active-question="state.activeQuestion"
+              show-submissions
               show-answer
           />
         </template>
@@ -217,6 +234,11 @@ const isZoomImage = computed(() => {
           v-else-if="state.activeQuestion.question.questionType === 'logo-fusion'"
           :active-question="state.activeQuestion"
           :first-buzz-name="state.buzzer.firstBuzz?.playerName ?? null"
+      />
+
+      <PatchQuestionView
+          v-else-if="state.activeQuestion.question.questionType === 'patch-quatsch'"
+          :active-question="state.activeQuestion"
       />
 
       <template v-else>

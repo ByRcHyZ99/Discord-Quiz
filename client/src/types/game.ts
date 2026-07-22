@@ -48,7 +48,14 @@ export type Question = {
   answer: string;
   used: boolean;
 
-  questionType?: 'normal' | 'estimate' | 'ability-fake' | 'progressive' | 'meme-reveal' | 'logo-fusion';
+  questionType?:
+      | 'normal'
+      | 'estimate'
+      | 'ability-fake'
+      | 'progressive'
+      | 'meme-reveal'
+      | 'logo-fusion'
+      | 'patch-quatsch';
 
   soundUrl?: string;
 
@@ -74,6 +81,9 @@ export type Question = {
 
   logoFusionRightName?: string;
   logoFusionRightImageUrl?: string;
+
+  patchChoices?: PatchChoice[];
+  patchCorrectChoiceKey?: PatchChoiceKey;
 };
 
 export type AudioStatus = 'stopped' | 'playing' | 'paused';
@@ -95,6 +105,21 @@ export type EstimateAnswer = {
   playerId: string;
   playerName: string;
   value: string;
+  submittedAt: number;
+};
+
+export type PatchChoiceKey = 'A' | 'B' | 'C' | 'D';
+
+export type PatchChoice = {
+  key: PatchChoiceKey;
+  text: string;
+  isFake?: boolean;
+};
+
+export type PatchAnswer = {
+  playerId: string;
+  playerName: string;
+  choiceKey: PatchChoiceKey;
   submittedAt: number;
 };
 
@@ -150,6 +175,8 @@ export type ActiveQuestion = {
   memeRevealCount?: number;
   progressiveImageRevealed?: boolean;
   pointPenaltyCounts?: Record<string, number>;
+
+  patchAnswers: PatchAnswer[];
 };
 
 export type BuzzerState = {
@@ -163,6 +190,11 @@ export type GameState = {
   phase: GamePhase;
   players: Player[];
   categories: Category[];
+  categoryBoards?: {
+    id: string;
+    title: string;
+    categories: Category[];
+  }[];
   activeQuestion: ActiveQuestion | null;
   buzzer: BuzzerState;
   message: string;
