@@ -158,7 +158,7 @@ export const createQuestionSet = (): Category[] => [
         categoryId: 'ohrwurm',
         points: 500,
         text: 'Zu welchem Game gehört dieser Sound?',
-        answer: 'Stronghold Crusador - Schatzkammer',
+        answer: 'Stronghold Crusader - Schatzkammer',
         soundUrl: '/sounds/strongholdCrusader.mp3',
         used: false
       }
@@ -735,13 +735,13 @@ export function createQuestionSetBoard2(): Category[] {
           categoryId: 'logo-fusion',
           points: 600,
           text: 'Welche Logos wurden vermischt?',
-          answer: 'Playstation + League of Legends',
+          answer: 'Nintendo Switch + Portal',
           questionType: 'logo-fusion',
-          fusionImageUrl: '/images/logo-fusion/playstationLolFusion.png',
-          logoFusionLeftName: 'Playstation',
-          logoFusionLeftImageUrl: '/images/logo-fusion/playstation.png',
-          logoFusionRightName: 'League of Legends',
-          logoFusionRightImageUrl: '/images/logo-fusion/leagueOfLegends.png',
+          fusionImageUrl: '/images/logo-fusion/nintendoSwitchPortalFusion.png',
+          logoFusionLeftName: 'Nintendo Switch',
+          logoFusionLeftImageUrl: '/images/logo-fusion/nintendoSwitch.png',
+          logoFusionRightName: 'Portal',
+          logoFusionRightImageUrl: '/images/logo-fusion/portal.png',
           used: false
         },
         {
@@ -749,13 +749,13 @@ export function createQuestionSetBoard2(): Category[] {
           categoryId: 'logo-fusion',
           points: 700,
           text: 'Welche Logos wurden vermischt?',
-          answer: 'XBOX + Among Us',
+          answer: 'XBOX + Halo',
           questionType: 'logo-fusion',
-          fusionImageUrl: '/images/logo-fusion/xboxAmongUsFusion.png',
+          fusionImageUrl: '/images/logo-fusion/xboxHaloFusion.png',
           logoFusionLeftName: 'XBOX',
           logoFusionLeftImageUrl: '/images/logo-fusion/xbox.png',
-          logoFusionRightName: 'Among Us',
-          logoFusionRightImageUrl: '/images/logo-fusion/amongUs.png',
+          logoFusionRightName: 'Halo',
+          logoFusionRightImageUrl: '/images/logo-fusion/halo.png',
           used: false
         },
         {
@@ -763,13 +763,13 @@ export function createQuestionSetBoard2(): Category[] {
           categoryId: 'logo-fusion',
           points: 800,
           text: 'Welche Logos wurden vermischt?',
-          answer: 'Steam + CS2',
+          answer: 'Game Cube + The Legend of Zelda',
           questionType: 'logo-fusion',
-          fusionImageUrl: '/images/logo-fusion/steamCs2Fusion.png',
-          logoFusionLeftName: 'Steam',
-          logoFusionLeftImageUrl: '/images/logo-fusion/steam.png',
-          logoFusionRightName: 'CS2',
-          logoFusionRightImageUrl: '/images/logo-fusion/cs2.png',
+          fusionImageUrl: '/images/logo-fusion/gameCubeZeldaFusion.png',
+          logoFusionLeftName: 'Game Cube',
+          logoFusionLeftImageUrl: '/images/logo-fusion/gameCube.png',
+          logoFusionRightName: 'Zelda',
+          logoFusionRightImageUrl: '/images/logo-fusion/zelda.png',
           used: false
         },
         {
@@ -777,13 +777,13 @@ export function createQuestionSetBoard2(): Category[] {
           categoryId: 'logo-fusion',
           points: 900,
           text: 'Welche Logos wurden vermischt?',
-          answer: 'Nintendo 64 + Minecraft',
+          answer: 'Nintendo 64 + Elden Ring',
           questionType: 'logo-fusion',
-          fusionImageUrl: '/images/logo-fusion/minecraftN64Fusion.png',
+          fusionImageUrl: '/images/logo-fusion/n64EldenRingFusion.png',
           logoFusionLeftName: 'Nintendo 64',
           logoFusionLeftImageUrl: '/images/logo-fusion/n64.png',
-          logoFusionRightName: 'Minecraft',
-          logoFusionRightImageUrl: '/images/logo-fusion/minecraft.png',
+          logoFusionRightName: 'Elden Ring',
+          logoFusionRightImageUrl: '/images/logo-fusion/eldenRing2.png',
           used: false
         },
         {
@@ -791,13 +791,13 @@ export function createQuestionSetBoard2(): Category[] {
           categoryId: 'logo-fusion',
           points: 1000,
           text: 'Welche Logos wurden vermischt?',
-          answer: 'Rocket League + Candy Crush',
+          answer: 'Bendy + Cuphead',
           questionType: 'logo-fusion',
-          fusionImageUrl: '/images/logo-fusion/RocketLeagueCandyCrushFusion.png',
-          logoFusionLeftName: 'Rocket League',
-          logoFusionLeftImageUrl: '/images/logo-fusion/rocketLeague.png',
-          logoFusionRightName: 'Candy Crush',
-          logoFusionRightImageUrl: '/images/logo-fusion/candyCrush.png',
+          fusionImageUrl: '/images/logo-fusion/bendyCupheadFusion.png',
+          logoFusionLeftName: 'Bendy',
+          logoFusionLeftImageUrl: '/images/logo-fusion/bendy.png',
+          logoFusionRightName: 'Cuphead',
+          logoFusionRightImageUrl: '/images/logo-fusion/cuphead.png',
           used: false
         }
       ]
@@ -807,146 +807,146 @@ export function createQuestionSetBoard2(): Category[] {
       title: 'Patch oder Quatsch',
       questions: [
         {
-          id: 'patch-quatsch-100',
+          id: 'patch-quatsch-600',
           categoryId: 'patch-quatsch',
-          points: 100,
-          text: 'Minecraft: Which fact is completely made up?',
-          answer: 'C is fake: Creepers were not originally designed as pigs with texture glitches.',
-          questionType: 'patch-quatsch',
-          patchCorrectChoiceKey: 'C',
-          patchChoices: [
-            {
-              key: 'A',
-              text: 'Creepers were created from a failed pig model.'
-            },
-            {
-              key: 'B',
-              text: 'Endermen were inspired by creepy internet horror vibes and were later changed because they were too unsettling.'
-            },
-            {
-              key: 'C',
-              text: 'Creepers were originally peaceful farm animals that exploded only when struck by lightning.',
-              isFake: true
-            },
-            {
-              key: 'D',
-              text: 'The Nether was added as a dangerous fast-travel-like dimension concept.'
-            }
-          ],
-          used: false
-        },
-        {
-          id: 'patch-quatsch-200',
-          categoryId: 'patch-quatsch',
-          points: 200,
-          text: 'Counter-Strike: Which fact is completely made up?',
-          answer: 'B is fake: CS did not start as an official Valve-made standalone game.',
-          questionType: 'patch-quatsch',
-          patchCorrectChoiceKey: 'B',
-          patchChoices: [
-            {
-              key: 'A',
-              text: 'Counter-Strike originally started as a mod.'
-            },
-            {
-              key: 'B',
-              text: 'Counter-Strike was first released as a full official Valve sequel to Team Fortress.',
-              isFake: true
-            },
-            {
-              key: 'C',
-              text: 'Defusal and hostage rescue became two of the most iconic objective modes.'
-            },
-            {
-              key: 'D',
-              text: 'Weapon recoil control became one of the defining skill checks of the game.'
-            }
-          ],
-          used: false
-        },
-        {
-          id: 'patch-quatsch-300',
-          categoryId: 'patch-quatsch',
-          points: 300,
-          text: 'League of Legends: Which fact is completely made up?',
-          answer: 'D is fake: Baron does not randomly swap teams.',
+          points: 600,
+          text: 'Minecraft: Welcher Fakt ist frei erfunden?',
+          answer: 'D ist fake!',
           questionType: 'patch-quatsch',
           patchCorrectChoiceKey: 'D',
           patchChoices: [
             {
               key: 'A',
-              text: 'Some champions have been heavily reworked after release.'
+              text: 'Blitze können die Oxidation von Kupferblöcken teilweise entfernen.'
             },
             {
               key: 'B',
-              text: 'The game has removed and replaced several items over time.'
+              text: 'Lederstiefel verhindern, dass Spieler in Pulverschnee einsinken.'
             },
             {
               key: 'C',
-              text: 'Champion abilities can be changed dramatically by patches.'
+              text: 'Man kann einen Ghast durch ein Fernrohr betrachten, um einen Fortschritt zu erhalten.'
             },
             {
               key: 'D',
-              text: 'Baron Nashor used to randomly change teams if nobody damaged him for long enough.',
+              text: 'Füchse können mit einem Eimer aufgenommen und transportiert werden.',
               isFake: true
             }
           ],
           used: false
         },
         {
-          id: 'patch-quatsch-400',
+          id: 'patch-quatsch-700',
           categoryId: 'patch-quatsch',
-          points: 400,
-          text: 'Pokémon: Which fact is completely made up?',
-          answer: 'A is fake: MissingNo. was not intentionally added as a secret legendary Pokémon.',
+          points: 700,
+          text: 'Rainbow Six Siege: Welcher Fakt ist frei erfunden?',
+          answer: 'B ist fake!',
+          questionType: 'patch-quatsch',
+          patchCorrectChoiceKey: 'B',
+          patchChoices: [
+            {
+              key: 'A',
+              text: 'Spieler konnten mit werfbaren Gadgets eine Art Dab-Tanz ausführen.'
+            },
+            {
+              key: 'B',
+              text: '„Geiseln konnten gegnerische Drohnen aufheben und zu den Verteidigern zurückbringen.',
+              isFake: true
+            },
+            {
+              key: 'C',
+              text: 'Niedergeschossene Spieler schienen aus der Außenansicht Treppen hinabzuschweben.'
+            },
+            {
+              key: 'D',
+              text: 'Das Geräusch einer Drohne konnte weiterlaufen, obwohl die Drohne bereits zerstört war.'
+            }
+          ],
+          used: false
+        },
+        {
+          id: 'patch-quatsch-800',
+          categoryId: 'patch-quatsch',
+          points: 800,
+          text: 'Rocket League: Welcher Fakt ist frei erfunden?',
+          answer: 'D ist fake!',
+          questionType: 'patch-quatsch',
+          patchCorrectChoiceKey: 'D',
+          patchChoices: [
+            {
+              key: 'A',
+              text: 'Der Ball konnte in privaten Spielen durch einen Würfel ersetzt werden.'
+            },
+            {
+              key: 'B',
+              text: 'Die Boost-Stärke konnte auf das Zehnfache gestellt werden.'
+            },
+            {
+              key: 'C',
+              text: 'In einem Modus wurden Fahrzeuge beim Annähern an den Ball langsamer.'
+            },
+            {
+              key: 'D',
+              text: 'Spieler konnten den Ball vor dem Anstoß selbst auf einer frei gewählten Position platzieren.',
+              isFake: true
+            }
+          ],
+          used: false
+        },
+        {
+          id: 'patch-quatsch-900',
+          categoryId: 'patch-quatsch',
+          points: 900,
+          text: 'Stardew Valley: Welcher Fakt ist frei erfunden?',
+          answer: 'A ist fake!',
           questionType: 'patch-quatsch',
           patchCorrectChoiceKey: 'A',
           patchChoices: [
             {
               key: 'A',
-              text: 'MissingNo. was intentionally added as a secret legendary Pokémon that players were meant to discover.',
+              text: 'Kühe können mit Hüten ausgestattet werden und produzieren dadurch höherwertige Milch.',
               isFake: true
             },
             {
               key: 'B',
-              text: 'Some glitches in early Pokémon games became extremely well known among players.'
+              text: 'Man kann Katzen und Hunden Hüte aufsetzen.'
             },
             {
               key: 'C',
-              text: 'Different Pokémon versions encouraged trading by having version-exclusive Pokémon.'
+              text: 'Mayonnaise und Gelee können getrunken werden.'
             },
             {
               key: 'D',
-              text: 'The series has repeatedly used evolution methods beyond simply leveling up.'
+              text: 'Gefüllte Truhen lassen sich durch Schläge mit einem schweren Werkzeug verschieben.'
             }
           ],
           used: false
         },
         {
-          id: 'patch-quatsch-500',
+          id: 'patch-quatsch-1000',
           categoryId: 'patch-quatsch',
-          points: 500,
-          text: 'The Legend of Zelda: Which fact is completely made up?',
-          answer: 'C is fake: Link was not named because he links controller ports.',
+          points: 1000,
+          text: 'Apex Legends: Welcher Fakt ist frei erfunden?',
+          answer: 'D ist fake!',
           questionType: 'patch-quatsch',
-          patchCorrectChoiceKey: 'C',
+          patchCorrectChoiceKey: 'D',
           patchChoices: [
             {
               key: 'A',
-              text: 'The name Link reflects the idea of connecting the player to the game world.'
+              text: 'Zwei P2020-Pistolen können gleichzeitig im Akimbo-Modus verwendet werden.'
             },
             {
               key: 'B',
-              text: 'The series has used different versions of Link across different eras and timelines.'
+              text: 'Zwei Mozambique-Schrotflinten können gleichzeitig verwendet werden.'
             },
             {
               key: 'C',
-              text: 'Link was named after the physical link cable used to connect early Nintendo controllers.',
-              isFake: true
+              text: 'Der Akimbo-Modus wird aktiviert, sobald man eine zweite passende Waffe aufnimmt.'
             },
             {
               key: 'D',
-              text: 'Music, exploration and puzzle solving are recurring pillars of the series.'
+              text: 'Zwei Wingman-Revolver können gleichzeitig verwendet werden, allerdings nur ohne Visier.',
+              isFake: true
             }
           ],
           used: false
@@ -971,7 +971,7 @@ export function createQuestionSetBoard2(): Category[] {
           categoryId: 'board2-fun-with-flags',
           points: 700,
           text: 'Welches Game suchen wir?',
-          answer: 'Nigeria',
+          answer: 'Skyrim',
           imageUrl: '/images/flaggen/skyrim.jpg',
           used: false
         },
